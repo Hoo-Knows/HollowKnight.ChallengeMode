@@ -6,17 +6,17 @@ namespace ChallengeMode.Modifiers
 	{
 		public override void StartEffect()
 		{
-			ModHooks.Instance.TakeHealthHook += damageTaken;
+			ModHooks.Instance.TakeHealthHook += TakeHealthHook;
 		}
 
-		private int damageTaken(int damage)
+		private int TakeHealthHook(int damage)
 		{
 			return damage *= 2;
 		}
 
 		public override void StopEffect()
 		{
-			ModHooks.Instance.TakeHealthHook -= damageTaken;
+			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
 		}
 	}
 }

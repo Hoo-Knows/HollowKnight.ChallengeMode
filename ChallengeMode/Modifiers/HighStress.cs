@@ -9,10 +9,10 @@ namespace ChallengeMode.Modifiers
 	{
 		public override void StartEffect()
 		{
-			ModHooks.Instance.TakeHealthHook += TakeDamage;
+			ModHooks.Instance.TakeHealthHook += TakeHealthHook;
 		}
 
-		private int TakeDamage(int damage)
+		private int TakeHealthHook(int damage)
 		{
 			int health = PlayerData.instance.GetInt("health");
 			int healthBlue = PlayerData.instance.GetInt("healthBlue");
@@ -30,7 +30,7 @@ namespace ChallengeMode.Modifiers
 			PlayerData.instance.health = 1;
 			PlayerData.instance.healthBlue = 0;
 			EventRegister.SendEvent("HERO DAMAGED");
-			yield return new WaitForSeconds(5.0f);
+			yield return new WaitForSecondsRealtime(5f);
 			HeroController.instance.AddHealth(Math.Min(health, health + healthBlue - damage) - 1);
 			for(int i = 0; i < Math.Max(healthBlue - damage, 0); i++)
 				EventRegister.SendEvent("ADD BLUE HEALTH");
@@ -39,7 +39,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
-			ModHooks.Instance.TakeHealthHook -= TakeDamage;
+			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
 		}
 	}
 }
