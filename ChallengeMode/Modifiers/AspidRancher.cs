@@ -17,7 +17,7 @@ namespace ChallengeMode.Modifiers
 			Destroy(aspidGO.GetComponent<PersistentBoolItem>());
 			HealthManager hm = aspidGO.GetComponent<HealthManager>();
 			hm.hp = 13;
-			//disable soul gain using magic bs
+			//disable soul gain
 			FieldInfo fi = ReflectionHelper.GetField(typeof(HealthManager), "enemyType");
 			fi.SetValue(hm, 6);
 
@@ -30,7 +30,6 @@ namespace ChallengeMode.Modifiers
 		private void AfterAttackHook(AttackDirection dir)
 		{
 			StartCoroutine(SpawnAspid());
-			//ChallengeMode.Instance.Log("Tried spawning aspid");
 		}
 
 		private IEnumerator SpawnAspid()

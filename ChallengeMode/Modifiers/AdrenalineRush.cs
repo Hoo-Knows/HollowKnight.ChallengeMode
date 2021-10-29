@@ -58,6 +58,7 @@ namespace ChallengeMode.Modifiers
 			Time.timeScale = 1f;
 
 			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
+			On.GameManager.FreezeMoment_float_float_float_float -= FreezeMoment;
 		}
 	}
 }

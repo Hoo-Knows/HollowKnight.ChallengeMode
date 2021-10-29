@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Modding;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ namespace ChallengeMode
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
 
-		public ChallengeMode() : base("Challenge Mode") { }
+		public ChallengeMode() : base("ChallengeMode") { }
 
 		public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
 		{
@@ -21,11 +20,16 @@ namespace ChallengeMode
 
 			Unload();
 
-			modifiers = new Modifier[1];
+			//modifiers = new Modifier[5];
 			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
-			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
+			//modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
+			//modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
+			//modifiers[3] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
+			//modifiers[4] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
+
+			//Test individual modifier
+			modifiers = new Modifier[1];
+			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
 
 			ModHooks.Instance.BeforeSceneLoadHook += BeforeSceneLoad;
 		}
