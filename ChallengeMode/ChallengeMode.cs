@@ -20,16 +20,20 @@ namespace ChallengeMode
 
 			Unload();
 
-			//modifiers = new Modifier[5];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
-			//modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
-			//modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
-			//modifiers[3] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
-			//modifiers[4] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
+			//All modifiers
+			modifiers = new Modifier[8];
+			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
+			modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
+			modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
+			modifiers[3] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
+			modifiers[4] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
+			modifiers[5] = GameManager.instance.gameObject.AddComponent<Modifiers.SpeedrunnersCurse>();
+			modifiers[6] = GameManager.instance.gameObject.AddComponent<Modifiers.NailOnly>();
+			modifiers[7] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
 
 			//Test individual modifier
-			modifiers = new Modifier[1];
-			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
+			//modifiers = new Modifier[1];
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
 
 			ModHooks.Instance.BeforeSceneLoadHook += BeforeSceneLoad;
 		}
