@@ -5,13 +5,6 @@
 		public override void StartEffect()
 		{
 			ModCommon.ModCommon.OnSpellHook += OnSpellHook;
-			On.HeroController.CanFocus += CanFocus;
-		}
-
-		private bool CanFocus(On.HeroController.orig_CanFocus orig, HeroController self)
-		{
-			orig(self);
-			return false;
 		}
 
 		private bool OnSpellHook(ModCommon.ModCommon.Spell s)
@@ -22,7 +15,11 @@
 		public override void StopEffect()
 		{
 			ModCommon.ModCommon.OnSpellHook -= OnSpellHook;
-			On.HeroController.CanFocus -= CanFocus;
+		}
+
+		public override string ToString()
+		{
+			return "ChallengeMode_Nail Only";
 		}
 	}
 }

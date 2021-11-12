@@ -17,5 +17,10 @@
 		{
 			On.SceneManager.Update -= SceneManagerUpdate;
 		}
+
+		public override string ToString()
+		{
+			return "ChallengeMode_Void Vision";
+		}
 	}
 }

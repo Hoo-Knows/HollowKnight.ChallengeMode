@@ -33,5 +33,10 @@ namespace ChallengeMode.Modifiers
 			ModCommon.ModCommon.OnSpellHook -= OnSpellHook;
 			ModHooks.Instance.GetPlayerBoolHook -= GetPlayerBoolHook;
 		}
+
+		public override string ToString()
+		{
+			return "ChallengeMode_Speedrunner's Curse";
+		}
 	}
 }

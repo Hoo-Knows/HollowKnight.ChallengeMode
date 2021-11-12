@@ -10,7 +10,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
-			customTimeScale = Time.timeScale;
+			customTimeScale = 1f;
 
 			ModHooks.Instance.TakeHealthHook += TakeHealthHook;
 			On.GameManager.FreezeMoment_float_float_float_float += FreezeMoment;
@@ -34,7 +34,7 @@ namespace ChallengeMode.Modifiers
 			yield break;
 		}
 
-		private IEnumerator SetTimeScale(float newTimeScale, float duration)
+		public IEnumerator SetTimeScale(float newTimeScale, float duration)
 		{
 			float lastTimeScale = Time.timeScale;
 			for(float timer = 0f; timer < duration; timer += Time.unscaledDeltaTime)
@@ -49,7 +49,7 @@ namespace ChallengeMode.Modifiers
 
 		private void SetTimeScale(float newTimeScale)
 		{
-			Time.timeScale = ((newTimeScale <= 0.01f) ? 0f : newTimeScale) * customTimeScale;
+			Time.timeScale = ((newTimeScale <= 0.01f) ? 0f : newTimeScale) * newTimeScale;
 		}
 
 		public override void StopEffect()
@@ -59,6 +59,12 @@ namespace ChallengeMode.Modifiers
 
 			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
 			On.GameManager.FreezeMoment_float_float_float_float -= FreezeMoment;
+			StopAllCoroutines();
+		}
+
+		public override string ToString()
+		{
+			return "ChallengeMode_Adrenaline Rush";
 		}
 	}
 }

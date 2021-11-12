@@ -18,5 +18,10 @@ namespace ChallengeMode.Modifiers
 		{
 			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
 		}
+
+		public override string ToString()
+		{
+			return "ChallengeMode_Frail Shell";
+		}
 	}
 }

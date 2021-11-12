@@ -7,6 +7,11 @@ namespace ChallengeMode.Modifiers
 {
 	class HighStress : Modifier
 	{
+		private int health;
+		private int healthBlue;
+		private int damage;
+		bool flag;
+
 		public override void StartEffect()
 		{
 			ModHooks.Instance.TakeHealthHook += TakeHealthHook;
@@ -14,32 +19,47 @@ namespace ChallengeMode.Modifiers
 
 		private int TakeHealthHook(int damage)
 		{
-			int health = PlayerData.instance.GetInt("health");
-			int healthBlue = PlayerData.instance.GetInt("healthBlue");
-			StopCoroutine(HandleHealth(damage, health, healthBlue));
+			this.damage = damage;
+			health = PlayerData.instance.GetInt("health");
+			healthBlue = PlayerData.instance.GetInt("healthBlue");
+			StopCoroutine(HandleHealth());
 			if(health + healthBlue > damage)
 			{
-				StartCoroutine(HandleHealth(damage, health, healthBlue));
+				StartCoroutine(HandleHealth());
 				return 0;
 			}
 			return damage;
 		}
 
-		private IEnumerator HandleHealth(int damage, int health, int healthBlue)
+		private IEnumerator HandleHealth()
 		{
-			PlayerData.instance.health = 1;
-			PlayerData.instance.healthBlue = 0;
+			flag = true;
+			PlayerData.instance.SetInt("health", 1);
+			PlayerData.instance.SetInt("healthBlue", 0);
 			EventRegister.SendEvent("HERO DAMAGED");
 			yield return new WaitForSecondsRealtime(5f);
 			HeroController.instance.AddHealth(Math.Min(health, health + healthBlue - damage) - 1);
 			for(int i = 0; i < Math.Max(healthBlue - damage, 0); i++)
 				EventRegister.SendEvent("ADD BLUE HEALTH");
+			flag = false;
 			yield break;
 		}
 
 		public override void StopEffect()
 		{
 			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
+			StopAllCoroutines();
+			if(flag)
+			{
+				HeroController.instance.AddHealth(Math.Min(health, health + healthBlue - damage) - 1);
+				for(int i = 0; i < Math.Max(healthBlue - damage, 0); i++)
+					EventRegister.SendEvent("ADD BLUE HEALTH");
+			}
+		}
+
+		public override string ToString()
+		{
+			return "ChallengeMode_High Stress";
 		}
 	}
 }

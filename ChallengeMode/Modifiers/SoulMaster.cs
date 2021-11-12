@@ -13,7 +13,7 @@ namespace ChallengeMode.Modifiers
 			flag = true;
 
 			ModHooks.Instance.GetPlayerIntHook += GetPlayerIntHook;
-			StartCoroutine(SoulHandler());
+			StartCoroutine(HandleSoul());
 		}
 
 		private int GetPlayerIntHook(string target)
@@ -22,13 +22,14 @@ namespace ChallengeMode.Modifiers
 			return PlayerData.instance.GetIntInternal(target);
 		}
 
-		private IEnumerator SoulHandler()
+		private IEnumerator HandleSoul()
 		{
 			while(flag)
 			{
-				HeroController.instance.AddMPCharge(11);
+				HeroController.instance.AddMPChargeSpa(11);
 				yield return new WaitForSecondsRealtime(1.5f);
 			}
+			yield break;
 		}
 
 		public override void StopEffect()
@@ -36,7 +37,12 @@ namespace ChallengeMode.Modifiers
 			flag = false;
 
 			ModHooks.Instance.GetPlayerIntHook -= GetPlayerIntHook;
-			StopCoroutine(SoulHandler());
+			StopAllCoroutines();
+		}
+
+		public override string ToString()
+		{
+			return "ChallengeMode_Soul Master";
 		}
 	}
 }

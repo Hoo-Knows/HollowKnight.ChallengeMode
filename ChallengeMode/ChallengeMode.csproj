@@ -41,6 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\PlayMaker.dll</HintPath>
     </Reference>
+    <Reference Include="SFCore">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Mods\SFCore.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,15 +56,16 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChallengeMode.cs" />
     <Compile Include="Modifier.cs" />
+    <Compile Include="ModifierControl.cs" />
     <Compile Include="Modifiers\AdrenalineRush.cs" />
     <Compile Include="Modifiers\AspidRancher.cs" />
     <Compile Include="Modifiers\FrailShell.cs" />
     <Compile Include="Modifiers\HighStress.cs" />
+    <Compile Include="Modifiers\HungryKnight.cs" />
     <Compile Include="Modifiers\NailOnly.cs" />
     <Compile Include="Modifiers\SoulMaster.cs" />
     <Compile Include="Modifiers\SpeedrunnersCurse.cs" />

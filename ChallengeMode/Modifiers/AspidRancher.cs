@@ -64,6 +64,12 @@ namespace ChallengeMode.Modifiers
 
 			ModHooks.Instance.AfterAttackHook -= AfterAttackHook;
 			On.HealthManager.Hit -= HealthManagerHit;
+			StopAllCoroutines();
+		}
+
+		public override string ToString()
+		{
+			return "ChallengeMode_Aspid Rancher";
 		}
 	}
 }

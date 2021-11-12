@@ -7,5 +7,7 @@ namespace ChallengeMode
 		public abstract void StartEffect();
 
 		public abstract void StopEffect();
+
+		public abstract override string ToString();
 	}
 }
