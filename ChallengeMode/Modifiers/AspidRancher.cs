@@ -25,6 +25,7 @@ namespace ChallengeMode.Modifiers
 
 			ModHooks.Instance.AfterAttackHook += AfterAttackHook;
 			On.HealthManager.Hit += HealthManagerHit;
+			ModHooks.Instance.HeroUpdateHook += HeroUpdateHook;
 		}
 
 		private void AfterAttackHook(AttackDirection dir)
@@ -58,12 +59,18 @@ namespace ChallengeMode.Modifiers
 			orig(self, hitInstance);
 		}
 
+		private void HeroUpdateHook()
+		{
+			if(HeroController.instance.cState.bouncing == true) spawnFlag = false;
+		}
+
 		public override void StopEffect()
 		{
 			spawnFlag = false;
 
 			ModHooks.Instance.AfterAttackHook -= AfterAttackHook;
 			On.HealthManager.Hit -= HealthManagerHit;
+			ModHooks.Instance.HeroUpdateHook += HeroUpdateHook;
 			StopAllCoroutines();
 		}
 

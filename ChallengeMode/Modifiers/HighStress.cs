@@ -19,6 +19,7 @@ namespace ChallengeMode.Modifiers
 
 		private int TakeHealthHook(int damage)
 		{
+			flag = true;
 			this.damage = damage;
 			health = PlayerData.instance.GetInt("health");
 			healthBlue = PlayerData.instance.GetInt("healthBlue");
@@ -33,11 +34,10 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator HandleHealth()
 		{
-			flag = true;
 			PlayerData.instance.SetInt("health", 1);
 			PlayerData.instance.SetInt("healthBlue", 0);
 			EventRegister.SendEvent("HERO DAMAGED");
-			yield return new WaitForSecondsRealtime(5f);
+			yield return new WaitForSeconds(5f);
 			HeroController.instance.AddHealth(Math.Min(health, health + healthBlue - damage) - 1);
 			for(int i = 0; i < Math.Max(healthBlue - damage, 0); i++)
 				EventRegister.SendEvent("ADD BLUE HEALTH");

@@ -8,10 +8,10 @@ namespace ChallengeMode
 	public class ChallengeMode : Mod, ITogglableMod
 	{
 		private Modifier[] modifiers;
-		private Modifier[] activeModifiers;
 		private int numActiveModifiers;
 		private ModifierControl modifierControl;
 
+		private int spaCount;
 		private HashSet<string> blacklistedScenes;
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
@@ -22,12 +22,11 @@ namespace ChallengeMode
 		{
 			Instance = this;
 			this.preloadedObjects = preloadedObjects;
+			spaCount = 0;
 			blacklistedScenes = new HashSet<string>()
 			{
 				"GG_Atrium", "GG_Atrium_Roof", "GG_Engine", "GG_Engine_Root", "GG_Spa", "GG_Waterways", "GG_Workshop", "GG_Wyrm"
 			};
-
-			Unload();
 
 			//All modifiers
 			modifiers = new Modifier[9];
@@ -43,7 +42,7 @@ namespace ChallengeMode
 
 			//Test individual modifier
 			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
 
 			numActiveModifiers = 1;
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
@@ -57,7 +56,6 @@ namespace ChallengeMode
 
 			ModHooks.Instance.BeforeSceneLoadHook += BeforeSceneLoad;
 			ModHooks.Instance.LanguageGetHook += LanguageGetHook;
-			ModHooks.Instance.BeforePlayerDeadHook += BeforePlayerDeadHook;
 		}
 
 		public override List<(string, string)> GetPreloadNames()
@@ -70,27 +68,22 @@ namespace ChallengeMode
 
 		private string BeforeSceneLoad(string sceneName)
 		{
-			modifierControl.Reset();
-			if(activeModifiers != null)
-			{
-				foreach(Modifier modifier in activeModifiers)
-					modifier.StopEffect();
-			}
-			activeModifiers = null;
-
-			if(sceneName == "GG_Spa") numActiveModifiers++;
-			//Log(numActiveModifiers);
+			modifierControl.Unload();
 
 			if(sceneName.Substring(0, 2) == "GG" && !blacklistedScenes.Contains(sceneName))
 			{
-				var random = new System.Random();
-				activeModifiers = new Modifier[numActiveModifiers];
-				for(int i = 0; i < numActiveModifiers; i++)
-				{
-					activeModifiers[i] = modifiers[random.Next(0, modifiers.Length)];
-				}
-				modifierControl.ActivateModifiers(activeModifiers);
+				modifierControl.Initialize(modifiers, numActiveModifiers);
 			}
+
+			if(sceneName == "GG_Spa") spaCount++;
+			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;
+			//P1 section in P5
+			if(spaCount == 0) numActiveModifiers = 1;
+			//P2 and P3 sections in P5
+			if(spaCount == 1) numActiveModifiers = 2;
+			//P4 section in P5
+			if(spaCount == 5) numActiveModifiers = 3;
+
 			return sceneName;
 		}
 
@@ -104,16 +97,12 @@ namespace ChallengeMode
 			return Language.Language.GetInternal(key, sheetTitle);
 		}
 
-		private void BeforePlayerDeadHook()
-		{
-			numActiveModifiers = 1;
-		}
-
 		public void Unload()
 		{
+			modifierControl.Unload();
+
 			ModHooks.Instance.BeforeSceneLoadHook -= BeforeSceneLoad;
 			ModHooks.Instance.LanguageGetHook -= LanguageGetHook;
-			ModHooks.Instance.BeforePlayerDeadHook -= BeforePlayerDeadHook;
 		}
 	}
 }

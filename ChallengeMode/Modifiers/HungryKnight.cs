@@ -20,11 +20,11 @@ namespace ChallengeMode.Modifiers
 			while(flag)
 			{
 				HeroController.instance.TakeMP(11);
-				yield return new WaitForSecondsRealtime(1f);
+				yield return new WaitForSeconds(3f);
 				if(PlayerData.instance.GetInt("MPCharge") == 0)
 				{
 					HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.other, 1, 1);
-					yield return new WaitForSecondsRealtime(4f);
+					yield return new WaitForSeconds(2f);
 				}
 			}
 			yield break;

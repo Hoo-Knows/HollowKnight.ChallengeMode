@@ -22,7 +22,7 @@ namespace ChallengeMode.Modifiers
 
 		private bool GetPlayerBoolHook(string target)
 		{
-			//unequip sbody, equip thorns
+			//Unequip sbody, equip thorns
 			if(target == "equippedCharm_14") return false;
 			if(target == "equippedCharm_12") return true;
 			return PlayerData.instance.GetBoolInternal(target);

@@ -1,25 +1,21 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Modding;
 
 namespace ChallengeMode.Modifiers
 {
 	class SoulMaster : Modifier
 	{
 		private bool flag;
+		private int nailDamage;
 
 		public override void StartEffect()
 		{
 			flag = true;
+			nailDamage = PlayerData.instance.nailDamage;
+			PlayerData.instance.nailDamage = 1;
+			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
-			ModHooks.Instance.GetPlayerIntHook += GetPlayerIntHook;
 			StartCoroutine(HandleSoul());
-		}
-
-		private int GetPlayerIntHook(string target)
-		{
-			if(target == "nailDamage") return 1;
-			return PlayerData.instance.GetIntInternal(target);
 		}
 
 		private IEnumerator HandleSoul()
@@ -27,7 +23,7 @@ namespace ChallengeMode.Modifiers
 			while(flag)
 			{
 				HeroController.instance.AddMPChargeSpa(11);
-				yield return new WaitForSecondsRealtime(1.5f);
+				yield return new WaitForSeconds(1.5f);
 			}
 			yield break;
 		}
@@ -35,8 +31,9 @@ namespace ChallengeMode.Modifiers
 		public override void StopEffect()
 		{
 			flag = false;
+			PlayerData.instance.SetInt("nailDamage", nailDamage);
+			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
-			ModHooks.Instance.GetPlayerIntHook -= GetPlayerIntHook;
 			StopAllCoroutines();
 		}
 

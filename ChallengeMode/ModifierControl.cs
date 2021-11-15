@@ -1,17 +1,42 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Modding;
-using SFCore;
+using System;
 
 namespace ChallengeMode
 {
 	class ModifierControl : MonoBehaviour
 	{
-		private Modifier[] modifiers;
+		private Modifier[] activeModifiers;
 
-		public void ActivateModifiers(Modifier[] modifiers)
+		public void Initialize(Modifier[] modifiers, int numActiveModifiers)
 		{
-			this.modifiers = modifiers;
+			var random = new System.Random();
+			activeModifiers = new Modifier[numActiveModifiers];
+
+			//Select modifiers
+			for(int i = 0; i < numActiveModifiers; i++)
+			{
+				Modifier modifier = modifiers[random.Next(0, modifiers.Length)];
+
+				//Check if modifier has already been selected
+				if(Array.IndexOf(activeModifiers, modifier) == -1)
+				{
+					//Soul Master and Nail Only are mutually exclusive
+					if(modifier.ToString() == "ChallengeMode_Soul Master" 
+					&& Array.IndexOf(activeModifiers, modifiers[6]) != -1)
+					{
+						i--; continue;
+					}
+					if(modifier.ToString() == "ChallengeMode_Nail Only" 
+					&& Array.IndexOf(activeModifiers, modifiers[7]) != -1)
+					{
+						i--; continue;
+					}
+
+					activeModifiers[i] = modifier;
+				}
+				else i--;
+			}
 
 			On.HeroController.FinishedEnteringScene += FinishedEnteringScene;
 		}
@@ -24,8 +49,8 @@ namespace ChallengeMode
 
 		private IEnumerator ActivateModifiers()
 		{
-			Time.timeScale = 0.1f;
-			foreach(Modifier modifier in modifiers)
+			Time.timeScale = 0.2f;
+			foreach(Modifier modifier in activeModifiers)
 			{
 				GameManager.instance.AwardAchievement(modifier.ToString());
 				modifier.StartEffect();
@@ -33,13 +58,18 @@ namespace ChallengeMode
 			}
 			yield return new WaitForSecondsRealtime(2f);
 			Time.timeScale = 1f;
-			Reset();
+			On.HeroController.FinishedEnteringScene -= FinishedEnteringScene;
 			yield break;
 		}
 
-		public void Reset()
+		public void Unload()
 		{
-			modifiers = null;
+			if(activeModifiers != null)
+			{
+				foreach(Modifier modifier in activeModifiers)
+					modifier.StopEffect();
+			}
+			activeModifiers = null;
 
 			On.HeroController.FinishedEnteringScene -= FinishedEnteringScene;
 			StopAllCoroutines();
