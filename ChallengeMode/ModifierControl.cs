@@ -49,6 +49,7 @@ namespace ChallengeMode
 
 		private IEnumerator ActivateModifiers()
 		{
+			//yield return null;
 			Time.timeScale = 0.2f;
 			foreach(Modifier modifier in activeModifiers)
 			{
@@ -57,7 +58,7 @@ namespace ChallengeMode
 				yield return new WaitForSecondsRealtime(0.75f);
 			}
 			yield return new WaitForSecondsRealtime(2f);
-			Time.timeScale = 1f;
+			if(!GameManager.instance.isPaused) Time.timeScale = 1f;
 			On.HeroController.FinishedEnteringScene -= FinishedEnteringScene;
 			yield break;
 		}

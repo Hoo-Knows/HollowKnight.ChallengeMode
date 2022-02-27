@@ -25,28 +25,33 @@ namespace ChallengeMode
 			spaCount = 0;
 			blacklistedScenes = new HashSet<string>()
 			{
-				"GG_Atrium", "GG_Atrium_Roof", "GG_Engine", "GG_Engine_Root", "GG_Spa", "GG_Waterways", "GG_Workshop", "GG_Wyrm"
+				"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms", 
+				"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
 			};
 
 			//All modifiers
-			modifiers = new Modifier[9];
-			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
-			modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
-			modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
-			modifiers[3] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
-			modifiers[4] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
-			modifiers[5] = GameManager.instance.gameObject.AddComponent<Modifiers.SpeedrunnersCurse>();
-			modifiers[6] = GameManager.instance.gameObject.AddComponent<Modifiers.NailOnly>();
-			modifiers[7] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
-			modifiers[8] = GameManager.instance.gameObject.AddComponent<Modifiers.HungryKnight>();
+			//modifiers = new Modifier[12];
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
+			//modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
+			//modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
+			//modifiers[3] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
+			//modifiers[4] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
+			//modifiers[5] = GameManager.instance.gameObject.AddComponent<Modifiers.SpeedrunnersCurse>();
+			//modifiers[6] = GameManager.instance.gameObject.AddComponent<Modifiers.NailOnly>();
+			//modifiers[7] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
+			//modifiers[8] = GameManager.instance.gameObject.AddComponent<Modifiers.HungryKnight>();
+			//modifiers[9] = GameManager.instance.gameObject.AddComponent<Modifiers.UnfriendlyFire>();
+			//modifiers[10] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
+			//modifiers[11] = GameManager.instance.gameObject.AddComponent<Modifiers.SleepyKnight>();
 
 			//Test individual modifier
-			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
+			modifiers = new Modifier[1];
+			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
 
 			numActiveModifiers = 1;
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 
+			//Create achievements
 			AchievementHelper.Initialize();
 			foreach(Modifier modifier in modifiers)
 			{
@@ -62,7 +67,8 @@ namespace ChallengeMode
 		{
 			return new List<(string, string)>
 			{
-				("Deepnest_East_04","Super Spitter")
+				("Deepnest_East_04","Super Spitter"),
+				("GG_Ghost_Gorb", "Warrior/Ghost Warrior Slug")
 			};
 		}
 

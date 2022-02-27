@@ -63,13 +63,17 @@
     <Compile Include="Modifier.cs" />
     <Compile Include="ModifierControl.cs" />
     <Compile Include="Modifiers\AdrenalineRush.cs" />
+    <Compile Include="Modifiers\Ascension.cs" />
     <Compile Include="Modifiers\AspidRancher.cs" />
     <Compile Include="Modifiers\FrailShell.cs" />
     <Compile Include="Modifiers\HighStress.cs" />
     <Compile Include="Modifiers\HungryKnight.cs" />
     <Compile Include="Modifiers\NailOnly.cs" />
+    <Compile Include="Modifiers\PastRegrets.cs" />
+    <Compile Include="Modifiers\SleepyKnight.cs" />
     <Compile Include="Modifiers\SoulMaster.cs" />
     <Compile Include="Modifiers\SpeedrunnersCurse.cs" />
+    <Compile Include="Modifiers\UnfriendlyFire.cs" />
     <Compile Include="Modifiers\VoidVision.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
