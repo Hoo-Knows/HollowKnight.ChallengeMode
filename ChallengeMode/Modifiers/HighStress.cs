@@ -10,7 +10,7 @@ namespace ChallengeMode.Modifiers
 		private int health;
 		private int healthBlue;
 		private int damage;
-		bool flag;
+		private bool flag;
 
 		public override void StartEffect()
 		{
