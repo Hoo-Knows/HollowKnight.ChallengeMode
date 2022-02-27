@@ -21,14 +21,23 @@ namespace ChallengeMode
 				//Check if modifier has already been selected
 				if(Array.IndexOf(activeModifiers, modifier) == -1)
 				{
-					//Soul Master and Nail Only are mutually exclusive
+					//Nail Only cannot appear with Soul Master or Past Regrets
+					if(modifier.ToString() == "ChallengeMode_Nail Only"
+					&& (Array.IndexOf(activeModifiers, modifiers[6]) != -1 || Array.IndexOf(activeModifiers, modifiers[12]) != -1))
+					{
+						i--; continue;
+					}
+
+					//Soul Master cannot appear with Nail Only
 					if(modifier.ToString() == "ChallengeMode_Soul Master" 
 					&& Array.IndexOf(activeModifiers, modifiers[6]) != -1)
 					{
 						i--; continue;
 					}
-					if(modifier.ToString() == "ChallengeMode_Nail Only" 
-					&& Array.IndexOf(activeModifiers, modifiers[7]) != -1)
+
+					//Past Regrets cannot appear with Nail Only
+					if(modifier.ToString() == "ChallengeMode_Past Regrets"
+					&& Array.IndexOf(activeModifiers, modifiers[6]) != -1)
 					{
 						i--; continue;
 					}

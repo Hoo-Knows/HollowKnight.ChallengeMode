@@ -30,7 +30,7 @@ namespace ChallengeMode
 			};
 
 			//All modifiers
-			//modifiers = new Modifier[12];
+			//modifiers = new Modifier[14];
 			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
 			//modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
 			//modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
@@ -43,10 +43,12 @@ namespace ChallengeMode
 			//modifiers[9] = GameManager.instance.gameObject.AddComponent<Modifiers.UnfriendlyFire>();
 			//modifiers[10] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
 			//modifiers[11] = GameManager.instance.gameObject.AddComponent<Modifiers.SleepyKnight>();
+			//modifiers[12] = GameManager.instance.gameObject.AddComponent<Modifiers.PastRegrets>();
+			//modifiers[13] = GameManager.instance.gameObject.AddComponent<Modifiers.InfectedWounds>();
 
 			//Test individual modifier
 			modifiers = new Modifier[1];
-			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
+			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.InfectedWounds>();
 
 			numActiveModifiers = 1;
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
@@ -68,7 +70,8 @@ namespace ChallengeMode
 			return new List<(string, string)>
 			{
 				("Deepnest_East_04","Super Spitter"),
-				("GG_Ghost_Gorb", "Warrior/Ghost Warrior Slug")
+				("GG_Ghost_Gorb", "Warrior/Ghost Warrior Slug"),
+				("Abyss_19", "Parasite Balloon (1)")
 			};
 		}
 

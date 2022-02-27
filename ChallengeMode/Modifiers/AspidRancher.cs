@@ -16,7 +16,7 @@ namespace ChallengeMode.Modifiers
 			aspidGO = ChallengeMode.Instance.preloadedObjects["Deepnest_East_04"]["Super Spitter"];
 			Destroy(aspidGO.GetComponent<PersistentBoolItem>());
 			HealthManager hm = aspidGO.GetComponent<HealthManager>();
-			hm.hp = 13;
+			hm.hp = 1;
 			//disable soul gain
 			FieldInfo fi = ReflectionHelper.GetField(typeof(HealthManager), "enemyType");
 			fi.SetValue(hm, 6);

@@ -68,6 +68,7 @@
     <Compile Include="Modifiers\FrailShell.cs" />
     <Compile Include="Modifiers\HighStress.cs" />
     <Compile Include="Modifiers\HungryKnight.cs" />
+    <Compile Include="Modifiers\InfectedWounds.cs" />
     <Compile Include="Modifiers\NailOnly.cs" />
     <Compile Include="Modifiers\PastRegrets.cs" />
     <Compile Include="Modifiers\SleepyKnight.cs" />

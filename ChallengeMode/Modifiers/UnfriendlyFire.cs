@@ -8,17 +8,17 @@ namespace ChallengeMode.Modifiers
 	class UnfriendlyFire : Modifier
 	{
 		private PlayMakerFSM spawnFSM;
-		private GameObject grimmchild;
+		private GameObject grimmchildGO;
 		private PlayMakerFSM grimmchildFSM;
-		private GameObject grimmball;
+		private GameObject grimmballGO;
 
 		public override void StartEffect()
 		{
 			spawnFSM = HeroController.instance.transform.Find("Charm Effects").gameObject.LocateMyFSM("Spawn Grimmchild");
 			if(spawnFSM.FsmVariables.GetFsmGameObject("Child").Value == null) spawnFSM.SetState("Spawn");
 
-			grimmchild = spawnFSM.FsmVariables.GetFsmGameObject("Child").Value;
-			grimmchildFSM = grimmchild.LocateMyFSM("Control");
+			grimmchildGO = spawnFSM.FsmVariables.GetFsmGameObject("Child").Value;
+			grimmchildFSM = grimmchildGO.LocateMyFSM("Control");
 
 			//Set level to 4
 			grimmchildFSM.SendEvent("4");
@@ -44,19 +44,19 @@ namespace ChallengeMode.Modifiers
 			//Get flameball GameObject
 			grimmchildFSM.InsertMethod("Shoot", 10, () =>
 			{
-				grimmball = grimmchildFSM.FsmVariables.GetFsmGameObject("Flameball").Value;
-				grimmball.layer = (int) PhysLayers.ENEMY_ATTACK;
-				grimmball.AddComponent<DamageHero>();
-				grimmball.GetComponent<DamageHero>().damageDealt = 1;
-				grimmball.GetComponent<DamageHero>().hazardType = 1;
+				grimmballGO = grimmchildFSM.FsmVariables.GetFsmGameObject("Flameball").Value;
+				grimmballGO.layer = (int) PhysLayers.ENEMY_ATTACK;
+				grimmballGO.AddComponent<DamageHero>();
+				grimmballGO.GetComponent<DamageHero>().damageDealt = 1;
+				grimmballGO.GetComponent<DamageHero>().hazardType = 1;
 			});
 		}
 
 		public override void StopEffect()
 		{
 			grimmchildFSM.Recycle();
-			grimmball.Recycle();
-			grimmchild.Recycle();
+			grimmballGO.Recycle();
+			grimmchildGO.Recycle();
 		}
 
 		public override string ToString()
