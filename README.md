@@ -21,3 +21,5 @@ For the mod to work properly, please enable "Show achievements" in the game opti
 - Unfriendly Fire: spawns a Grimmchild that attacks the player
 - Ascension: Gorb will occasionally teleport onto the player and fire a ring of spears
 - Sleepy Knight: the Knight falls asleep after using too many spells or attacking too much
+- Past Regrets: spawns a shade that slashes occasionally and copies any spell the player uses
+- Infected Wounds: taking damage drains soul and sets nail damage to 1 for 5 seconds, also spawns 1-3 Infected Balloons
