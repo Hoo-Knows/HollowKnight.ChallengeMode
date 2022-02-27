@@ -16,6 +16,8 @@
 		public override void StopEffect()
 		{
 			On.SceneManager.Update -= SceneManagerUpdate;
+
+			HeroController.instance.vignetteFSM.SetState("Normal");
 		}
 
 		public override string ToString()
