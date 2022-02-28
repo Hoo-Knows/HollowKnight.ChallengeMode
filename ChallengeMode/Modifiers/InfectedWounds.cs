@@ -2,6 +2,7 @@
 using System.Reflection;
 using Modding;
 using UnityEngine;
+using Random = System.Random;
 
 namespace ChallengeMode.Modifiers
 {
@@ -31,7 +32,7 @@ namespace ChallengeMode.Modifiers
 			StartCoroutine(NailControl());
 			StartCoroutine(SoulControl());
 
-			var random = new System.Random();
+			Random random = new Random();
 			int numToSpawn = random.Next(1, 4);
 			for(int i = 0; i < numToSpawn; i++)
 			{

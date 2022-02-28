@@ -2,7 +2,7 @@
 
 namespace ChallengeMode
 {
-	abstract class Modifier : MonoBehaviour
+	public abstract class Modifier : MonoBehaviour
 	{
 		public abstract void StartEffect();
 

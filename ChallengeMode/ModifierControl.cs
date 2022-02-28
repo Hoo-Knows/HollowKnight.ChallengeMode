@@ -1,16 +1,20 @@
 ﻿using System.Collections;
 using UnityEngine;
+using Random = System.Random;
 using System;
 
 namespace ChallengeMode
 {
-	class ModifierControl : MonoBehaviour
+	public class ModifierControl : MonoBehaviour
 	{
 		private Modifier[] activeModifiers;
 
-		public void Initialize(Modifier[] modifiers, int numActiveModifiers)
+		public void Initialize()
 		{
-			var random = new System.Random();
+			Modifier[] modifiers = ChallengeMode.Instance.modifiers;
+			int numActiveModifiers = ChallengeMode.Instance.numActiveModifiers;
+
+			Random random = new Random();
 			activeModifiers = new Modifier[numActiveModifiers];
 
 			//Select modifiers
@@ -18,36 +22,46 @@ namespace ChallengeMode
 			{
 				Modifier modifier = modifiers[random.Next(0, modifiers.Length)];
 
-				//Check if modifier has already been selected
-				if(Array.IndexOf(activeModifiers, modifier) == -1)
-				{
-					//Nail Only cannot appear with Soul Master or Past Regrets
-					if(modifier.ToString() == "ChallengeMode_Nail Only"
-					&& (Array.IndexOf(activeModifiers, modifiers[6]) != -1 || Array.IndexOf(activeModifiers, modifiers[12]) != -1))
-					{
-						i--; continue;
-					}
-
-					//Soul Master cannot appear with Nail Only
-					if(modifier.ToString() == "ChallengeMode_Soul Master" 
-					&& Array.IndexOf(activeModifiers, modifiers[6]) != -1)
-					{
-						i--; continue;
-					}
-
-					//Past Regrets cannot appear with Nail Only
-					if(modifier.ToString() == "ChallengeMode_Past Regrets"
-					&& Array.IndexOf(activeModifiers, modifiers[6]) != -1)
-					{
-						i--; continue;
-					}
-
-					activeModifiers[i] = modifier;
-				}
+				if(CheckValidModifier(modifier)) activeModifiers[i] = modifier;
 				else i--;
 			}
 
 			On.HeroController.FinishedEnteringScene += FinishedEnteringScene;
+		}
+
+		public bool CheckValidModifier(Modifier modifier)
+		{
+			Modifier[] modifiers = ChallengeMode.Instance.modifiers;
+			bool result = false;
+
+			//Check if modifier hasn't been selected
+			if(Array.IndexOf(activeModifiers, modifier) == -1)
+			{
+				result = true;
+			}
+
+			//Nail Only cannot appear with Soul Master or Past Regrets
+			if(modifier.ToString() == "ChallengeMode_Nail Only"
+			&& (Array.IndexOf(activeModifiers, modifiers[6]) != -1 || Array.IndexOf(activeModifiers, modifiers[12]) != -1))
+			{
+				result = false;
+			}
+
+			//Soul Master cannot appear with Nail Only
+			if(modifier.ToString() == "ChallengeMode_Soul Master"
+			&& Array.IndexOf(activeModifiers, modifiers[6]) != -1)
+			{
+				result = false;
+			}
+
+			//Past Regrets cannot appear with Nail Only
+			if(modifier.ToString() == "ChallengeMode_Past Regrets"
+			&& Array.IndexOf(activeModifiers, modifiers[6]) != -1)
+			{
+				result = false;
+			}
+
+			return result;
 		}
 
 		private void FinishedEnteringScene(On.HeroController.orig_FinishedEnteringScene orig, HeroController self, bool setHazardMarker, bool preventRunBob)

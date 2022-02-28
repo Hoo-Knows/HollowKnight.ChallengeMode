@@ -7,9 +7,9 @@ namespace ChallengeMode
 {
 	public class ChallengeMode : Mod, ITogglableMod
 	{
-		private Modifier[] modifiers;
-		private int numActiveModifiers;
-		private ModifierControl modifierControl;
+		public Modifier[] modifiers;
+		public int numActiveModifiers;
+		public ModifierControl modifierControl;
 
 		private int spaCount;
 		private HashSet<string> blacklistedScenes;
@@ -30,7 +30,7 @@ namespace ChallengeMode
 			};
 
 			//All modifiers
-			//modifiers = new Modifier[14];
+			//modifiers = new Modifier[16];
 			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
 			//modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
 			//modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
@@ -45,10 +45,12 @@ namespace ChallengeMode
 			//modifiers[11] = GameManager.instance.gameObject.AddComponent<Modifiers.SleepyKnight>();
 			//modifiers[12] = GameManager.instance.gameObject.AddComponent<Modifiers.PastRegrets>();
 			//modifiers[13] = GameManager.instance.gameObject.AddComponent<Modifiers.InfectedWounds>();
+			//modifiers[14] = GameManager.instance.gameObject.AddComponent<Modifiers.ChaosChaos>();
+			//modifiers[15] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
 
 			//Test individual modifier
 			modifiers = new Modifier[1];
-			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.InfectedWounds>();
+			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
 
 			numActiveModifiers = 1;
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
@@ -81,7 +83,7 @@ namespace ChallengeMode
 
 			if(sceneName.Substring(0, 2) == "GG" && !blacklistedScenes.Contains(sceneName))
 			{
-				modifierControl.Initialize(modifiers, numActiveModifiers);
+				modifierControl.Initialize();
 			}
 
 			if(sceneName == "GG_Spa") spaCount++;
