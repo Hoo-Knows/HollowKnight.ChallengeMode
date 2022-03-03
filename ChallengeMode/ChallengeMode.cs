@@ -8,13 +8,13 @@ namespace ChallengeMode
 	public class ChallengeMode : Mod, ITogglableMod
 	{
 		public Modifier[] modifiers;
-		public int numActiveModifiers;
 		public ModifierControl modifierControl;
 
-		private int spaCount;
-		private HashSet<string> blacklistedScenes;
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
+
+		private int spaCount;
+		private int numActiveModifiers;
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -22,15 +22,9 @@ namespace ChallengeMode
 		{
 			Instance = this;
 			this.preloadedObjects = preloadedObjects;
-			spaCount = 0;
-			blacklistedScenes = new HashSet<string>()
-			{
-				"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms", 
-				"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
-			};
 
 			//All modifiers
-			//modifiers = new Modifier[16];
+			//modifiers = new Modifier[18];
 			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
 			//modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
 			//modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
@@ -47,13 +41,16 @@ namespace ChallengeMode
 			//modifiers[13] = GameManager.instance.gameObject.AddComponent<Modifiers.InfectedWounds>();
 			//modifiers[14] = GameManager.instance.gameObject.AddComponent<Modifiers.ChaosChaos>();
 			//modifiers[15] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
+			//modifiers[16] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
+			//modifiers[17] = GameManager.instance.gameObject.AddComponent<Modifiers.PoorMemory>();
 
 			//Test individual modifier
 			modifiers = new Modifier[1];
-			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
+			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.PoorMemory>();
 
-			numActiveModifiers = 1;
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
+			spaCount = 0;
+			numActiveModifiers = 1;
 
 			//Create achievements
 			AchievementHelper.Initialize();
@@ -71,20 +68,28 @@ namespace ChallengeMode
 		{
 			return new List<(string, string)>
 			{
-				("Deepnest_East_04","Super Spitter"),
-				("GG_Ghost_Gorb", "Warrior/Ghost Warrior Slug"),
-				("Abyss_19", "Parasite Balloon (1)")
+				//For instantiating
+				("Deepnest_East_04","Super Spitter"), //Primal Aspid
+				("GG_Ghost_Gorb", "Warrior/Ghost Warrior Slug"), //Gorb
+				("Abyss_19", "Parasite Balloon (1)"), //Infected Balloon
+				("Room_Colosseum_Bronze", "Colosseum Manager/Ground Spikes/Colosseum Spike (19)"), //Colosseum Spike
+				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 2/Colosseum Cage Small"), //Armored Squit Cage
+				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 37/Colosseum Cage Small (3)"), //Battle Obble Cage
+				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 10/Colosseum Cage Small (5)"), //Death Loodle Cage
+				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 17/Colosseum Cage Small (2)"), //Primal Aspid Cage
+				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"), //Winged Fool Cage
+				//For audio
+				("Room_Colosseum_Bronze", "Colosseum Manager/Ground Spikes"), //Colosseum Spikes
 			};
 		}
 
 		private string BeforeSceneLoad(string sceneName)
 		{
-			modifierControl.Unload();
-
-			if(sceneName.Substring(0, 2) == "GG" && !blacklistedScenes.Contains(sceneName))
+			if(GameManager.instance.gameObject.GetComponent<ModifierControl>() == null)
 			{
-				modifierControl.Initialize();
+				modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			}
+			modifierControl.Initialize(sceneName, modifiers, numActiveModifiers);
 
 			if(sceneName == "GG_Spa") spaCount++;
 			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;

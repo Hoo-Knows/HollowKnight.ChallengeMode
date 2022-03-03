@@ -8,11 +8,17 @@ namespace ChallengeMode
 	public class ModifierControl : MonoBehaviour
 	{
 		private Modifier[] activeModifiers;
-
-		public void Initialize()
+		private readonly string[] blacklistedScenes = 
 		{
-			Modifier[] modifiers = ChallengeMode.Instance.modifiers;
-			int numActiveModifiers = ChallengeMode.Instance.numActiveModifiers;
+			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
+			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
+		};
+
+		public void Initialize(string sceneName, Modifier[] modifiers, int numActiveModifiers)
+		{
+			Unload();
+
+			if(sceneName.Substring(0, 2) != "GG" || Array.IndexOf(blacklistedScenes, sceneName) != -1) return;
 
 			Random random = new Random();
 			activeModifiers = new Modifier[numActiveModifiers];
@@ -72,7 +78,6 @@ namespace ChallengeMode
 
 		private IEnumerator ActivateModifiers()
 		{
-			//yield return null;
 			Time.timeScale = 0.2f;
 			foreach(Modifier modifier in activeModifiers)
 			{
@@ -91,7 +96,9 @@ namespace ChallengeMode
 			if(activeModifiers != null)
 			{
 				foreach(Modifier modifier in activeModifiers)
+				{
 					modifier.StopEffect();
+				}
 			}
 			activeModifiers = null;
 

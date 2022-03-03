@@ -25,3 +25,5 @@ For the mod to work properly, please enable "Show achievements" in the game opti
 - Infected Wounds: taking damage drains soul and sets nail damage to 1 for 5 seconds, also spawns 1-3 Infected Balloons
 - Chaos, Chaos: applies a different modifier every 15 seconds
 - Temporal Distortion: occasionally moves the Knight back in time 3 seconds
+- A Fool's Errand: covers the ground in spikes in regular intervals, spawning 1-3 enemies from the Colosseum each time
+- Poor Memory: disables the HUD

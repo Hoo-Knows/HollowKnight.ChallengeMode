@@ -53,6 +53,10 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -63,6 +67,7 @@
     <Compile Include="Modifier.cs" />
     <Compile Include="ModifierControl.cs" />
     <Compile Include="Modifiers\AdrenalineRush.cs" />
+    <Compile Include="Modifiers\AFoolsErrand.cs" />
     <Compile Include="Modifiers\Ascension.cs" />
     <Compile Include="Modifiers\AspidRancher.cs" />
     <Compile Include="Modifiers\ChaosChaos.cs" />
@@ -72,6 +77,7 @@
     <Compile Include="Modifiers\InfectedWounds.cs" />
     <Compile Include="Modifiers\NailOnly.cs" />
     <Compile Include="Modifiers\PastRegrets.cs" />
+    <Compile Include="Modifiers\PoorMemory.cs" />
     <Compile Include="Modifiers\SleepyKnight.cs" />
     <Compile Include="Modifiers\SoulMaster.cs" />
     <Compile Include="Modifiers\SpeedrunnersCurse.cs" />
