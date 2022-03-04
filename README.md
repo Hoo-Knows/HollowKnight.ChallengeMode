@@ -1,6 +1,6 @@
 # HK Challenge Mode
 
-WIP mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight.
+A WIP mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight. Each boss arena in Godhome now has 1-3 **modifiers** that make the game more challenging in a variety of ways, such as spawning enemies, adding something new to juggle, and more. The mod applies to both Pantheons and Hall of Gods.
 
 ## Dependencies
 - ModCommon
