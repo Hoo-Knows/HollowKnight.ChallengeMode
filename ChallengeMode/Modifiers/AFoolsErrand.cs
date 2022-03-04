@@ -22,6 +22,7 @@ namespace ChallengeMode.Modifiers
 		private AudioSource audioSource;
 		private bool waveFlag;
 		private bool enemyFlag;
+		private int numEnemies;
 
 		public override void StartEffect()
 		{
@@ -60,10 +61,12 @@ namespace ChallengeMode.Modifiers
 			
 			waveFlag = true;
 			enemyFlag = false;
+			numEnemies = 1;
 			random = new Random();
 			audioSource = HeroController.instance.GetComponent<AudioSource>();
 
 			StartCoroutine(WaveControl());
+			StartCoroutine(IncreaseNumEnemies());
 		}
 
 		private IEnumerator WaveControl()
@@ -99,9 +102,8 @@ namespace ChallengeMode.Modifiers
 		private IEnumerator SpawnEnemies(Vector3 spawnPos)
 		{
 			GameObject enemy = null;
-			int numEnemies = random.Next(1, 4);
 
-			for(int i = 0; i < numEnemies; i++)
+			for(int i = 0; i < numEnemies + random.Next(0, 2); i++)
 			{
 				int index = random.Next(0, enemies.Length);
 
@@ -130,6 +132,15 @@ namespace ChallengeMode.Modifiers
 			enemyFlag = false;
 		}
 
+		private IEnumerator IncreaseNumEnemies()
+		{
+			yield return new WaitForSeconds(20f);
+			numEnemies = 2;
+			yield return new WaitForSeconds(30f);
+			numEnemies = 3;
+			yield break;
+		}
+
 		public override void StopEffect()
 		{
 			foreach(GameObject spike in spikes)
@@ -138,6 +149,7 @@ namespace ChallengeMode.Modifiers
 			}
 			waveFlag = false;
 			enemyFlag = false;
+			numEnemies = 1;
 
 			StopAllCoroutines();
 		}

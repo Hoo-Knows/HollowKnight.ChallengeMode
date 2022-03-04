@@ -8,20 +8,26 @@ namespace ChallengeMode
 	public class ModifierControl : MonoBehaviour
 	{
 		private Modifier[] activeModifiers;
-		private readonly string[] blacklistedScenes = 
+		private readonly string[] sceneBlacklist = 
 		{
 			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
 			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
 		};
+		private readonly string[] foolSceneBlacklist =
+		{
+			"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V"
+		};
+		private string sceneName;
 
 		public void Initialize(string sceneName, Modifier[] modifiers, int numActiveModifiers)
 		{
 			Unload();
 
-			if(sceneName.Substring(0, 2) != "GG" || Array.IndexOf(blacklistedScenes, sceneName) != -1) return;
+			if(sceneName.Substring(0, 2) != "GG" || Array.IndexOf(sceneBlacklist, sceneName) != -1) return;
 
 			Random random = new Random();
 			activeModifiers = new Modifier[numActiveModifiers];
+			this.sceneName = sceneName;
 
 			//Select modifiers
 			for(int i = 0; i < numActiveModifiers; i++)
@@ -67,6 +73,20 @@ namespace ChallengeMode
 				result = false;
 			}
 
+			//Chaos, Chaos cannot appear with A Fool's Errand
+			if(modifier.ToString() == "ChallengeMode_Chaos, Chaos"
+			&& Array.IndexOf(activeModifiers, modifiers[17]) != -1)
+			{
+				result = false;
+			}
+
+			//A Fool's Errand cannot appear with Chaos, Chaos or on a blacklisted scene
+			if(modifier.ToString() == "ChallengeMode_A Fool's Errand"
+			&& Array.IndexOf(activeModifiers, modifiers[14]) != -1 || Array.IndexOf(foolSceneBlacklist, sceneName) != -1)
+			{
+				result = false;
+			}
+
 			return result;
 		}
 
@@ -78,11 +98,20 @@ namespace ChallengeMode
 
 		private IEnumerator ActivateModifiers()
 		{
+			ChallengeMode.Instance.Log("Activating modifiers");
 			Time.timeScale = 0.2f;
 			foreach(Modifier modifier in activeModifiers)
 			{
 				GameManager.instance.AwardAchievement(modifier.ToString());
-				modifier.StartEffect();
+				ChallengeMode.Instance.Log("Starting " + modifier.ToString().Substring(14));
+				try
+				{
+					modifier.StartEffect();
+				}
+				catch
+				{
+					ChallengeMode.Instance.Log("Failed to start " + modifier.ToString().Substring(14));
+				}
 				yield return new WaitForSecondsRealtime(0.75f);
 			}
 			yield return new WaitForSecondsRealtime(2f);
@@ -97,7 +126,18 @@ namespace ChallengeMode
 			{
 				foreach(Modifier modifier in activeModifiers)
 				{
-					modifier.StopEffect();
+					if(modifier != null)
+					{
+						ChallengeMode.Instance.Log("Stopping " + modifier.ToString().Substring(14));
+						try
+						{
+							modifier.StopEffect();
+						}
+						catch
+						{
+							ChallengeMode.Instance.Log("Failed to stop " + modifier.ToString().Substring(14));
+						}
+					}
 				}
 			}
 			activeModifiers = null;

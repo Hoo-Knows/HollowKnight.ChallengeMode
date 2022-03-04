@@ -12,7 +12,6 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
-			//Reflection to get list of modifiers and active modifiers
 			modifiers = ChallengeMode.Instance.modifiers;
 
 			flag = true;
@@ -26,9 +25,25 @@ namespace ChallengeMode.Modifiers
 			{
 				activeModifier = PickNewModifier();
 				GameManager.instance.AwardAchievement(activeModifier.ToString());
-				activeModifier.StartEffect();
-				yield return new WaitForSeconds(15f);
-				activeModifier.StopEffect();
+				ChallengeMode.Instance.Log("Starting " + activeModifier.ToString().Substring(14));
+				try
+				{
+					activeModifier.StartEffect();
+				}
+				catch
+				{
+					ChallengeMode.Instance.Log("Failed to start " + activeModifier.ToString().Substring(14));
+				}
+				yield return new WaitForSeconds(20f);
+				try
+				{
+					ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
+					activeModifier.StopEffect();
+				}
+				catch
+				{
+					ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
+				}
 			}
 			yield break;
 		}
@@ -43,7 +58,7 @@ namespace ChallengeMode.Modifiers
 			{
 				modifier = modifiers[random.Next(0, modifiers.Length)];
 
-				foundModifier = ChallengeMode.Instance.modifierControl.CheckValidModifier(modifier);
+				foundModifier = ChallengeMode.Instance.modifierControl.CheckValidModifier(modifier) && modifier != activeModifier;
 			}
 			return modifier;
 		}
@@ -51,7 +66,15 @@ namespace ChallengeMode.Modifiers
 		public override void StopEffect()
 		{
 			flag = false;
-			activeModifier.StopEffect();
+			try
+			{
+				ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
+				activeModifier.StopEffect();
+			}
+			catch
+			{
+				ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
+			}
 
 			StopAllCoroutines();
 		}

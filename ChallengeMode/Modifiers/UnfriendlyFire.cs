@@ -11,6 +11,7 @@ namespace ChallengeMode.Modifiers
 		private GameObject grimmchildGO;
 		private PlayMakerFSM grimmchildFSM;
 		private GameObject grimmballGO;
+		private PlayMakerFSM grimmballFSM;
 
 		public override void StartEffect()
 		{
@@ -41,7 +42,7 @@ namespace ChallengeMode.Modifiers
 				grimmchildFSM.FsmVariables.FindFsmGameObject("Target").Value = HeroController.instance.gameObject;
 			});
 
-			//Get flameball GameObject
+			//Make grimmball do damage
 			grimmchildFSM.InsertMethod("Shoot", 10, () =>
 			{
 				grimmballGO = grimmchildFSM.FsmVariables.GetFsmGameObject("Flameball").Value;
@@ -49,6 +50,13 @@ namespace ChallengeMode.Modifiers
 				grimmballGO.AddComponent<DamageHero>();
 				grimmballGO.GetComponent<DamageHero>().damageDealt = 1;
 				grimmballGO.GetComponent<DamageHero>().hazardType = 1;
+
+				//Prevent grimmball from doing daamge after impact
+				grimmballFSM = grimmballGO.LocateMyFSM("Control");
+				grimmballFSM.InsertMethod("Impact", 0, () =>
+				{
+					grimmballGO.layer = (int)PhysLayers.CORPSE;
+				});
 			});
 		}
 

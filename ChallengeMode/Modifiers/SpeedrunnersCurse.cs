@@ -1,13 +1,28 @@
-﻿using Modding;
-
-namespace ChallengeMode.Modifiers
+﻿namespace ChallengeMode.Modifiers
 {
 	class SpeedrunnersCurse : Modifier
 	{
+		private bool sbodyAlreadyEquipped;
+		private bool thornsNotAlreadyEquipped;
+
 		public override void StartEffect()
 		{
+			sbodyAlreadyEquipped = PlayerData.instance.GetBool("equippedCharm_14");
+			thornsNotAlreadyEquipped = !PlayerData.instance.GetBool("equippedCharm_12");
+
+			if(sbodyAlreadyEquipped)
+			{
+				PlayerData.instance.SetBool("equippedCharm_14", false);
+				GameManager.instance.UnequipCharm(14);
+			}
+			if(thornsNotAlreadyEquipped)
+			{
+				PlayerData.instance.SetBool("equippedCharm_12", true);
+				GameManager.instance.EquipCharm(12);
+			}
+			HeroController.instance.CharmUpdate();
+
 			ModCommon.ModCommon.OnSpellHook += OnSpellHook;
-			ModHooks.Instance.GetPlayerBoolHook += GetPlayerBoolHook;
 		}
 
 		private bool OnSpellHook(ModCommon.ModCommon.Spell s)
@@ -20,18 +35,21 @@ namespace ChallengeMode.Modifiers
 			return true;
 		}
 
-		private bool GetPlayerBoolHook(string target)
-		{
-			//Unequip sbody, equip thorns
-			if(target == "equippedCharm_14") return false;
-			if(target == "equippedCharm_12") return true;
-			return PlayerData.instance.GetBoolInternal(target);
-		}
-
 		public override void StopEffect()
 		{
+			if(sbodyAlreadyEquipped)
+			{
+				PlayerData.instance.SetBool("equippedCharm_14", true);
+				GameManager.instance.EquipCharm(14);
+			}
+			if(thornsNotAlreadyEquipped)
+			{
+				PlayerData.instance.SetBool("equippedCharm_12", false);
+				GameManager.instance.UnequipCharm(12);
+			}
+			HeroController.instance.CharmUpdate();
+
 			ModCommon.ModCommon.OnSpellHook -= OnSpellHook;
-			ModHooks.Instance.GetPlayerBoolHook -= GetPlayerBoolHook;
 		}
 
 		public override string ToString()

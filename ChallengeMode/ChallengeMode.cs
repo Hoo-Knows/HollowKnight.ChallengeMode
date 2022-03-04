@@ -48,7 +48,7 @@ namespace ChallengeMode
 
 			//Test individual modifier
 			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.SalubrasCurse>();
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			spaCount = 0;
@@ -70,7 +70,6 @@ namespace ChallengeMode
 		{
 			return new List<(string, string)>
 			{
-				//For instantiating
 				("Deepnest_East_04","Super Spitter"), //Primal Aspid
 				("GG_Ghost_Gorb", "Warrior/Ghost Warrior Slug"), //Gorb
 				("Abyss_19", "Parasite Balloon (1)"), //Infected Balloon

@@ -35,7 +35,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator SpawnAspid()
 		{
-			yield return new WaitWhile(() => HeroController.instance.cState.attacking == true);
+			yield return new WaitWhile(() => HeroController.instance.cState.attacking);
 
 			if(spawnFlag)
 			{
@@ -61,7 +61,7 @@ namespace ChallengeMode.Modifiers
 
 		private void HeroUpdateHook()
 		{
-			if(HeroController.instance.cState.bouncing == true) spawnFlag = false;
+			if(HeroController.instance.cState.bouncing) spawnFlag = false;
 		}
 
 		public override void StopEffect()
