@@ -18,35 +18,37 @@ namespace ChallengeMode
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
+		public override string GetVersion() => "0.2";
+
 		public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
 		{
 			Instance = this;
 			this.preloadedObjects = preloadedObjects;
 
 			//All modifiers
-			//modifiers = new Modifier[18];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
-			//modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
-			//modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
-			//modifiers[3] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
-			//modifiers[4] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
-			//modifiers[5] = GameManager.instance.gameObject.AddComponent<Modifiers.SpeedrunnersCurse>();
-			//modifiers[6] = GameManager.instance.gameObject.AddComponent<Modifiers.NailOnly>();
-			//modifiers[7] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
-			//modifiers[8] = GameManager.instance.gameObject.AddComponent<Modifiers.HungryKnight>();
-			//modifiers[9] = GameManager.instance.gameObject.AddComponent<Modifiers.UnfriendlyFire>();
-			//modifiers[10] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
-			//modifiers[11] = GameManager.instance.gameObject.AddComponent<Modifiers.SleepyKnight>();
-			//modifiers[12] = GameManager.instance.gameObject.AddComponent<Modifiers.PastRegrets>();
-			//modifiers[13] = GameManager.instance.gameObject.AddComponent<Modifiers.InfectedWounds>();
-			//modifiers[14] = GameManager.instance.gameObject.AddComponent<Modifiers.ChaosChaos>();
-			//modifiers[15] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
-			//modifiers[16] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
-			//modifiers[17] = GameManager.instance.gameObject.AddComponent<Modifiers.PoorMemory>();
+			modifiers = new Modifier[18];
+			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
+			modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
+			modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
+			modifiers[3] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
+			modifiers[4] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
+			modifiers[5] = GameManager.instance.gameObject.AddComponent<Modifiers.SpeedrunnersCurse>();
+			modifiers[6] = GameManager.instance.gameObject.AddComponent<Modifiers.NailOnly>();
+			modifiers[7] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
+			modifiers[8] = GameManager.instance.gameObject.AddComponent<Modifiers.HungryKnight>();
+			modifiers[9] = GameManager.instance.gameObject.AddComponent<Modifiers.UnfriendlyFire>();
+			modifiers[10] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
+			modifiers[11] = GameManager.instance.gameObject.AddComponent<Modifiers.SalubrasCurse>();
+			modifiers[12] = GameManager.instance.gameObject.AddComponent<Modifiers.PastRegrets>();
+			modifiers[13] = GameManager.instance.gameObject.AddComponent<Modifiers.InfectedWounds>();
+			modifiers[14] = GameManager.instance.gameObject.AddComponent<Modifiers.ChaosChaos>();
+			modifiers[15] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
+			modifiers[16] = GameManager.instance.gameObject.AddComponent<Modifiers.PoorMemory>();
+			modifiers[17] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
 
 			//Test individual modifier
-			modifiers = new Modifier[1];
-			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.PoorMemory>();
+			//modifiers = new Modifier[1];
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.SalubrasCurse>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			spaCount = 0;
@@ -72,14 +74,13 @@ namespace ChallengeMode
 				("Deepnest_East_04","Super Spitter"), //Primal Aspid
 				("GG_Ghost_Gorb", "Warrior/Ghost Warrior Slug"), //Gorb
 				("Abyss_19", "Parasite Balloon (1)"), //Infected Balloon
+				("Room_Colosseum_Bronze", "Colosseum Manager/Ground Spikes"), //Colosseum Spikes (for audio)
 				("Room_Colosseum_Bronze", "Colosseum Manager/Ground Spikes/Colosseum Spike (19)"), //Colosseum Spike
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 2/Colosseum Cage Small"), //Armored Squit Cage
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 37/Colosseum Cage Small (3)"), //Battle Obble Cage
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 10/Colosseum Cage Small (5)"), //Death Loodle Cage
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 17/Colosseum Cage Small (2)"), //Primal Aspid Cage
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"), //Winged Fool Cage
-				//For audio
-				("Room_Colosseum_Bronze", "Colosseum Manager/Ground Spikes"), //Colosseum Spikes
 			};
 		}
 

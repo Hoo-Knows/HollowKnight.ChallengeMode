@@ -78,6 +78,7 @@
     <Compile Include="Modifiers\NailOnly.cs" />
     <Compile Include="Modifiers\PastRegrets.cs" />
     <Compile Include="Modifiers\PoorMemory.cs" />
+    <Compile Include="Modifiers\SalubrasCurse.cs" />
     <Compile Include="Modifiers\SleepyKnight.cs" />
     <Compile Include="Modifiers\SoulMaster.cs" />
     <Compile Include="Modifiers\SpeedrunnersCurse.cs" />
