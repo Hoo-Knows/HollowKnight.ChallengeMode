@@ -69,12 +69,12 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
-			spawnFlag = false;
-
 			ModHooks.AfterAttackHook -= AfterAttackHook;
 			ModHooks.SlashHitHook -= SlashHitHook;
 			ModHooks.HeroUpdateHook += HeroUpdateHook;
 			StopAllCoroutines();
+
+			spawnFlag = false;
 		}
 
 		public override string ToString()

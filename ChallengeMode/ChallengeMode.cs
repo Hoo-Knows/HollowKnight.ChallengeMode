@@ -16,9 +16,9 @@ namespace ChallengeMode
 		private int spaCount;
 		private int numActiveModifiers;
 
-		public ChallengeMode() : base("ChallengeMode") { }
+		public override string GetVersion() => "0.3.1.0";
 
-		public override string GetVersion() => "0.2";
+		public ChallengeMode() : base("ChallengeMode") { }
 
 		public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
 		{
@@ -48,18 +48,17 @@ namespace ChallengeMode
 
 			//Test individual modifier
 			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			spaCount = 0;
 			numActiveModifiers = 1;
 
 			//Create achievements
-			AchievementHelper.unusedInit();
 			foreach(Modifier modifier in modifiers)
 			{
-				AchievementHelper.AddAchievement(modifier.ToString(), 
-					Sprite.Create(new Texture2D(80, 80), new Rect(0f, 0f, 80f, 80f), new Vector2(0f, 0f)), 
+				AchievementHelper.AddAchievement(modifier.ToString(),
+					Sprite.Create(new Texture2D(80, 80), new Rect(0f, 0f, 80f, 80f), new Vector2(0f, 0f)),
 					modifier.ToString(), "ChallengeMode_AchievementText", false);
 			}
 			UIManager.instance.RefreshAchievementsList();
@@ -87,10 +86,7 @@ namespace ChallengeMode
 
 		private string BeforeSceneLoad(string sceneName)
 		{
-			if(GameManager.instance.gameObject.GetComponent<ModifierControl>() == null)
-			{
-				modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
-			}
+			if(modifierControl == null) modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			modifierControl.Initialize(sceneName, numActiveModifiers);
 
 			if(sceneName == "GG_Spa") spaCount++;

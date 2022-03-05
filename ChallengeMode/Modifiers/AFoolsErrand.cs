@@ -22,6 +22,7 @@ namespace ChallengeMode.Modifiers
 		private AudioSource audioSource;
 		private bool waveFlag;
 		private bool enemyFlag;
+		private int numWaves;
 		private int numEnemies;
 
 		public override void StartEffect()
@@ -61,12 +62,12 @@ namespace ChallengeMode.Modifiers
 			
 			waveFlag = true;
 			enemyFlag = false;
+			numWaves = 0;
 			numEnemies = 1;
 			random = new Random();
 			audioSource = HeroController.instance.GetComponent<AudioSource>();
 
 			StartCoroutine(WaveControl());
-			StartCoroutine(IncreaseNumEnemies());
 		}
 
 		private IEnumerator WaveControl()
@@ -81,7 +82,7 @@ namespace ChallengeMode.Modifiers
 				audioSource.PlayOneShot(audioSpikeAntic);
 				yield return new WaitForSeconds(1f);
 
-				//Spawn Enemies
+				//Spawn enemies
 				enemyFlag = true;
 				StartCoroutine(SpawnEnemies(spawnPos));
 
@@ -94,15 +95,18 @@ namespace ChallengeMode.Modifiers
 				yield return new WaitForSeconds(1f);
 				PlayMakerFSM.BroadcastEvent("RETRACT");
 				audioSource.PlayOneShot(audioSpikeRetract);
-				yield return new WaitForSeconds(random.Next(10, 15));
+
+				//Update number of waves/enemies (increase minimum number of enemies to 2 after 3 waves
+				numWaves++;
+				if(numWaves == 3) numEnemies = 2;
+
+				yield return new WaitForSeconds(random.Next(15, 20));
 			}
 			yield break;
 		}
 
 		private IEnumerator SpawnEnemies(Vector3 spawnPos)
 		{
-			GameObject enemy = null;
-
 			for(int i = 0; i < numEnemies + random.Next(0, 2); i++)
 			{
 				int index = random.Next(0, enemies.Length);
@@ -110,39 +114,40 @@ namespace ChallengeMode.Modifiers
 				//Spawn cage
 				GameObject cage = Instantiate(enemies[index], spawnPos, Quaternion.identity);
 				PlayMakerFSM cageFSM = cage.LocateMyFSM("Spawn");
+				cage.SetActive(true);
+				cageFSM.SetState("Init");
 
-				//Spawn enemy manually
+				//Spawn enemy manually so we can keep track of when it dies
+				GameObject enemy = null;
 				if(index != 4) //Small cage
 				{
 					enemy = Instantiate(cageFSM.Fsm.GetFsmGameObject("Enemy Type").Value, spawnPos, Quaternion.identity);
+					cageFSM.RemoveAction("Spawn", 0);
 				}
 				else //Large cage
 				{
 					enemy = Instantiate(cageFSM.Fsm.GetFsmGameObject("Corpse to Instantiate").Value, spawnPos, Quaternion.identity);
+					cageFSM.RemoveAction("Spawn", 1);
 				}
 				enemy.SetActive(false);
+
+				//Set enemy active when cage comes up
 				cageFSM.InsertMethod("Pause", () =>
 				{
 					enemy.SetActive(true);
 				}, 0);
-				cage.SetActive(true);
-				cageFSM.SetState("Anim");
+
+				//Start cage
+				cageFSM.SendEvent("SPAWN");
 				yield return new WaitWhile(() => enemy != null);
 			}
 			enemyFlag = false;
 		}
 
-		private IEnumerator IncreaseNumEnemies()
-		{
-			yield return new WaitForSeconds(20f);
-			numEnemies = 2;
-			yield return new WaitForSeconds(30f);
-			numEnemies = 3;
-			yield break;
-		}
-
 		public override void StopEffect()
 		{
+			StopAllCoroutines();
+
 			foreach(GameObject spike in spikes)
 			{
 				spike.Recycle();
@@ -150,8 +155,6 @@ namespace ChallengeMode.Modifiers
 			waveFlag = false;
 			enemyFlag = false;
 			numEnemies = 1;
-
-			StopAllCoroutines();
 		}
 
 		public override string ToString()

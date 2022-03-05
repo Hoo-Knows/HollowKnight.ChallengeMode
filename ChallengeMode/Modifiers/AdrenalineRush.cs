@@ -18,46 +18,25 @@ namespace ChallengeMode.Modifiers
 		private int TakeHealthHook(int damage)
 		{
 			customTimeScale = Mathf.Min(customTimeScale + 0.025f, 1.5f);
+			StartCoroutine(WaitAfterRecoil());
 			return damage;
 		}
 
-		//private IEnumerator FreezeMoment(GameManager.orig_FreezeMoment_float_float_float_float orig, GameManager self, 
-		//	float rampDownTime, float waitTime, float rampUpTime, float targetSpeed)
-		//{
-		//	yield return this.StartCoroutine(this.SetTimeScale(targetSpeed, rampDownTime));
-		//	for(float timer = 0f; timer < waitTime; timer += Time.unscaledDeltaTime)
-		//	{
-		//		yield return null;
-		//	}
-		//	yield return this.StartCoroutine(this.SetTimeScale(customTimeScale, rampUpTime));
-		//	yield break;
-		//}
-
-		public IEnumerator SetTimeScale(float newTimeScale, float duration)
+		private IEnumerator WaitAfterRecoil()
 		{
-			float lastTimeScale = Time.timeScale;
-			for(float timer = 0f; timer < duration; timer += Time.unscaledDeltaTime)
-			{
-				float val = Mathf.Clamp01(timer / duration);
-				this.SetTimeScale(Mathf.Lerp(lastTimeScale, newTimeScale, val));
-				yield return null;
-			}
-			this.SetTimeScale(newTimeScale);
+			//recoilDuration is 0.5 seconds
+			yield return new WaitForSeconds(0.5f);
+			Time.timeScale = customTimeScale;
 			yield break;
-		}
-
-		private void SetTimeScale(float newTimeScale)
-		{
-			Time.timeScale = ((newTimeScale <= 0.01f) ? 0f : newTimeScale) * newTimeScale;
 		}
 
 		public override void StopEffect()
 		{
-			customTimeScale = 1f;
-			Time.timeScale = 1f;
-
 			ModHooks.TakeHealthHook -= TakeHealthHook;
 			StopAllCoroutines();
+
+			customTimeScale = 1f;
+			Time.timeScale = 1f;
 		}
 
 		public override string ToString()

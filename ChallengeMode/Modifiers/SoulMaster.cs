@@ -23,18 +23,18 @@ namespace ChallengeMode.Modifiers
 			while(flag)
 			{
 				HeroController.instance.AddMPChargeSpa(11);
-				yield return new WaitForSeconds(1.5f);
+				yield return new WaitForSeconds(2f);
 			}
 			yield break;
 		}
 
 		public override void StopEffect()
 		{
+			StopAllCoroutines();
+
 			flag = false;
 			PlayerData.instance.SetInt("nailDamage", nailDamage);
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
-
-			StopAllCoroutines();
 		}
 
 		public override string ToString()

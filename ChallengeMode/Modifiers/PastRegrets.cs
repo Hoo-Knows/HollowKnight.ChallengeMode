@@ -27,6 +27,9 @@ namespace ChallengeMode.Modifiers
 			usingScream = false;
 			warping = false;
 
+			//Remove audio
+			shadeGO.LocateMyFSM("Play Audio").RemoveState("Fade Up");
+
 			//Remove spell limit, increase hp, and set spell levels to max
 			shadeFSM.InsertMethod("Init", () =>
 			{
@@ -67,15 +70,15 @@ namespace ChallengeMode.Modifiers
 				if(usingFireball)
 				{
 					if(HeroController.instance.cState.facingRight) position += 3 * Vector3.left;
-					else position += 3 * Vector3.right;
+					else position += 2 * Vector3.right;
 				}
 				else if(usingQuake)
 				{
-					position += 3 * Vector3.up;
+					position += 2 * Vector3.up;
 				}
 				else if(usingScream)
 				{
-					position += 3 * Vector3.down;
+					position += 2 * Vector3.down;
 				}
 				shadeFSM.FsmVariables.FindFsmVector3("Start Pos").Value = position;
 			}, 1);
@@ -140,6 +143,8 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
+			StopAllCoroutines();
+
 			shadeFSM.Recycle();
 			shadeGO.Recycle();
 			usingFireball = false;
@@ -150,8 +155,6 @@ namespace ChallengeMode.Modifiers
 			spellFSM.RemoveAction("Wallside?", 0);
 			spellFSM.RemoveAction("On Ground?", 0);
 			spellFSM.RemoveAction("Scream Get?", 0);
-
-			StopAllCoroutines();
 		}
 
 		public override string ToString()

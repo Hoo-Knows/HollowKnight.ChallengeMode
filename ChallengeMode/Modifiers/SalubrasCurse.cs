@@ -43,7 +43,6 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_" + i, charms[i - 1]);
 				if(charms[i - 1]) GameManager.instance.EquipCharm(i);
 			}
-			HeroController.instance.CharmUpdate();
 			GameManager.instance.RefreshOvercharm();
 		}
 

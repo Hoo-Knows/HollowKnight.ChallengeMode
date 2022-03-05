@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Modding;
 using UnityEngine;
 using Random = System.Random;
 
@@ -24,7 +25,12 @@ namespace ChallengeMode.Modifiers
 			while(flag)
 			{
 				activeModifier = PickNewModifier();
-				GameManager.instance.AwardAchievement(activeModifier.ToString());
+
+				AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
+				AchievementHandler.AchievementAwarded aa =
+					ReflectionHelper.GetField<AchievementHandler, AchievementHandler.AchievementAwarded>(ah, "AwardAchievementEvent");
+				aa.Invoke(activeModifier.ToString());
+
 				ChallengeMode.Instance.Log("Starting " + activeModifier.ToString().Substring(14));
 				try
 				{
@@ -65,6 +71,8 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
+			StopAllCoroutines();
+
 			flag = false;
 			try
 			{
@@ -75,8 +83,6 @@ namespace ChallengeMode.Modifiers
 			{
 				ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
 			}
-
-			StopAllCoroutines();
 		}
 
 		public override string ToString()

@@ -20,11 +20,11 @@ namespace ChallengeMode.Modifiers
 			while(flag)
 			{
 				HeroController.instance.TakeMP(11);
-				yield return new WaitForSeconds(3f);
+				yield return new WaitForSeconds(2f);
 				if(PlayerData.instance.GetInt("MPCharge") == 0)
 				{
 					HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.other, 1, 1);
-					yield return new WaitForSeconds(2f);
+					yield return new WaitForSeconds(3f);
 				}
 			}
 			yield break;
@@ -32,9 +32,9 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
-			flag = false;
-
 			StopAllCoroutines();
+
+			flag = false;
 		}
 
 		public override string ToString()

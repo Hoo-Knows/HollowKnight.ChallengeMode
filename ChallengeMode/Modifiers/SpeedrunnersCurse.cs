@@ -24,7 +24,6 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_12", true);
 				GameManager.instance.EquipCharm(12);
 			}
-			HeroController.instance.CharmUpdate();
 
 			//Take hazard damage when using DDark
 			spellFSM = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
@@ -46,7 +45,6 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_12", false);
 				GameManager.instance.UnequipCharm(12);
 			}
-			HeroController.instance.CharmUpdate();
 
 			spellFSM.RemoveAction("Level Check 2", 0);
 		}

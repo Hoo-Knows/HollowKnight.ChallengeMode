@@ -62,9 +62,9 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
-			flag = false;
-
 			StopAllCoroutines();
+
+			flag = false;
 		}
 
 		public override string ToString()

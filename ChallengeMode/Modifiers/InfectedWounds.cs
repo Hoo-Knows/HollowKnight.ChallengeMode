@@ -36,9 +36,9 @@ namespace ChallengeMode.Modifiers
 			{
 				GameObject balloon = Instantiate(balloonGO);
 				balloon.transform.position = HeroController.instance.transform.position;
-				balloon.transform.position += new Vector3(random.Next(-4, 4), random.Next(-4, 4), 0);
+				balloon.transform.position += new Vector3(random.Next(-4, 4), random.Next(0, 4), 0);
 				balloon.SetActive(true);
-				balloon.LocateMyFSM("Control").SetState("Spawn");
+				balloon.LocateMyFSM("Control").SendEvent("SPAWN");
 			}
 
 			return damage;
@@ -48,7 +48,7 @@ namespace ChallengeMode.Modifiers
 		{
 			PlayerData.instance.nailDamage = 1;
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
-			yield return new WaitForSeconds(5f);
+			yield return new WaitForSeconds(7.5f);
 			PlayerData.instance.SetInt("nailDamage", nailDamage);
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 			yield break;
@@ -56,21 +56,21 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator SoulControl()
 		{
-			for(int i = 0; i < 5; i++)
+			for(int i = 0; i < 9; i++)
 			{
 				HeroController.instance.TakeMPQuick(11);
-				yield return new WaitForSeconds(1f);
+				yield return new WaitForSeconds(0.1f);
 			}
 			yield break;
 		}
 
 		public override void StopEffect()
 		{
-			PlayerData.instance.SetInt("nailDamage", nailDamage);
-			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
-
 			ModHooks.TakeHealthHook -= TakeHealthHook;
 			StopAllCoroutines();
+
+			PlayerData.instance.SetInt("nailDamage", nailDamage);
+			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 		}
 
 		public override string ToString()
