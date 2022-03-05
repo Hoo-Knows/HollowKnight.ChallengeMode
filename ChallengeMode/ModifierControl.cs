@@ -76,6 +76,25 @@ namespace ChallengeMode
 			//Check if modifier hasn't been selected
 			if(ContainsModifier(modifier, activeModifiers)) result = false;
 
+			//High Stress cannot appear with Unfriendly Fire, Ascension, Past Regrets, or A Fool's Errand
+			if(modifier.ToString() == "ChallengeMode_High Stress")
+			{
+				result = result && !ContainsModifier(modifiers[9], activeModifiers) && !ContainsModifier(modifiers[10], activeModifiers)
+					&& !ContainsModifier(modifiers[12], activeModifiers) && !ContainsModifier(modifiers[17], activeModifiers);
+			}
+
+			//Unfriendly Fire cannot appear with High Stress
+			if(modifier.ToString() == "ChallengeMode_Unfriendly Fire")
+			{
+				result = result && !ContainsModifier(modifiers[0], activeModifiers);
+			}
+
+			//Ascension cannot appear with High Stress
+			if(modifier.ToString() == "ChallengeMode_Ascension")
+			{
+				result = result && !ContainsModifier(modifiers[0], activeModifiers);
+			}
+
 			//Nail Only cannot appear with Soul Master or Past Regrets
 			if(modifier.ToString() == "ChallengeMode_Nail Only")
 			{
@@ -88,10 +107,10 @@ namespace ChallengeMode
 				result = result && !ContainsModifier(modifiers[6], activeModifiers);
 			}
 
-			//Past Regrets cannot appear with Nail Only
+			//Past Regrets cannot appear with High Stress or Nail Only
 			if(modifier.ToString() == "ChallengeMode_Past Regrets")
 			{
-				result = result && !ContainsModifier(modifiers[6], activeModifiers);
+				result = result && !ContainsModifier(modifiers[0], activeModifiers) && !ContainsModifier(modifiers[6], activeModifiers);
 			}
 
 			//Chaos, Chaos cannot appear with A Fool's Errand
@@ -100,10 +119,11 @@ namespace ChallengeMode
 				result = result && !ContainsModifier(modifiers[17], activeModifiers);
 			}
 
-			//A Fool's Errand cannot appear with Chaos, Chaos or on a blacklisted scene
+			//A Fool's Errand cannot appear with High Stress, Chaos, Chaos, or on a blacklisted scene
 			if(modifier.ToString() == "ChallengeMode_A Fool's Errand")
 			{
-				result = result && !ContainsModifier(modifiers[14], activeModifiers) && Array.IndexOf(foolSceneBlacklist, sceneName) == -1;
+				result = result && !ContainsModifier(modifiers[0], activeModifiers) && !ContainsModifier(modifiers[14], activeModifiers)
+					&& Array.IndexOf(foolSceneBlacklist, sceneName) == -1;
 			}
 
 			return result;

@@ -16,7 +16,7 @@ namespace ChallengeMode
 		private int spaCount;
 		private int numActiveModifiers;
 
-		public override string GetVersion() => "0.3.1.1";
+		public override string GetVersion() => "0.3.1.2";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
