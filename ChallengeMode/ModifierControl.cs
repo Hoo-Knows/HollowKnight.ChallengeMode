@@ -19,26 +19,29 @@ namespace ChallengeMode
 		};
 		private string sceneName;
 
-		public void Initialize(string sceneName, Modifier[] modifiers, int numActiveModifiers)
+		public void Initialize(string sceneName, int numActiveModifiers)
 		{
 			Unload();
 
 			if(sceneName.Substring(0, 2) != "GG" || Array.IndexOf(sceneBlacklist, sceneName) != -1) return;
 
 			Random random = new Random();
-			activeModifiers = new Modifier[numActiveModifiers];
 			this.sceneName = sceneName;
+			activeModifiers = new Modifier[numActiveModifiers];
+			Modifier[] modifiers = ChallengeMode.Instance.modifiers;
 
 			//Select modifiers
 			for(int i = 0; i < numActiveModifiers; i++)
 			{
-				Modifier modifier = modifiers[random.Next(0, modifiers.Length)];
+				Modifier modifier;
+				if(Array.IndexOf(activeModifiers, modifiers[14]) == -1) modifier = modifiers[14];
+				modifier = modifiers[random.Next(0, modifiers.Length)];
 
 				if(CheckValidModifier(modifier)) activeModifiers[i] = modifier;
 				else i--;
 			}
 
-			On.HeroController.FinishedEnteringScene += FinishedEnteringScene;
+			GameManager.instance.OnFinishedEnteringScene += OnFinishedEnteringScene;
 		}
 
 		public bool CheckValidModifier(Modifier modifier)
@@ -90,9 +93,8 @@ namespace ChallengeMode
 			return result;
 		}
 
-		private void FinishedEnteringScene(On.HeroController.orig_FinishedEnteringScene orig, HeroController self, bool setHazardMarker, bool preventRunBob)
+		private void OnFinishedEnteringScene()
 		{
-			orig(self, setHazardMarker, preventRunBob);
 			StartCoroutine(ActivateModifiers());
 		}
 
@@ -116,7 +118,7 @@ namespace ChallengeMode
 			}
 			yield return new WaitForSecondsRealtime(2f);
 			if(!GameManager.instance.isPaused) Time.timeScale = 1f;
-			On.HeroController.FinishedEnteringScene -= FinishedEnteringScene;
+			GameManager.instance.OnFinishedEnteringScene -= OnFinishedEnteringScene;
 			yield break;
 		}
 
@@ -142,7 +144,7 @@ namespace ChallengeMode
 			}
 			activeModifiers = null;
 
-			On.HeroController.FinishedEnteringScene -= FinishedEnteringScene;
+			GameManager.instance.OnFinishedEnteringScene -= OnFinishedEnteringScene;
 			StopAllCoroutines();
 		}
 	}

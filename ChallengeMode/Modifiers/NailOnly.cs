@@ -1,20 +1,31 @@
-﻿namespace ChallengeMode.Modifiers
+﻿using SFCore.Utils;
+using HutongGames.PlayMaker.Actions;
+
+namespace ChallengeMode.Modifiers
 {
 	class NailOnly : Modifier
 	{
+		private PlayMakerFSM spellFSM;
+
 		public override void StartEffect()
 		{
-			ModCommon.ModCommon.OnSpellHook += OnSpellHook;
-		}
+			spellFSM = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
 
-		private bool OnSpellHook(ModCommon.ModCommon.Spell s)
-		{
-			return false;
+			spellFSM.InsertMethod("Can Cast?", () =>
+			{
+				spellFSM.SendEvent("CANCEL");
+			}, 0);
+
+			spellFSM.InsertMethod("Can Cast? QC", () =>
+			{
+				spellFSM.SendEvent("CANCEL");
+			}, 0);
 		}
 
 		public override void StopEffect()
 		{
-			ModCommon.ModCommon.OnSpellHook -= OnSpellHook;
+			spellFSM.RemoveAction("Can Cast?", 0);
+			spellFSM.RemoveAction("Can Cast? QC", 0);
 		}
 
 		public override string ToString()

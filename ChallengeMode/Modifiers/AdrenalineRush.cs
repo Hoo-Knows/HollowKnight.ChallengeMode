@@ -12,8 +12,7 @@ namespace ChallengeMode.Modifiers
 		{
 			customTimeScale = 1f;
 
-			ModHooks.Instance.TakeHealthHook += TakeHealthHook;
-			On.GameManager.FreezeMoment_float_float_float_float += FreezeMoment;
+			ModHooks.TakeHealthHook += TakeHealthHook;
 		}
 		
 		private int TakeHealthHook(int damage)
@@ -22,17 +21,17 @@ namespace ChallengeMode.Modifiers
 			return damage;
 		}
 
-		private IEnumerator FreezeMoment(On.GameManager.orig_FreezeMoment_float_float_float_float orig, GameManager self, 
-			float rampDownTime, float waitTime, float rampUpTime, float targetSpeed)
-		{
-			yield return this.StartCoroutine(this.SetTimeScale(targetSpeed, rampDownTime));
-			for(float timer = 0f; timer < waitTime; timer += Time.unscaledDeltaTime)
-			{
-				yield return null;
-			}
-			yield return this.StartCoroutine(this.SetTimeScale(customTimeScale, rampUpTime));
-			yield break;
-		}
+		//private IEnumerator FreezeMoment(GameManager.orig_FreezeMoment_float_float_float_float orig, GameManager self, 
+		//	float rampDownTime, float waitTime, float rampUpTime, float targetSpeed)
+		//{
+		//	yield return this.StartCoroutine(this.SetTimeScale(targetSpeed, rampDownTime));
+		//	for(float timer = 0f; timer < waitTime; timer += Time.unscaledDeltaTime)
+		//	{
+		//		yield return null;
+		//	}
+		//	yield return this.StartCoroutine(this.SetTimeScale(customTimeScale, rampUpTime));
+		//	yield break;
+		//}
 
 		public IEnumerator SetTimeScale(float newTimeScale, float duration)
 		{
@@ -57,8 +56,7 @@ namespace ChallengeMode.Modifiers
 			customTimeScale = 1f;
 			Time.timeScale = 1f;
 
-			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
-			On.GameManager.FreezeMoment_float_float_float_float -= FreezeMoment;
+			ModHooks.TakeHealthHook -= TakeHealthHook;
 			StopAllCoroutines();
 		}
 

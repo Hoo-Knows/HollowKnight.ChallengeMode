@@ -1,7 +1,6 @@
 ﻿using Modding;
 using UnityEngine;
 using GlobalEnums;
-using System.Reflection;
 using System.Collections;
 
 namespace ChallengeMode.Modifiers
@@ -17,15 +16,14 @@ namespace ChallengeMode.Modifiers
 			Destroy(aspidGO.GetComponent<PersistentBoolItem>());
 			HealthManager hm = aspidGO.GetComponent<HealthManager>();
 			hm.hp = 1;
-			//disable soul gain
-			FieldInfo fi = ReflectionHelper.GetField(typeof(HealthManager), "enemyType");
-			fi.SetValue(hm, 6);
+			//Disable soul gain
+			ReflectionHelper.SetField(hm, "enemyType", 6);
 
 			spawnFlag = true;
 
-			ModHooks.Instance.AfterAttackHook += AfterAttackHook;
-			On.HealthManager.Hit += HealthManagerHit;
-			ModHooks.Instance.HeroUpdateHook += HeroUpdateHook;
+			ModHooks.AfterAttackHook += AfterAttackHook;
+			ModHooks.SlashHitHook += SlashHitHook;
+			ModHooks.HeroUpdateHook += HeroUpdateHook;
 		}
 
 		private void AfterAttackHook(AttackDirection dir)
@@ -35,6 +33,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator SpawnAspid()
 		{
+			spawnFlag = true;
 			yield return new WaitWhile(() => HeroController.instance.cState.attacking);
 
 			if(spawnFlag)
@@ -48,29 +47,33 @@ namespace ChallengeMode.Modifiers
 				aspid.transform.position += 4 * (HeroController.instance.cState.facingRight ? Vector3.left : Vector3.right);
 				aspid.SetActive(true);
 			}
-			spawnFlag = true;
 
 			yield break;
 		}
 
-		private void HealthManagerHit(On.HealthManager.orig_Hit orig, HealthManager self, HitInstance hitInstance)
+		private void SlashHitHook(Collider2D otherCollider, GameObject slash)
 		{
-			spawnFlag = false;
-			orig(self, hitInstance);
+			if(otherCollider.gameObject.GetComponent<HealthManager>() != null)
+			{
+				spawnFlag = false;
+			}
 		}
 
 		private void HeroUpdateHook()
 		{
-			if(HeroController.instance.cState.bouncing) spawnFlag = false;
+			if(HeroController.instance.cState.bouncing || HeroController.instance.cState.nailCharging)
+			{
+				spawnFlag = false;
+			}
 		}
 
 		public override void StopEffect()
 		{
 			spawnFlag = false;
 
-			ModHooks.Instance.AfterAttackHook -= AfterAttackHook;
-			On.HealthManager.Hit -= HealthManagerHit;
-			ModHooks.Instance.HeroUpdateHook += HeroUpdateHook;
+			ModHooks.AfterAttackHook -= AfterAttackHook;
+			ModHooks.SlashHitHook -= SlashHitHook;
+			ModHooks.HeroUpdateHook += HeroUpdateHook;
 			StopAllCoroutines();
 		}
 

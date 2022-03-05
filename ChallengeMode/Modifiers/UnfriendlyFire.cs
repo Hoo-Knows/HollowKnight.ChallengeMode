@@ -1,4 +1,4 @@
-﻿using ModCommon.Util;
+﻿using SFCore.Utils;
 using HutongGames.PlayMaker.Actions;
 using UnityEngine;
 using GlobalEnums;
@@ -37,13 +37,13 @@ namespace ChallengeMode.Modifiers
 			grimmchildFSM.GetAction<DistanceFlySmooth>("Follow", 11).targetRadius = 8f;
 
 			//Target player
-			grimmchildFSM.InsertMethod("Check For Target", 2, () =>
+			grimmchildFSM.InsertMethod("Check For Target", () =>
 			{
 				grimmchildFSM.FsmVariables.FindFsmGameObject("Target").Value = HeroController.instance.gameObject;
-			});
+			}, 2);
 
 			//Make grimmball do damage
-			grimmchildFSM.InsertMethod("Shoot", 10, () =>
+			grimmchildFSM.InsertMethod("Shoot", () =>
 			{
 				grimmballGO = grimmchildFSM.FsmVariables.GetFsmGameObject("Flameball").Value;
 				grimmballGO.layer = (int) PhysLayers.ENEMY_ATTACK;
@@ -53,11 +53,11 @@ namespace ChallengeMode.Modifiers
 
 				//Prevent grimmball from doing daamge after impact
 				grimmballFSM = grimmballGO.LocateMyFSM("Control");
-				grimmballFSM.InsertMethod("Impact", 0, () =>
+				grimmballFSM.InsertMethod("Impact", () =>
 				{
 					grimmballGO.layer = (int)PhysLayers.CORPSE;
-				});
-			});
+				}, 0);
+			}, 10);
 		}
 
 		public override void StopEffect()

@@ -48,22 +48,24 @@ namespace ChallengeMode
 
 			//Test individual modifier
 			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			spaCount = 0;
 			numActiveModifiers = 1;
 
 			//Create achievements
-			AchievementHelper.Initialize();
+			AchievementHelper.unusedInit();
 			foreach(Modifier modifier in modifiers)
 			{
-				AchievementHelper.AddAchievement(modifier.ToString(), new Sprite(), modifier.ToString(), "ChallengeMode_AchievementText", false);
+				AchievementHelper.AddAchievement(modifier.ToString(), 
+					Sprite.Create(new Texture2D(80, 80), new Rect(0f, 0f, 80f, 80f), new Vector2(0f, 0f)), 
+					modifier.ToString(), "ChallengeMode_AchievementText", false);
 			}
 			UIManager.instance.RefreshAchievementsList();
 
-			ModHooks.Instance.BeforeSceneLoadHook += BeforeSceneLoad;
-			ModHooks.Instance.LanguageGetHook += LanguageGetHook;
+			ModHooks.BeforeSceneLoadHook += BeforeSceneLoad;
+			ModHooks.LanguageGetHook += LanguageGetHook;
 		}
 
 		public override List<(string, string)> GetPreloadNames()
@@ -89,7 +91,7 @@ namespace ChallengeMode
 			{
 				modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			}
-			modifierControl.Initialize(sceneName, modifiers, numActiveModifiers);
+			modifierControl.Initialize(sceneName, numActiveModifiers);
 
 			if(sceneName == "GG_Spa") spaCount++;
 			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;
@@ -103,22 +105,22 @@ namespace ChallengeMode
 			return sceneName;
 		}
 
-		private string LanguageGetHook(string key, string sheetTitle)
+		private string LanguageGetHook(string key, string sheetTitle, string orig)
 		{
 			foreach(Modifier modifier in modifiers)
 			{
 				if(key == modifier.ToString()) return modifier.ToString().Substring(14);
 			}
 			if(key == "ChallengeMode_AchievementText") return "";
-			return Language.Language.GetInternal(key, sheetTitle);
+			return orig;
 		}
 
 		public void Unload()
 		{
 			modifierControl.Unload();
 
-			ModHooks.Instance.BeforeSceneLoadHook -= BeforeSceneLoad;
-			ModHooks.Instance.LanguageGetHook -= LanguageGetHook;
+			ModHooks.BeforeSceneLoadHook -= BeforeSceneLoad;
+			ModHooks.LanguageGetHook -= LanguageGetHook;
 		}
 	}
 }

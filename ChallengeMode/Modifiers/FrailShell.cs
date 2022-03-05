@@ -6,7 +6,7 @@ namespace ChallengeMode.Modifiers
 	{
 		public override void StartEffect()
 		{
-			ModHooks.Instance.TakeHealthHook += TakeHealthHook;
+			ModHooks.TakeHealthHook += TakeHealthHook;
 		}
 
 		private int TakeHealthHook(int damage)
@@ -16,7 +16,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
-			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
+			ModHooks.TakeHealthHook -= TakeHealthHook;
 		}
 
 		public override string ToString()

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Reflection;
 using Modding;
 using UnityEngine;
 using Random = System.Random;
@@ -17,13 +16,12 @@ namespace ChallengeMode.Modifiers
 			Destroy(balloonGO.GetComponent<PersistentBoolItem>());
 			HealthManager hm = balloonGO.GetComponent<HealthManager>();
 			hm.hp = 1;
-			//disable soul gain
-			FieldInfo fi = ReflectionHelper.GetField(typeof(HealthManager), "enemyType");
-			fi.SetValue(hm, 6);
+			//Disable soul gain
+			ReflectionHelper.SetField(hm, "enemyType", 6);
 
 			nailDamage = PlayerData.instance.nailDamage;
 
-			ModHooks.Instance.TakeHealthHook += TakeHealthHook;
+			ModHooks.TakeHealthHook += TakeHealthHook;
 		}
 
 		private int TakeHealthHook(int damage)
@@ -71,7 +69,7 @@ namespace ChallengeMode.Modifiers
 			PlayerData.instance.SetInt("nailDamage", nailDamage);
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
-			ModHooks.Instance.TakeHealthHook -= TakeHealthHook;
+			ModHooks.TakeHealthHook -= TakeHealthHook;
 			StopAllCoroutines();
 		}
 

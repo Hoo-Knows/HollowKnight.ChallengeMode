@@ -1,4 +1,4 @@
-﻿using ModCommon.Util;
+﻿using SFCore.Utils;
 using UnityEngine;
 using HutongGames.PlayMaker.Actions;
 using System.Collections;
@@ -9,6 +9,7 @@ namespace ChallengeMode.Modifiers
 	{
 		private GameObject shadeGO;
 		private PlayMakerFSM shadeFSM;
+		private PlayMakerFSM spellFSM;
 		private bool usingFireball;
 		private bool usingQuake;
 		private bool usingScream;
@@ -27,7 +28,7 @@ namespace ChallengeMode.Modifiers
 			warping = false;
 
 			//Remove spell limit, increase hp, and set spell levels to max
-			shadeFSM.InsertMethod("Init", 25, () =>
+			shadeFSM.InsertMethod("Init", () =>
 			{
 				shadeFSM.FsmVariables.FindFsmInt("SP").Value = int.MaxValue;
 				shadeGO.GetComponent<HealthManager>().hp = int.MaxValue;
@@ -35,7 +36,7 @@ namespace ChallengeMode.Modifiers
 				shadeFSM.FsmVariables.FindFsmInt("Quake Level").Value = 2;
 				shadeFSM.FsmVariables.FindFsmInt("Scream Level").Value = 2;
 
-			});
+			}, 25);
 
 			//Remove roam limit
 			shadeFSM.FsmVariables.FindFsmFloat("Max Roam").Value = 999f;
@@ -46,21 +47,21 @@ namespace ChallengeMode.Modifiers
 			//Decrease frequency of random attacks and make them all slashes
 			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMin = 5f;
 			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMax = 6f;
-			shadeFSM.InsertMethod("Quake?", 0, () =>
+			shadeFSM.InsertMethod("Quake?", () =>
 			{
 				shadeFSM.SetState("Slash Antic");
-			});
+			}, 0);
 
 			//Decrease flight speed
 			shadeFSM.GetAction<ChaseObject>("Fly", 4).speedMax = 2f;
 			shadeFSM.GetAction<ChaseObjectV2>("Fly", 6).speedMax = 2f;
 
 			//Teleport to different location depending on spell
-			shadeFSM.InsertMethod("Retreat Start", 0, () =>
+			shadeFSM.InsertMethod("Retreat Start", () =>
 			{
 				warping = true;
-			});
-			shadeFSM.InsertMethod("Retreat", 1, () =>
+			}, 0);
+			shadeFSM.InsertMethod("Retreat", () =>
 			{
 				Vector3 position = HeroController.instance.transform.position;
 				if(usingFireball)
@@ -77,50 +78,54 @@ namespace ChallengeMode.Modifiers
 					position += 3 * Vector3.down;
 				}
 				shadeFSM.FsmVariables.FindFsmVector3("Start Pos").Value = position;
-			});
-			shadeFSM.InsertMethod("Retreat Reset", 3, () =>
+			}, 1);
+			shadeFSM.InsertMethod("Retreat Reset", () =>
 			{
 				warping = false;
-			});
+			}, 3);
 
 			//Make shade face player before using fireball
 			shadeFSM.InsertAction("Cast Antic", shadeFSM.GetAction<FaceObject>("Fireball Pos", 3), 0);
 
 			//Increase warp speed
-			shadeFSM.GetAction<iTweenMoveTo>("Retreat", 2).time = 0.5f;
+			shadeFSM.GetAction<iTweenMoveTo>("Retreat", 2).time = 0.15f;
 
 			//Increase attack speed
-			shadeFSM.GetAction<Wait>("Cast Antic", 8).time = 0.2f;
-			shadeFSM.GetAction<Wait>("Quake Antic", 7).time = 0.2f;
-			shadeFSM.GetAction<Wait>("Scream Antic", 6).time = 0.2f;
+			shadeFSM.GetAction<Wait>("Cast Antic", 8).time = 0.1f;
+			shadeFSM.GetAction<Wait>("Quake Antic", 7).time = 0.1f;
+			shadeFSM.GetAction<Wait>("Scream Antic", 6).time = 0.1f;
 
 			//Reset variables after using a spell
-			shadeFSM.InsertMethod("Cast", 4, () =>
+			shadeFSM.InsertMethod("Cast", () =>
 			{
 				usingFireball = false;
-			});
-			shadeFSM.InsertMethod("Collider On", 2, () =>
+			}, 4);
+			shadeFSM.InsertMethod("Collider On", () =>
 			{
 				usingQuake = false;
-			});
-			shadeFSM.InsertMethod("Scream Recover", 2, () =>
+			}, 2);
+			shadeFSM.InsertMethod("Scream Recover", () =>
 			{
 				usingScream = false;
-			});
+			}, 2);
 
-			ModCommon.ModCommon.OnSpellHook += OnSpellHook;
-		}
-
-		private bool OnSpellHook(ModCommon.ModCommon.Spell s)
-		{
-			if(shadeFSM.ActiveStateName == "Fly")
+			//Detect when player uses a spell
+			spellFSM = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
+			spellFSM.InsertMethod("Wallside?", () =>
 			{
-				if(s == ModCommon.ModCommon.Spell.Fireball) usingFireball = true;
-				if(s == ModCommon.ModCommon.Spell.Quake) usingQuake = true;
-				if(s == ModCommon.ModCommon.Spell.Scream) usingScream = true;
+				usingFireball = true;
 				StartCoroutine(SpellControl());
-			}
-			return true;
+			}, 0);
+			spellFSM.InsertMethod("On Ground?", () =>
+			{
+				usingQuake = true;
+				StartCoroutine(SpellControl());
+			}, 0);
+			spellFSM.InsertMethod("Scream Get?", () =>
+			{
+				usingScream = true;
+				StartCoroutine(SpellControl());
+			}, 0);
 		}
 
 		private IEnumerator SpellControl()
@@ -142,7 +147,10 @@ namespace ChallengeMode.Modifiers
 			usingScream = false;
 			warping = false;
 
-			ModCommon.ModCommon.OnSpellHook -= OnSpellHook;
+			spellFSM.RemoveAction("Wallside?", 0);
+			spellFSM.RemoveAction("On Ground?", 0);
+			spellFSM.RemoveAction("Scream Get?", 0);
+
 			StopAllCoroutines();
 		}
 

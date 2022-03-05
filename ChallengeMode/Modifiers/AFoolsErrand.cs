@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using HutongGames.PlayMaker.Actions;
-using ModCommon.Util;
+using SFCore.Utils;
 using Random = System.Random;
 
 namespace ChallengeMode.Modifiers
@@ -121,10 +121,10 @@ namespace ChallengeMode.Modifiers
 					enemy = Instantiate(cageFSM.Fsm.GetFsmGameObject("Corpse to Instantiate").Value, spawnPos, Quaternion.identity);
 				}
 				enemy.SetActive(false);
-				cageFSM.InsertMethod("Pause", 0, () =>
+				cageFSM.InsertMethod("Pause", () =>
 				{
 					enemy.SetActive(true);
-				});
+				}, 0);
 				cage.SetActive(true);
 				cageFSM.SetState("Anim");
 				yield return new WaitWhile(() => enemy != null);

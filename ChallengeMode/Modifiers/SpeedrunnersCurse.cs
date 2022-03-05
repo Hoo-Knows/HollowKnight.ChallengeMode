@@ -1,12 +1,16 @@
-﻿namespace ChallengeMode.Modifiers
+﻿using SFCore.Utils;
+
+namespace ChallengeMode.Modifiers
 {
 	class SpeedrunnersCurse : Modifier
 	{
 		private bool sbodyAlreadyEquipped;
 		private bool thornsNotAlreadyEquipped;
+		private PlayMakerFSM spellFSM;
 
 		public override void StartEffect()
 		{
+			//Unequip SBody, equip Thorns of Agony
 			sbodyAlreadyEquipped = PlayerData.instance.GetBool("equippedCharm_14");
 			thornsNotAlreadyEquipped = !PlayerData.instance.GetBool("equippedCharm_12");
 
@@ -22,17 +26,12 @@
 			}
 			HeroController.instance.CharmUpdate();
 
-			ModCommon.ModCommon.OnSpellHook += OnSpellHook;
-		}
-
-		private bool OnSpellHook(ModCommon.ModCommon.Spell s)
-		{
-			if(s == ModCommon.ModCommon.Spell.Quake)
+			//Take hazard damage when using DDark
+			spellFSM = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
+			spellFSM.InsertMethod("Level Check 2", () =>
 			{
 				HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.other, 1, 2);
-				return false;
-			}
-			return true;
+			}, 0);
 		}
 
 		public override void StopEffect()
@@ -49,7 +48,7 @@
 			}
 			HeroController.instance.CharmUpdate();
 
-			ModCommon.ModCommon.OnSpellHook -= OnSpellHook;
+			spellFSM.RemoveAction("Level Check 2", 0);
 		}
 
 		public override string ToString()

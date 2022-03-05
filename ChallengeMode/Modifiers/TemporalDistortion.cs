@@ -1,7 +1,7 @@
 ﻿using Random = System.Random;
 using System.Collections;
 using UnityEngine;
-using ModCommon.Util;
+using SFCore.Utils;
 using HutongGames.PlayMaker.Actions;
 
 namespace ChallengeMode.Modifiers

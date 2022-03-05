@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using GlobalEnums;
 using HutongGames.PlayMaker.Actions;
-using ModCommon.Util;
+using SFCore.Utils;
 using System.Collections;
 
 namespace ChallengeMode.Modifiers
@@ -30,35 +30,38 @@ namespace ChallengeMode.Modifiers
 			gorbMovementFSM.GetAction<Wait>("Warp Out", 2).time = 4f;
 			gorbMovementFSM.RemoveAction("Return", 0);
 			gorbMovementFSM.InsertAction("Return", gorbMovementFSM.GetAction<SetPosition>("Warp", 1), 0);
-			gorbMovementFSM.InsertMethod("Return", 0, () =>
+			gorbMovementFSM.InsertMethod("Return", () =>
 			{
 				gorbMovementFSM.FsmVariables.FindFsmVector3("Warp Pos").Value = HeroController.instance.transform.position;
-			});
+			}, 0);
 
 			//Make Gorb attack after teleport
-			gorbMovementFSM.InsertCoroutine("Return", 6, GorbAttack);
+			gorbMovementFSM.InsertMethod("Return", () =>
+			{
+				StartCoroutine(GorbAttack());
+			}, 6);
 
 			//Prevent attacking if something else is happening
-			gorbAttackFSM.InsertMethod("Antic", 1, () =>
+			gorbAttackFSM.InsertMethod("Antic", () =>
 			{
 				if(!isAttacking) gorbAttackFSM.SetState("End");
-			});
-			gorbAttackFSM.InsertMethod("End", 0, () =>
+			}, 1);
+			gorbAttackFSM.InsertMethod("End", () =>
 			{
 				isAttacking = false;
-			});
+			}, 0);
 
 			//Make Gorb warp when idle
-			gorbMovementFSM.InsertMethod("Hover", 0, () =>
+			gorbMovementFSM.InsertMethod("Hover", () =>
 			{
 				if(!isAttacking) gorbMovementFSM.SendEvent("RETURN");
-			});
+			}, 0);
 
 			//Disable Gorb's distance attack
-			gorbDistanceAttackFSM.InsertMethod("Away", 0, () =>
+			gorbDistanceAttackFSM.InsertMethod("Away", () =>
 			{
 				gorbDistanceAttackFSM.SendEvent("CLOSE");
-			});
+			}, 0);
 		}
 
 		private IEnumerator GorbAttack()
