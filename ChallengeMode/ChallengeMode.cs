@@ -16,7 +16,7 @@ namespace ChallengeMode
 		private int spaCount;
 		private int numActiveModifiers;
 
-		public override string GetVersion() => "0.3.1.0";
+		public override string GetVersion() => "0.3.1.1";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -48,7 +48,7 @@ namespace ChallengeMode
 
 			//Test individual modifier
 			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			spaCount = 0;

@@ -26,7 +26,7 @@ namespace ChallengeMode.Modifiers
 			}
 
 			//Take hazard damage when using DDark
-			spellFSM = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
+			spellFSM = HeroController.instance.spellControl;
 			spellFSM.InsertMethod("Level Check 2", () =>
 			{
 				HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.other, 1, 2);

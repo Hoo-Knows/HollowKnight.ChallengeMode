@@ -113,7 +113,7 @@ namespace ChallengeMode.Modifiers
 			}, 2);
 
 			//Detect when player uses a spell
-			spellFSM = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
+			spellFSM = HeroController.instance.spellControl;
 			spellFSM.InsertMethod("Wallside?", () =>
 			{
 				usingFireball = true;

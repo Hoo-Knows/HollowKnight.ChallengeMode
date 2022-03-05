@@ -50,6 +50,7 @@ namespace ChallengeMode.Modifiers
 				}
 
 				//Warp to gate
+				HeroController.instance.parryInvulnTimer = 0.4f;
 				HeroController.instance.transform.position = position;
 				dreamgate.Recycle();
 				Instantiate(flash, position, Quaternion.identity);

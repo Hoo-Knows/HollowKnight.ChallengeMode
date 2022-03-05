@@ -2,6 +2,8 @@
 using GlobalEnums;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
+using System.Collections;
+using Modding;
 
 namespace ChallengeMode.Modifiers
 {
@@ -38,7 +40,7 @@ namespace ChallengeMode.Modifiers
 			gorbMovementFSM.InsertMethod("Hover", () =>
 			{
 				if(!isAttacking) gorbMovementFSM.SendEvent("RETURN");
-				else gorbAttackFSM.SetState("Antic");
+				else StartCoroutine(GorbAttack());
 			}, 0);
 
 			//Set isAttacking after teleport
@@ -50,8 +52,11 @@ namespace ChallengeMode.Modifiers
 			//Prevent attacking if something else is happening
 			gorbAttackFSM.InsertMethod("Antic", () =>
 			{
-				if(!isAttacking) gorbAttackFSM.SetState("End");
+				if(!isAttacking || HeroController.instance.controlReqlinquished) gorbAttackFSM.SetState("End");
 			}, 0);
+
+			//Make sure Gorb is visible when attacking
+			gorbAttackFSM.InsertAction("Antic", gorbMovementFSM.GetAction<SetMeshRenderer>("Return", 6), 1);
 
 			//Reset isAttacking
 			gorbAttackFSM.InsertMethod("End", () =>
@@ -66,8 +71,17 @@ namespace ChallengeMode.Modifiers
 			}, 0);
 		}
 
+		private IEnumerator GorbAttack()
+		{
+			yield return new WaitForSeconds(0.3f);
+			gorbAttackFSM.SetState("Antic");
+			yield break;
+		}
+
 		public override void StopEffect()
 		{
+			StopAllCoroutines();
+
 			gorbMovementFSM.Recycle();
 			gorbAttackFSM.Recycle();
 			gorbDistanceAttackFSM.Recycle();

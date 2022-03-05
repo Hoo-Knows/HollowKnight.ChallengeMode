@@ -43,6 +43,21 @@ namespace ChallengeMode
 				{
 					ChallengeMode.Instance.Log(modifier.ToString() + " is valid");
 					activeModifiers[i] = modifier;
+					//Frail Shell must appear before High Stress
+					if(modifier.ToString() == "ChallengeMode_Frail Shell")
+					{
+						for(int j = 0; j < numActiveModifiers; j++)
+						{
+							if(activeModifiers[j] != null && activeModifiers[j].ToString() == "ChallengeMode_High Stress")
+							{
+								ChallengeMode.Instance.Log("Swapping Frail Shell and High Stress");
+								Modifier temp = activeModifiers[j];
+								activeModifiers[j] = activeModifiers[i];
+								activeModifiers[i] = temp;
+								break;
+							}
+						}
+					}
 				}
 				else
 				{
@@ -88,7 +103,7 @@ namespace ChallengeMode
 			//A Fool's Errand cannot appear with Chaos, Chaos or on a blacklisted scene
 			if(modifier.ToString() == "ChallengeMode_A Fool's Errand")
 			{
-				result = result && !ContainsModifier(modifiers[14], activeModifiers) && Array.IndexOf(foolSceneBlacklist, sceneName) != -1;
+				result = result && !ContainsModifier(modifiers[14], activeModifiers) && Array.IndexOf(foolSceneBlacklist, sceneName) == -1;
 			}
 
 			return result;

@@ -78,6 +78,7 @@ namespace ChallengeMode.Modifiers
 				Vector3 spawnPos = new Vector3(HeroController.instance.transform.position.x, spikes[0].transform.position.y + 6f);
 
 				//Expand spikes
+				yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
 				PlayMakerFSM.BroadcastEvent("EXPAND");
 				audioSource.PlayOneShot(audioSpikeAntic);
 				yield return new WaitForSeconds(1f);

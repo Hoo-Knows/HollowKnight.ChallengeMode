@@ -11,7 +11,7 @@ namespace ChallengeMode.Modifiers
 
 		private int TakeHealthHook(int damage)
 		{
-			return damage += 1;
+			return damage + 1;
 		}
 
 		public override void StopEffect()

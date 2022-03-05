@@ -9,7 +9,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
-			spellFSM = HeroController.instance.gameObject.LocateMyFSM("Spell Control");
+			spellFSM = HeroController.instance.spellControl;
 
 			spellFSM.InsertMethod("Can Cast?", () =>
 			{

@@ -31,20 +31,29 @@ namespace ChallengeMode.Modifiers
 			grimmchildFSM.GetAction<FloatSubtract>("Follow", 0).subtract = 0.5f;
 
 			//Decrease flameball speed
-			grimmchildFSM.FsmVariables.FindFsmFloat("Flameball Speed").Value = 7.5f;
+			grimmchildFSM.FsmVariables.FindFsmFloat("Flameball Speed").Value = 10f;
 
 			//Fly slower
 			grimmchildFSM.GetAction<FloatClamp>("Follow", 10).minValue = 3f;
 			grimmchildFSM.GetAction<FloatClamp>("Follow", 10).maxValue = 3f;
 
 			//Stay farther away from player
-			grimmchildFSM.GetAction<DistanceFlySmooth>("Follow", 11).targetRadius = 6f;
+			grimmchildFSM.GetAction<DistanceFlySmooth>("Follow", 11).targetRadius = 8f;
 
 			//Target player
 			grimmchildFSM.InsertMethod("Check For Target", () =>
 			{
 				grimmchildFSM.FsmVariables.FindFsmGameObject("Target").Value = HeroController.instance.gameObject;
 			}, 2);
+
+			//Prevent shooting if player is stunned
+			grimmchildFSM.InsertMethod("Check For Target", () =>
+			{
+				if(HeroController.instance.controlReqlinquished)
+				{
+					grimmchildFSM.SendEvent("NO TARGET");
+				}
+			}, 0);
 
 			//Make grimmball do damage
 			grimmchildFSM.InsertMethod("Shoot", () =>
