@@ -21,7 +21,14 @@ namespace ChallengeMode.Modifiers
 			{
 				if(!HeroController.instance.controlReqlinquished)
 				{
-					HeroController.instance.TakeMP(11);
+					if(BossSequenceController.BoundSoul)
+					{
+						HeroController.instance.TakeMP(5);
+					}
+					else
+					{
+						HeroController.instance.TakeMP(11);
+					}
 				}
 				yield return new WaitForSeconds(2f);
 				if(PlayerData.instance.GetInt("MPCharge") == 0)

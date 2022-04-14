@@ -16,7 +16,7 @@ namespace ChallengeMode
 		private int spaCount;
 		private int numActiveModifiers;
 
-		public override string GetVersion() => "0.3.1.2";
+		public override string GetVersion() => "0.3.1.3";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -48,7 +48,7 @@ namespace ChallengeMode
 
 			//Test individual modifier
 			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			spaCount = 0;
@@ -78,8 +78,9 @@ namespace ChallengeMode
 				("Room_Colosseum_Bronze", "Colosseum Manager/Ground Spikes/Colosseum Spike (19)"), //Colosseum Spike
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 2/Colosseum Cage Small"), //Armored Squit Cage
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 37/Colosseum Cage Small (3)"), //Battle Obble Cage
-				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 10/Colosseum Cage Small (5)"), //Death Loodle Cage
-				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 17/Colosseum Cage Small (2)"), //Primal Aspid Cage
+				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 3/Colosseum Cage Large"), //Shielded Fool Cage
+				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 50/Colosseum Cage Large"), //Sturdy Fool Cage
+				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 1/Colosseum Cage Large"), //Heavy Fool Cage
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"), //Winged Fool Cage
 			};
 		}

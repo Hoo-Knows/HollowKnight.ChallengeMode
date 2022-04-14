@@ -9,6 +9,7 @@ namespace ChallengeMode.Modifiers
 	{
 		private GameObject aspidGO;
 		private bool spawnFlag;
+		private bool waiting;
 
 		public override void StartEffect()
 		{
@@ -20,61 +21,64 @@ namespace ChallengeMode.Modifiers
 			ReflectionHelper.SetField(hm, "enemyType", 6);
 
 			spawnFlag = true;
+			waiting = false;
 
 			ModHooks.AfterAttackHook += AfterAttackHook;
 			ModHooks.SlashHitHook += SlashHitHook;
-			ModHooks.HeroUpdateHook += HeroUpdateHook;
 		}
 
 		private void AfterAttackHook(AttackDirection dir)
 		{
-			StartCoroutine(SpawnAspid());
-		}
-
-		private IEnumerator SpawnAspid()
-		{
-			spawnFlag = true;
-			yield return new WaitWhile(() => HeroController.instance.cState.attacking);
-
-			if(spawnFlag)
+			if(waiting)
 			{
-				GameObject aspid = Instantiate(aspidGO);
-				foreach(PlayMakerFSM fsm in aspid.GetComponentsInChildren<PlayMakerFSM>())
-				{
-					fsm.SetState(fsm.Fsm.StartState);
-				}
-				aspid.transform.position = HeroController.instance.transform.position;
-				aspid.transform.position += 4 * (HeroController.instance.cState.facingRight ? Vector3.left : Vector3.right);
-				aspid.SetActive(true);
+				StopAllCoroutines();
+				TrySpawnAspid();
 			}
-
-			yield break;
+			spawnFlag = true;
+			StartCoroutine(WaitToSpawn());
 		}
 
 		private void SlashHitHook(Collider2D otherCollider, GameObject slash)
 		{
-			if(otherCollider.gameObject.GetComponent<HealthManager>() != null)
+			GameObject go = otherCollider.gameObject;
+			if(go.GetComponent<HealthManager>() != null || go.GetComponent<DamageHero>() != null)
 			{
 				spawnFlag = false;
 			}
 		}
 
-		private void HeroUpdateHook()
+		private IEnumerator WaitToSpawn()
 		{
-			if(HeroController.instance.cState.bouncing || HeroController.instance.cState.nailCharging)
+			waiting = true;
+			yield return new WaitWhile(() => HeroController.instance.cState.attacking);
+			waiting = false;
+
+			TrySpawnAspid();
+			yield break;
+		}
+
+		private void TrySpawnAspid()
+		{
+			if(!spawnFlag || HeroController.instance.cState.nailCharging) return;
+
+			GameObject aspid = Instantiate(aspidGO);
+			foreach(PlayMakerFSM fsm in aspid.GetComponentsInChildren<PlayMakerFSM>())
 			{
-				spawnFlag = false;
+				fsm.SetState(fsm.Fsm.StartState);
 			}
+			aspid.transform.position = HeroController.instance.transform.position;
+			aspid.transform.position += 4 * (HeroController.instance.cState.facingRight ? Vector3.left : Vector3.right);
+			aspid.SetActive(true);
 		}
 
 		public override void StopEffect()
 		{
 			ModHooks.AfterAttackHook -= AfterAttackHook;
 			ModHooks.SlashHitHook -= SlashHitHook;
-			ModHooks.HeroUpdateHook += HeroUpdateHook;
 			StopAllCoroutines();
 
 			spawnFlag = false;
+			waiting = false;
 		}
 
 		public override string ToString()

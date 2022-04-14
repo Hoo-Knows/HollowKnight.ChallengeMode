@@ -48,17 +48,19 @@ namespace ChallengeMode.Modifiers
 			audioSpikeRetract = groundSpikesFSM.GetAction<AudioPlaySimple>("Retract", 2).oneShotClip.Value as AudioClip;
 
 			//Set possible enemies
-			enemies = new GameObject[5];
+			enemies = new GameObject[6];
 			//Armored Squit
 			enemies[0] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 2/Colosseum Cage Small"];
 			//Battle Obble
 			enemies[1] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 37/Colosseum Cage Small (3)"];
-			//Death Loodle
-			enemies[2] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 10/Colosseum Cage Small (5)"];
-			//Primal Aspid
-			enemies[3] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 17/Colosseum Cage Small (2)"];
+			//Shielded Fool
+			enemies[2] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 3/Colosseum Cage Large"];
+			//Sturdy Fool
+			enemies[3] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 50/Colosseum Cage Large"];
+			//Heavy Fool
+			enemies[4] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 1/Colosseum Cage Large"];
 			//Winged Fool
-			enemies[4] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"];
+			enemies[5] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"];
 			
 			waveFlag = true;
 			enemyFlag = false;
@@ -77,31 +79,24 @@ namespace ChallengeMode.Modifiers
 			{
 				Vector3 spawnPos = new Vector3(HeroController.instance.transform.position.x, spikes[0].transform.position.y + 6f);
 
-				//Expand spikes
+				//Spikes
 				yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
 				PlayMakerFSM.BroadcastEvent("EXPAND");
 				audioSource.PlayOneShot(audioSpikeAntic);
-				yield return new WaitForSeconds(1f);
-
-				//Spawn enemies
-				enemyFlag = true;
-				StartCoroutine(SpawnEnemies(spawnPos));
-
-				//Expanded
-				yield return new WaitForSeconds(1f);
+				yield return new WaitForSeconds(2f);
 				audioSource.PlayOneShot(audioSpikeExpand);
-
-				//Retract spikes after enemies are dead
-				yield return new WaitWhile(() => enemyFlag);
-				yield return new WaitForSeconds(1f);
+				yield return new WaitForSeconds(5f);
 				PlayMakerFSM.BroadcastEvent("RETRACT");
 				audioSource.PlayOneShot(audioSpikeRetract);
 
-				//Update number of waves/enemies (increase minimum number of enemies to 2 after 3 waves
-				numWaves++;
-				if(numWaves == 3) numEnemies = 2;
+				yield return new WaitForSeconds(random.Next(5, 10));
 
-				yield return new WaitForSeconds(random.Next(15, 20));
+				//Enemies
+				enemyFlag = true;
+				StartCoroutine(SpawnEnemies(spawnPos));
+				yield return new WaitWhile(() => enemyFlag);
+
+				yield return new WaitForSeconds(random.Next(5, 10));
 			}
 			yield break;
 		}
@@ -120,7 +115,7 @@ namespace ChallengeMode.Modifiers
 
 				//Spawn enemy manually so we can keep track of when it dies
 				GameObject enemy = null;
-				if(index != 4) //Small cage
+				if(index < 2) //Small cage
 				{
 					enemy = Instantiate(cageFSM.Fsm.GetFsmGameObject("Enemy Type").Value, spawnPos, Quaternion.identity);
 					cageFSM.RemoveAction("Spawn", 0);
@@ -142,6 +137,11 @@ namespace ChallengeMode.Modifiers
 				cageFSM.SendEvent("SPAWN");
 				yield return new WaitWhile(() => enemy != null);
 			}
+
+			//Update number of waves/enemies (increase minimum number of enemies to 2 after 2 waves)
+			numWaves++;
+			if(numWaves == 2) numEnemies = 2;
+
 			enemyFlag = false;
 		}
 

@@ -19,10 +19,10 @@ namespace ChallengeMode.Modifiers
 
 		private int TakeHealthHook(int damage)
 		{
-			flag = true;
 			this.damage = damage;
 			health = PlayerData.instance.GetInt("health");
 			healthBlue = PlayerData.instance.GetInt("healthBlue");
+
 			StopCoroutine(HandleHealth());
 			if(health + healthBlue > damage)
 			{
@@ -34,6 +34,8 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator HandleHealth()
 		{
+			ChallengeMode.Instance.Log("here");
+			flag = true;
 			PlayerData.instance.SetInt("health", 1);
 			PlayerData.instance.SetInt("healthBlue", 0);
 			EventRegister.SendEvent("HERO DAMAGED");
