@@ -34,7 +34,6 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator HandleHealth()
 		{
-			ChallengeMode.Instance.Log("here");
 			flag = true;
 			PlayerData.instance.SetInt("health", 1);
 			PlayerData.instance.SetInt("healthBlue", 0);

@@ -1,23 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Modding;
 using UnityEngine;
 using Random = System.Random;
-using System;
-using Modding;
 
 namespace ChallengeMode
 {
 	public class ModifierControl : MonoBehaviour
 	{
 		private Modifier[] activeModifiers;
-		private readonly string[] sceneBlacklist = 
+		private readonly string[] sceneBlacklist =
 		{
-			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms", 
+			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
 			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
 		};
 		private readonly string[] foolSceneBlacklist =
 		{
-			"GG_Vengefly", "GG_Vengefly_V", "GG_Ghost_Gorb", "GG_Ghost_Gorb_V", "GG_Ghost_Xero", "GG_Ghost_Xero_V", 
-			"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V", 
+			"GG_Vengefly", "GG_Vengefly_V", "GG_Ghost_Gorb", "GG_Ghost_Gorb_V", "GG_Ghost_Xero", "GG_Ghost_Xero_V",
+			"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V",
 			"GG_Grimm_Nightmare", "GG_Radiance"
 		};
 		private string sceneName;
@@ -195,7 +195,7 @@ namespace ChallengeMode
 						catch
 						{
 							ChallengeMode.Instance.Log("Failed to stop " + modifier.ToString().Substring(14));
-							
+
 						}
 					}
 				}

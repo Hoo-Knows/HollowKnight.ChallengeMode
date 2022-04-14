@@ -5,7 +5,7 @@ namespace ChallengeMode.Modifiers
 	class SalubrasCurse : Modifier
 	{
 		private List<int> charms;
-		
+
 		public override void StartEffect()
 		{
 			//Store current charms and unequip them

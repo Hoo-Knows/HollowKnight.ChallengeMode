@@ -1,7 +1,7 @@
-﻿using SFCore.Utils;
+﻿using GlobalEnums;
 using HutongGames.PlayMaker.Actions;
+using SFCore.Utils;
 using UnityEngine;
-using GlobalEnums;
 
 namespace ChallengeMode.Modifiers
 {
@@ -59,7 +59,7 @@ namespace ChallengeMode.Modifiers
 			grimmchildFSM.InsertMethod("Shoot", () =>
 			{
 				grimmballGO = grimmchildFSM.FsmVariables.GetFsmGameObject("Flameball").Value;
-				grimmballGO.layer = (int) PhysLayers.ENEMY_ATTACK;
+				grimmballGO.layer = (int)PhysLayers.ENEMY_ATTACK;
 				grimmballGO.AddComponent<DamageHero>();
 				grimmballGO.GetComponent<DamageHero>().damageDealt = 1;
 				grimmballGO.GetComponent<DamageHero>().hazardType = 1;

@@ -1,7 +1,7 @@
-﻿using SFCore.Utils;
-using UnityEngine;
+﻿using System.Collections;
 using HutongGames.PlayMaker.Actions;
-using System.Collections;
+using SFCore.Utils;
+using UnityEngine;
 
 namespace ChallengeMode.Modifiers
 {

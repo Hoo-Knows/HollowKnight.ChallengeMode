@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections;
 using GlobalEnums;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
-using System.Collections;
-using Modding;
+using UnityEngine;
 
 namespace ChallengeMode.Modifiers
 {

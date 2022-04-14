@@ -1,8 +1,8 @@
-﻿using Random = System.Random;
-using System.Collections;
-using UnityEngine;
-using SFCore.Utils;
+﻿using System.Collections;
 using HutongGames.PlayMaker.Actions;
+using SFCore.Utils;
+using UnityEngine;
+using Random = System.Random;
 
 namespace ChallengeMode.Modifiers
 {

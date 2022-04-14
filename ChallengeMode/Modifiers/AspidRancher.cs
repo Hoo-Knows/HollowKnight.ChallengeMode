@@ -1,7 +1,7 @@
-﻿using Modding;
-using UnityEngine;
+﻿using System.Collections;
 using GlobalEnums;
-using System.Collections;
+using Modding;
+using UnityEngine;
 
 namespace ChallengeMode.Modifiers
 {

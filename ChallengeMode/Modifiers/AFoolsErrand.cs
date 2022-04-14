@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using UnityEngine;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
+using UnityEngine;
 using Random = System.Random;
 
 namespace ChallengeMode.Modifiers
@@ -61,7 +61,7 @@ namespace ChallengeMode.Modifiers
 			enemies[4] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 1/Colosseum Cage Large"];
 			//Winged Fool
 			enemies[5] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"];
-			
+
 			waveFlag = true;
 			enemyFlag = false;
 			numWaves = 0;
