@@ -13,7 +13,7 @@ namespace ChallengeMode
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
 
-		public override string GetVersion() => "0.3.2.0";
+		public override string GetVersion() => "0.3.2.1";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -45,7 +45,7 @@ namespace ChallengeMode
 
 			//Test individual modifier
 			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			modifierControl.Initialize();

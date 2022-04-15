@@ -1,4 +1,5 @@
-﻿using SFCore.Utils;
+﻿using System.Collections.Generic;
+using SFCore.Utils;
 
 namespace ChallengeMode.Modifiers
 {
@@ -24,6 +25,7 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_12", true);
 				GameManager.instance.EquipCharm(12);
 			}
+			GameManager.instance.RefreshOvercharm();
 
 			//Take hazard damage when using DDark
 			spellFSM = HeroController.instance.spellControl;
@@ -45,6 +47,7 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_12", false);
 				GameManager.instance.UnequipCharm(12);
 			}
+			GameManager.instance.RefreshOvercharm();
 
 			spellFSM.RemoveAction("Level Check 2", 0);
 		}
@@ -52,6 +55,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Speedrunner's Curse";
+		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Speedrunner's Curse", "ChallengeMode_Salubra's Curse"
+			};
 		}
 	}
 }

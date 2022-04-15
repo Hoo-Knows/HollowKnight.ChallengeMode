@@ -36,5 +36,13 @@ namespace ChallengeMode.Modifiers
 		{
 			return "ChallengeMode_Salubra's Curse";
 		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Salubra's Curse", "ChallengeMode_Speedrunner's Curse"
+			};
+		}
 	}
 }

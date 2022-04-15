@@ -29,17 +29,20 @@ namespace ChallengeMode.Modifiers
 			grimmchildFSM.GetAction<SetIntValue>("Level 4", 0).intValue = 0;
 
 			//Increase time between attacks
-			grimmchildFSM.GetAction<FloatSubtract>("Follow", 0).subtract = 0.5f;
+			grimmchildFSM.GetAction<FloatSubtract>("Follow", 0).subtract = 0.4f;
 
 			//Decrease flameball speed
 			grimmchildFSM.FsmVariables.FindFsmFloat("Flameball Speed").Value = 10f;
 
 			//Fly slower
-			grimmchildFSM.GetAction<FloatClamp>("Follow", 10).minValue = 3f;
-			grimmchildFSM.GetAction<FloatClamp>("Follow", 10).maxValue = 3f;
+			grimmchildFSM.GetAction<FloatClamp>("Follow", 10).minValue = 0.25f;
+			grimmchildFSM.GetAction<FloatClamp>("Follow", 10).maxValue = 0.25f;
 
 			//Stay farther away from player
-			grimmchildFSM.GetAction<DistanceFlySmooth>("Follow", 11).targetRadius = 8f;
+			grimmchildFSM.GetAction<DistanceFlySmooth>("Follow", 11).targetRadius = 6f;
+
+			//Make teleports less frequent
+			grimmchildFSM.GetAction<FloatCompare>("Follow", 17).float2 = 25f;
 
 			//Target player
 			grimmchildFSM.InsertMethod("Check For Target", () =>

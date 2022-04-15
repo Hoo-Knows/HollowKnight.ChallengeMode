@@ -4,7 +4,7 @@
 	{
 		public override void StartEffect()
 		{
-			HeroController.instance.vignetteFSM.SetState("Dark 1");
+			HeroController.instance.vignetteFSM.SetState("Lantern");
 		}
 
 		public override void StopEffect()

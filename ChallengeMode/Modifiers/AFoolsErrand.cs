@@ -23,7 +23,6 @@ namespace ChallengeMode.Modifiers
 		private AudioSource audioSource;
 		private bool waveFlag;
 		private bool enemyFlag;
-		private int numWaves;
 		private int numEnemies;
 
 		public override void StartEffect()
@@ -65,7 +64,6 @@ namespace ChallengeMode.Modifiers
 
 			waveFlag = true;
 			enemyFlag = false;
-			numWaves = 0;
 			numEnemies = 1;
 			random = new Random();
 			audioSource = HeroController.instance.GetComponent<AudioSource>();
@@ -90,14 +88,14 @@ namespace ChallengeMode.Modifiers
 				PlayMakerFSM.BroadcastEvent("RETRACT");
 				audioSource.PlayOneShot(audioSpikeRetract);
 
-				yield return new WaitForSeconds(random.Next(5, 10));
+				yield return new WaitForSeconds(random.Next(3, 5));
 
 				//Enemies
 				enemyFlag = true;
 				StartCoroutine(SpawnEnemies(spawnPos));
 				yield return new WaitWhile(() => enemyFlag);
 
-				yield return new WaitForSeconds(random.Next(5, 10));
+				yield return new WaitForSeconds(random.Next(15, 20));
 			}
 			yield break;
 		}
@@ -139,9 +137,8 @@ namespace ChallengeMode.Modifiers
 				yield return new WaitWhile(() => enemy != null);
 			}
 
-			//Update number of waves/enemies (increase minimum number of enemies to 2 after 2 waves)
-			numWaves++;
-			if(numWaves == 2) numEnemies = 2;
+			//Increase number of enemies after one wave
+			if(numEnemies == 1) numEnemies++;
 
 			enemyFlag = false;
 		}

@@ -29,7 +29,11 @@ namespace ChallengeMode.Modifiers
 			warping = false;
 
 			//Remove audio
+			shadeGO.LocateMyFSM("Play Audio").RemoveState("Pause");
 			shadeGO.LocateMyFSM("Play Audio").RemoveState("Fade Up");
+
+			//Remove dreamnail cheese
+			shadeGO.LocateMyFSM("Dreamnail Kill").RemoveTransition("Idle", "DREAM IMPACT");
 
 			//Remove spell limit, increase hp, and set spell levels to max
 			shadeFSM.InsertMethod("Init", () =>
@@ -48,9 +52,9 @@ namespace ChallengeMode.Modifiers
 			//Make shade unfriendly
 			shadeFSM.RemoveAction("Friendly?", 2);
 
-			//Decrease frequency of random attacks and make them all slashes
-			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMin = 5f;
-			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMax = 6f;
+			//Decrease frequency of random attacks and make them slashes with a delay
+			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMin = 6f;
+			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMax = 8f;
 			shadeFSM.InsertMethod("Quake?", () =>
 			{
 				shadeFSM.SetState("Slash Antic");
@@ -145,6 +149,7 @@ namespace ChallengeMode.Modifiers
 		public override void StopEffect()
 		{
 			StopAllCoroutines();
+			shadeFSM.SendEvent("ZERO HP");
 
 			shadeFSM.Recycle();
 			shadeGO.Recycle();

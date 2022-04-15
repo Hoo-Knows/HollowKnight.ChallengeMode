@@ -24,7 +24,7 @@ namespace ChallengeMode.Modifiers
 			while(flag)
 			{
 				HeroController.instance.AddMPChargeSpa(11);
-				yield return new WaitForSeconds(2f);
+				yield return new WaitForSeconds(3f);
 			}
 			yield break;
 		}

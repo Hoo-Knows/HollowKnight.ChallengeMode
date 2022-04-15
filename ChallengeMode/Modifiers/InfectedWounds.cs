@@ -46,7 +46,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator NailControl()
 		{
-			PlayerData.instance.nailDamage = 1;
+			PlayerData.instance.nailDamage /= 2;
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 			yield return new WaitForSeconds(7.5f);
 			PlayerData.instance.SetInt("nailDamage", nailDamage);
@@ -59,7 +59,7 @@ namespace ChallengeMode.Modifiers
 			for(int i = 0; i < 9; i++)
 			{
 				HeroController.instance.TakeMPQuick(11);
-				yield return new WaitForSeconds(0.1f);
+				yield return new WaitForSeconds(0.3f);
 			}
 			yield break;
 		}

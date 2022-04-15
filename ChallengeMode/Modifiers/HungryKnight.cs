@@ -37,7 +37,7 @@ namespace ChallengeMode.Modifiers
 					{
 						HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.other, 1, 1);
 					}
-					yield return new WaitForSeconds(3f);
+					yield return new WaitForSeconds(8f);
 				}
 			}
 			yield break;
