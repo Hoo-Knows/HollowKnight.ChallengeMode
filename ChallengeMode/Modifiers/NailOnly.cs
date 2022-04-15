@@ -1,4 +1,5 @@
-﻿using SFCore.Utils;
+﻿using System.Collections.Generic;
+using SFCore.Utils;
 
 namespace ChallengeMode.Modifiers
 {
@@ -30,6 +31,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Nail Only";
+		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Nail Only", "ChallengeMode_Soul Master", "ChallengeMode_Past Regrets"
+			};
 		}
 	}
 }

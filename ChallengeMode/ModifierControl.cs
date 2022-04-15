@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Modding;
 using UnityEngine;
 using Random = System.Random;
@@ -8,30 +9,65 @@ namespace ChallengeMode
 {
 	public class ModifierControl : MonoBehaviour
 	{
+		private Modifier[] modifiers;
 		private Modifier[] activeModifiers;
-		private readonly string[] sceneBlacklist =
-		{
-			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
-			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
-		};
-		private readonly string[] foolSceneBlacklist =
-		{
-			"GG_Vengefly", "GG_Vengefly_V", "GG_Ghost_Gorb", "GG_Ghost_Gorb_V", "GG_Ghost_Xero", "GG_Ghost_Xero_V",
-			"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V",
-			"GG_Grimm_Nightmare", "GG_Radiance"
-		};
-		private string sceneName;
 
-		public void Initialize(string sceneName, int numActiveModifiers)
+		private int spaCount;
+		private int numActiveModifiers;
+		private string currentScene;
+		private Random random;
+
+		private List<string> sceneBlacklist;
+		private List<string> foolSceneBlacklist;
+
+		public void Initialize()
 		{
 			Unload();
 
-			if(sceneName.Substring(0, 2) != "GG" || Array.IndexOf(sceneBlacklist, sceneName) != -1) return;
-
-			Random random = new Random();
-			this.sceneName = sceneName;
+			modifiers = ChallengeMode.Instance.modifiers;
+			spaCount = 0;
+			numActiveModifiers = 1;
+			currentScene = "none lol";
 			activeModifiers = new Modifier[numActiveModifiers];
-			Modifier[] modifiers = ChallengeMode.Instance.modifiers;
+			random = new Random();
+
+			sceneBlacklist = new List<string>()
+			{
+				"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
+				"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
+			};
+			foolSceneBlacklist = new List<string>()
+			{
+				"GG_Vengefly", "GG_Vengefly_V", "GG_Ghost_Gorb", "GG_Ghost_Gorb_V", "GG_Ghost_Xero", "GG_Ghost_Xero_V",
+				"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V",
+				"GG_Grimm_Nightmare", "GG_Radiance"
+			};
+
+			ModHooks.BeforeSceneLoadHook += BeforeSceneLoadHook;
+		}
+
+		private string BeforeSceneLoadHook(string sceneName)
+		{
+			Stop();
+
+			if(sceneName == "GG_Spa") spaCount++;
+			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;
+			//P1 section in P5
+			if(spaCount == 0) numActiveModifiers = 1;
+			//P2 and P3 sections in P5
+			if(spaCount == 1) numActiveModifiers = 2;
+			//P4 section in P5
+			if(spaCount == 5) numActiveModifiers = 3;
+			currentScene = sceneName;
+
+			Start();
+
+			return sceneName;
+		}
+
+		private void Start()
+		{
+			if(currentScene.Substring(0, 2) != "GG" || sceneBlacklist.Contains(currentScene)) return;
 
 			//Select modifiers
 			for(int i = 0; i < numActiveModifiers; i++)
@@ -51,9 +87,7 @@ namespace ChallengeMode
 							if(activeModifiers[j] != null && activeModifiers[j].ToString() == "ChallengeMode_High Stress")
 							{
 								ChallengeMode.Instance.Log("Swapping Frail Shell and High Stress");
-								Modifier temp = activeModifiers[j];
-								activeModifiers[j] = activeModifiers[i];
-								activeModifiers[i] = temp;
+								(activeModifiers[i], activeModifiers[j]) = (activeModifiers[j], activeModifiers[i]);
 								break;
 							}
 						}
@@ -70,85 +104,34 @@ namespace ChallengeMode
 
 		public bool CheckValidModifier(Modifier modifier)
 		{
-			Modifier[] modifiers = ChallengeMode.Instance.modifiers;
-			bool result = true;
-
-			//Check if modifier hasn't been selected
-			if(ContainsModifier(modifier, activeModifiers)) result = false;
-
-			//High Stress cannot appear with Unfriendly Fire, Ascension, Past Regrets, or A Fool's Errand
-			if(modifier.ToString() == "ChallengeMode_High Stress")
-			{
-				result = result && !ContainsModifier(modifiers[9], activeModifiers) && !ContainsModifier(modifiers[10], activeModifiers)
-					&& !ContainsModifier(modifiers[12], activeModifiers) && !ContainsModifier(modifiers[17], activeModifiers);
-			}
-
-			//Unfriendly Fire cannot appear with High Stress
-			if(modifier.ToString() == "ChallengeMode_Unfriendly Fire")
-			{
-				result = result && !ContainsModifier(modifiers[0], activeModifiers);
-			}
-
-			//Ascension cannot appear with High Stress
-			if(modifier.ToString() == "ChallengeMode_Ascension")
-			{
-				result = result && !ContainsModifier(modifiers[0], activeModifiers);
-			}
-
-			//Nail Only cannot appear with Soul Master or Past Regrets
-			if(modifier.ToString() == "ChallengeMode_Nail Only")
-			{
-				result = result && !ContainsModifier(modifiers[7], activeModifiers) && !ContainsModifier(modifiers[12], activeModifiers);
-			}
-
-			//Soul Master cannot appear with Nail Only
-			if(modifier.ToString() == "ChallengeMode_Soul Master")
-			{
-				result = result && !ContainsModifier(modifiers[6], activeModifiers);
-			}
-
-			//Past Regrets cannot appear with High Stress or Nail Only
-			if(modifier.ToString() == "ChallengeMode_Past Regrets")
-			{
-				result = result && !ContainsModifier(modifiers[0], activeModifiers) && !ContainsModifier(modifiers[6], activeModifiers);
-			}
-
-			//Chaos, Chaos cannot appear with A Fool's Errand
-			if(modifier.ToString() == "ChallengeMode_Chaos, Chaos")
-			{
-				result = result && !ContainsModifier(modifiers[17], activeModifiers);
-			}
-
-			//A Fool's Errand cannot appear with High Stress, Chaos, Chaos, or on a blacklisted scene
+			//A Fool's Errand
 			if(modifier.ToString() == "ChallengeMode_A Fool's Errand")
 			{
-				result = result && !ContainsModifier(modifiers[0], activeModifiers) && !ContainsModifier(modifiers[14], activeModifiers)
-					&& Array.IndexOf(foolSceneBlacklist, sceneName) == -1;
-			}
-
-			return result;
-		}
-
-		private bool ContainsModifier(Modifier modifier, Modifier[] modifiers)
-		{
-			for(int i = 0; i < modifiers.Length; i++)
-			{
-				if(modifiers[i] != null)
+				if(foolSceneBlacklist.Contains(currentScene))
 				{
-					if(modifier.ToString() == modifiers[i].ToString()) return true;
+					return false;
 				}
 			}
-			return false;
+
+			foreach(Modifier m in activeModifiers)
+			{
+				if(m != null && m.GetBlacklistedModifiers().Contains(modifier.ToString()))
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		private void OnFinishedEnteringScene()
 		{
-			StartCoroutine(ActivateModifiers());
+			StartCoroutine(StartModifiers());
 		}
 
-		private IEnumerator ActivateModifiers()
+		private IEnumerator StartModifiers()
 		{
-			ChallengeMode.Instance.Log("Activating modifiers");
+			ChallengeMode.Instance.Log("Starting modifiers");
 
 			//Reflection magic to award achievements
 			AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
@@ -178,9 +161,9 @@ namespace ChallengeMode
 			yield break;
 		}
 
-		public void Unload()
+		private void Stop()
 		{
-			if(activeModifiers != null)
+			if(activeModifiers != null && activeModifiers.Length != 0)
 			{
 				ChallengeMode.Instance.Log("Stopping modifiers");
 				foreach(Modifier modifier in activeModifiers)
@@ -200,8 +183,14 @@ namespace ChallengeMode
 					}
 				}
 			}
-			activeModifiers = null;
+			activeModifiers = new Modifier[numActiveModifiers];
+		}
 
+		public void Unload()
+		{
+			Stop();
+
+			ModHooks.BeforeSceneLoadHook -= BeforeSceneLoadHook;
 			GameManager.instance.OnFinishedEnteringScene -= OnFinishedEnteringScene;
 			StopAllCoroutines();
 		}

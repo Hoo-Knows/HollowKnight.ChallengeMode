@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
 using UnityEngine;
@@ -160,6 +161,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Past Regrets";
+		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Past Regrets", "ChallengeMode_High Stress", "ChallengeMode_Nail Only"
+			};
 		}
 	}
 }

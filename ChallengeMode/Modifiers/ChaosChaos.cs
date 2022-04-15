@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Modding;
 using UnityEngine;
 using Random = System.Random;
@@ -88,6 +89,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Chaos, Chaos";
+		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Chaos, Chaos", "ChallengeMode_A Fool's Errand"
+			};
 		}
 	}
 }

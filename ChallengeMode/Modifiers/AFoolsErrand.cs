@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
 using UnityEngine;
@@ -161,6 +162,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_A Fool's Errand";
+		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_A Fool's Errand", "ChallengeMode_High Stress", "ChallengeMode_Chaos, Chaos"
+			};
 		}
 	}
 }

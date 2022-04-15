@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Modding;
 using UnityEngine;
 
@@ -61,6 +62,15 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_High Stress";
+		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_High Stress", "ChallengeMode_Unfriendly Fire", "ChallengeMode_Ascension",
+				"ChallengeMode_Past Regrets", "ChallengeMode_A Fool's Errand"
+			};
 		}
 	}
 }

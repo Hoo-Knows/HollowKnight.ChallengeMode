@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using GlobalEnums;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
@@ -90,6 +91,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Ascension";
+		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Ascension", "ChallengeMode_High Stress"
+			};
 		}
 	}
 }

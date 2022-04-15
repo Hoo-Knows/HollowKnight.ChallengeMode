@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ChallengeMode
 {
-	public class ChallengeMode : Mod, ITogglableMod
+	public class ChallengeMode : Mod
 	{
 		public Modifier[] modifiers;
 		public ModifierControl modifierControl;
@@ -13,10 +13,7 @@ namespace ChallengeMode
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
 
-		private int spaCount;
-		private int numActiveModifiers;
-
-		public override string GetVersion() => "0.3.1.4";
+		public override string GetVersion() => "0.3.2.0";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -51,8 +48,7 @@ namespace ChallengeMode
 			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
-			spaCount = 0;
-			numActiveModifiers = 1;
+			modifierControl.Initialize();
 
 			//Create achievements
 			foreach(Modifier modifier in modifiers)
@@ -63,7 +59,6 @@ namespace ChallengeMode
 			}
 			UIManager.instance.RefreshAchievementsList();
 
-			ModHooks.BeforeSceneLoadHook += BeforeSceneLoad;
 			ModHooks.LanguageGetHook += LanguageGetHook;
 		}
 
@@ -85,23 +80,6 @@ namespace ChallengeMode
 			};
 		}
 
-		private string BeforeSceneLoad(string sceneName)
-		{
-			if(modifierControl == null) modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
-			modifierControl.Initialize(sceneName, numActiveModifiers);
-
-			if(sceneName == "GG_Spa") spaCount++;
-			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;
-			//P1 section in P5
-			if(spaCount == 0) numActiveModifiers = 1;
-			//P2 and P3 sections in P5
-			if(spaCount == 1) numActiveModifiers = 2;
-			//P4 section in P5
-			if(spaCount == 5) numActiveModifiers = 3;
-
-			return sceneName;
-		}
-
 		private string LanguageGetHook(string key, string sheetTitle, string orig)
 		{
 			foreach(Modifier modifier in modifiers)
@@ -116,7 +94,6 @@ namespace ChallengeMode
 		{
 			modifierControl.Unload();
 
-			ModHooks.BeforeSceneLoadHook -= BeforeSceneLoad;
 			ModHooks.LanguageGetHook -= LanguageGetHook;
 		}
 	}

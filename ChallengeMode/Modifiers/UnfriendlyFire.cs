@@ -1,4 +1,5 @@
-﻿using GlobalEnums;
+﻿using System.Collections.Generic;
+using GlobalEnums;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
 using UnityEngine;
@@ -83,6 +84,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Unfriendly Fire";
+		}
+
+		public override List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Unfriendly Fire", "ChallengeMode_High Stress"
+			};
 		}
 	}
 }

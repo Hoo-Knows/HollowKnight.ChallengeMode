@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace ChallengeMode
 {
@@ -9,5 +10,10 @@ namespace ChallengeMode
 		public abstract void StopEffect();
 
 		public abstract override string ToString();
+
+		public virtual List<string> GetBlacklistedModifiers()
+		{
+			return new List<string>() { ToString() };
+		}
 	}
 }
