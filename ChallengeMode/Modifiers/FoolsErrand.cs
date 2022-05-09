@@ -7,7 +7,7 @@ using Random = System.Random;
 
 namespace ChallengeMode.Modifiers
 {
-	class AFoolsErrand : Modifier
+	class FoolsErrand : Modifier
 	{
 		private GameObject[] spikes;
 		private GameObject spikeGO;
@@ -116,12 +116,12 @@ namespace ChallengeMode.Modifiers
 				GameObject enemy = null;
 				if(index < 2) //Small cage
 				{
-					enemy = Instantiate(cageFSM.Fsm.GetFsmGameObject("Enemy Type").Value, spawnPos, Quaternion.identity);
+					enemy = Instantiate(cageFSM.FsmVariables.FindFsmGameObject("Enemy Type").Value, spawnPos, Quaternion.identity);
 					cageFSM.RemoveAction("Spawn", 0);
 				}
 				else //Large cage
 				{
-					enemy = Instantiate(cageFSM.Fsm.GetFsmGameObject("Corpse to Instantiate").Value, spawnPos, Quaternion.identity);
+					enemy = Instantiate(cageFSM.FsmVariables.FindFsmGameObject("Corpse to Instantiate").Value, spawnPos, Quaternion.identity);
 					cageFSM.RemoveAction("Spawn", 1);
 				}
 				enemy.SetActive(false);
@@ -135,6 +135,7 @@ namespace ChallengeMode.Modifiers
 				//Start cage
 				cageFSM.SendEvent("SPAWN");
 				yield return new WaitWhile(() => enemy != null);
+				Destroy(enemy);
 			}
 
 			//Increase number of enemies after one wave
@@ -149,7 +150,7 @@ namespace ChallengeMode.Modifiers
 
 			foreach(GameObject spike in spikes)
 			{
-				spike.Recycle();
+				Destroy(spike);
 			}
 			waveFlag = false;
 			enemyFlag = false;
@@ -165,7 +166,8 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_A Fool's Errand", "ChallengeMode_High Stress", "ChallengeMode_Chaos, Chaos"
+				"ChallengeMode_A Fool's Errand", "ChallengeMode_High Stress", "ChallengeMode_Chaos, Chaos",
+				"ChallengeMode_Nailmaster", "ChallengeMode_Past Regrets", "ChallengeMode_Unfriendly Fire"
 			};
 		}
 	}

@@ -27,6 +27,9 @@ namespace ChallengeMode.Modifiers
 		private int TakeHealthHook(int damage)
 		{
 			StopAllCoroutines();
+			PlayerData.instance.SetInt("nailDamage", nailDamage);
+			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
+
 			StartCoroutine(NailControl());
 			StartCoroutine(SoulControl());
 
@@ -48,7 +51,7 @@ namespace ChallengeMode.Modifiers
 		{
 			PlayerData.instance.nailDamage /= 2;
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
-			yield return new WaitForSeconds(7.5f);
+			yield return new WaitForSeconds(5f);
 			PlayerData.instance.SetInt("nailDamage", nailDamage);
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 			yield break;
@@ -59,7 +62,7 @@ namespace ChallengeMode.Modifiers
 			for(int i = 0; i < 9; i++)
 			{
 				HeroController.instance.TakeMPQuick(11);
-				yield return new WaitForSeconds(0.3f);
+				yield return new WaitForSeconds(0.5f);
 			}
 			yield break;
 		}

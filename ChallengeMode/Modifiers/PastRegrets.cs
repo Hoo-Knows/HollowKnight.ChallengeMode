@@ -149,10 +149,8 @@ namespace ChallengeMode.Modifiers
 		public override void StopEffect()
 		{
 			StopAllCoroutines();
-			shadeFSM.SendEvent("ZERO HP");
 
-			shadeFSM.Recycle();
-			shadeGO.Recycle();
+			Destroy(shadeGO);
 			usingFireball = false;
 			usingQuake = false;
 			usingScream = false;
@@ -172,7 +170,8 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Past Regrets", "ChallengeMode_High Stress", "ChallengeMode_Nail Only"
+				"ChallengeMode_Past Regrets", "ChallengeMode_High Stress", "ChallengeMode_Nail Only",
+				"ChallengeMode_Nailmaster", "ChallengeMode_A Fool's Errand", "ChallengeMode_Unfriendly Fire"
 			};
 		}
 	}

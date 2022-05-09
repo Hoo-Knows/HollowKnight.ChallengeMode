@@ -52,7 +52,7 @@ namespace ChallengeMode.Modifiers
 				//Warp to gate
 				HeroController.instance.parryInvulnTimer = 0.4f;
 				HeroController.instance.transform.position = position;
-				dreamgate.Recycle();
+				Destroy(dreamgate);
 				Instantiate(flash, position, Quaternion.identity);
 				audioSource.PlayOneShot(audioWarp);
 

@@ -17,9 +17,9 @@ namespace ChallengeMode.Modifiers
 		public override void StartEffect()
 		{
 			spawnFSM = HeroController.instance.transform.Find("Charm Effects").gameObject.LocateMyFSM("Spawn Grimmchild");
-			if(spawnFSM.FsmVariables.GetFsmGameObject("Child").Value == null) spawnFSM.SetState("Spawn");
+			if(spawnFSM.FsmVariables.FindFsmGameObject("Child").Value == null) spawnFSM.SetState("Spawn");
 
-			grimmchildGO = spawnFSM.FsmVariables.GetFsmGameObject("Child").Value;
+			grimmchildGO = spawnFSM.FsmVariables.FindFsmGameObject("Child").Value;
 			grimmchildFSM = grimmchildGO.LocateMyFSM("Control");
 
 			//Set level to 4
@@ -62,7 +62,7 @@ namespace ChallengeMode.Modifiers
 			//Make grimmball do damage
 			grimmchildFSM.InsertMethod("Shoot", () =>
 			{
-				grimmballGO = grimmchildFSM.FsmVariables.GetFsmGameObject("Flameball").Value;
+				grimmballGO = grimmchildFSM.FsmVariables.FindFsmGameObject("Flameball").Value;
 				grimmballGO.layer = (int)PhysLayers.ENEMY_ATTACK;
 				grimmballGO.AddComponent<DamageHero>();
 				grimmballGO.GetComponent<DamageHero>().damageDealt = 1;
@@ -79,9 +79,8 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
-			grimmchildFSM.Recycle();
-			grimmballGO.Recycle();
-			grimmchildGO.Recycle();
+			Destroy(grimmballGO);
+			Destroy(grimmchildGO);
 		}
 
 		public override string ToString()
@@ -93,7 +92,8 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Unfriendly Fire", "ChallengeMode_High Stress"
+				"ChallengeMode_Unfriendly Fire", "ChallengeMode_High Stress", "ChallengeMode_A Fool's Errand",
+				"ChallengeMode_Past Regrets"
 			};
 		}
 	}

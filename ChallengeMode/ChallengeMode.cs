@@ -8,12 +8,13 @@ namespace ChallengeMode
 	public class ChallengeMode : Mod
 	{
 		public Modifier[] modifiers;
+		public Modifier[] modifiersU;
 		public ModifierControl modifierControl;
 
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
 
-		public override string GetVersion() => "0.3.2.1";
+		public override string GetVersion() => "0.4.0.0";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -22,7 +23,7 @@ namespace ChallengeMode
 			Instance = this;
 			this.preloadedObjects = preloadedObjects;
 
-			//All modifiers
+			//Modifiers
 			modifiers = new Modifier[18];
 			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
 			modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
@@ -41,17 +42,31 @@ namespace ChallengeMode
 			modifiers[14] = GameManager.instance.gameObject.AddComponent<Modifiers.ChaosChaos>();
 			modifiers[15] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
 			modifiers[16] = GameManager.instance.gameObject.AddComponent<Modifiers.PoorMemory>();
-			modifiers[17] = GameManager.instance.gameObject.AddComponent<Modifiers.AFoolsErrand>();
+			modifiers[17] = GameManager.instance.gameObject.AddComponent<Modifiers.FoolsErrand>();
+
+			//Unique modifiers
+			modifiersU = new Modifier[5];
+			modifiersU[0] = GameManager.instance.gameObject.AddComponent<Modifiers.NailmasterU>();
+			modifiersU[1] = GameManager.instance.gameObject.AddComponent<Modifiers.EphemeralOrdealU>();
+			modifiersU[2] = GameManager.instance.gameObject.AddComponent<Modifiers.SomethingWickedU>();
+			modifiersU[3] = GameManager.instance.gameObject.AddComponent<Modifiers.PaleWatchU>();
+			modifiersU[4] = GameManager.instance.gameObject.AddComponent<Modifiers.ForgottenLightU>();
 
 			//Test individual modifier
 			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
+			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
 
 			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
 			modifierControl.Initialize();
 
 			//Create achievements
 			foreach(Modifier modifier in modifiers)
+			{
+				AchievementHelper.AddAchievement(modifier.ToString(),
+					Sprite.Create(new Texture2D(80, 80), new Rect(0f, 0f, 80f, 80f), new Vector2(0f, 0f)),
+					modifier.ToString(), "ChallengeMode_AchievementText", false);
+			}
+			foreach(Modifier modifier in modifiersU)
 			{
 				AchievementHelper.AddAchievement(modifier.ToString(),
 					Sprite.Create(new Texture2D(80, 80), new Rect(0f, 0f, 80f, 80f), new Vector2(0f, 0f)),
@@ -77,12 +92,19 @@ namespace ChallengeMode
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 50/Colosseum Cage Large"), //Sturdy Fool Cage
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 1/Colosseum Cage Large"), //Heavy Fool Cage
 				("Room_Colosseum_Gold", "Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"), //Winged Fool Cage
+				("GG_Mighty_Zote", "Battle Control"), //Eternal Ordeal
+				("Hive_03", "Flamebearer Spawn"), //Grimmkin Nightmare
+				("White_Palace_02", "Battle Scene/Royal Gaurd") //Kingsmould
 			};
 		}
 
 		private string LanguageGetHook(string key, string sheetTitle, string orig)
 		{
 			foreach(Modifier modifier in modifiers)
+			{
+				if(key == modifier.ToString()) return modifier.ToString().Substring(14);
+			}
+			foreach(Modifier modifier in modifiersU)
 			{
 				if(key == modifier.ToString()) return modifier.ToString().Substring(14);
 			}

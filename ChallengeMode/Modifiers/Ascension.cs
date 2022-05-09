@@ -19,7 +19,8 @@ namespace ChallengeMode.Modifiers
 		{
 			gorbGO = Instantiate(ChallengeMode.Instance.preloadedObjects["GG_Ghost_Gorb"]["Warrior/Ghost Warrior Slug"]);
 			gorbGO.transform.position = HeroController.instance.transform.position;
-			gorbGO.layer = (int)PhysLayers.CORPSE;
+			Destroy(gorbGO.GetComponent<DamageHero>());
+			Destroy(gorbGO.GetComponent<Collider2D>());
 			gorbGO.SetActive(true);
 
 			gorbMovementFSM = gorbGO.LocateMyFSM("Movement");
@@ -82,10 +83,7 @@ namespace ChallengeMode.Modifiers
 		{
 			StopAllCoroutines();
 
-			gorbMovementFSM.Recycle();
-			gorbAttackFSM.Recycle();
-			gorbDistanceAttackFSM.Recycle();
-			gorbGO.Recycle();
+			Destroy(gorbGO);
 		}
 
 		public override string ToString()
@@ -97,7 +95,8 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Ascension", "ChallengeMode_High Stress"
+				"ChallengeMode_Ascension", "ChallengeMode_High Stress", "ChallengeMode_A Fool's Errand",
+				"ChallengeMode_Past Regrets", "ChallengeMode_Unfriendly Fire"
 			};
 		}
 	}

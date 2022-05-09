@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using Modding;
 using UnityEngine;
-using Random = System.Random;
 
 namespace ChallengeMode.Modifiers
 {
 	class ChaosChaos : Modifier
 	{
-		private Modifier[] modifiers;
 		private Modifier activeModifier;
 		private bool flag;
 
 		public override void StartEffect()
 		{
-			modifiers = ChallengeMode.Instance.modifiers;
-
 			flag = true;
+
 			StartCoroutine(BeginChaos());
 		}
 
@@ -25,7 +22,11 @@ namespace ChallengeMode.Modifiers
 			yield return new WaitForSeconds(2f);
 			while(flag)
 			{
-				activeModifier = PickNewModifier();
+				activeModifier = null;
+				while(activeModifier == null)
+				{
+					activeModifier = ChallengeMode.Instance.modifierControl.SelectModifier();
+				}
 
 				AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
 				AchievementHandler.AchievementAwarded aa =
@@ -53,21 +54,6 @@ namespace ChallengeMode.Modifiers
 				}
 			}
 			yield break;
-		}
-
-		private Modifier PickNewModifier()
-		{
-			Random random = new Random();
-			Modifier modifier = null;
-			bool foundModifier = false;
-
-			while(!foundModifier)
-			{
-				modifier = modifiers[random.Next(0, modifiers.Length)];
-
-				foundModifier = ChallengeMode.Instance.modifierControl.CheckValidModifier(modifier) && modifier != activeModifier;
-			}
-			return modifier;
 		}
 
 		public override void StopEffect()

@@ -2,11 +2,12 @@
 
 namespace ChallengeMode.Modifiers
 {
-	class NailOnly : Modifier
+	class NailmasterU : Modifier
 	{
 		public override void StartEffect()
 		{
 			On.HeroController.CanCast += OnCanCast;
+			On.HeroController.CanAttack += OnCanAttack;
 		}
 
 		private bool OnCanCast(On.HeroController.orig_CanCast orig, HeroController self)
@@ -14,22 +15,28 @@ namespace ChallengeMode.Modifiers
 			return false;
 		}
 
+		private bool OnCanAttack(On.HeroController.orig_CanAttack orig, HeroController self)
+		{
+			return false;
+		}
+
 		public override void StopEffect()
 		{
 			On.HeroController.CanCast -= OnCanCast;
+			On.HeroController.CanAttack -= OnCanAttack;
 		}
 
 		public override string ToString()
 		{
-			return "ChallengeMode_Nail Only";
+			return "ChallengeMode_Nailmaster";
 		}
 
 		public override List<string> GetBlacklistedModifiers()
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Nail Only", "ChallengeMode_Soul Master", "ChallengeMode_Past Regrets",
-				"ChallengeMode_Speedrunner's Curse", "ChallengeMode_Nailmaster"
+				"ChallengeMode_Nailmaster", "ChallengeMode_Nail Only", "ChallengeMode_Soul Master",
+				"ChallengeMode_Past Regrets", "ChallengeMode_Speedrunner's Curse", "ChallengeMode_A Fool's Errand"
 			};
 		}
 	}

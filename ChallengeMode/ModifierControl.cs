@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Modding;
 using UnityEngine;
@@ -10,7 +9,8 @@ namespace ChallengeMode
 	public class ModifierControl : MonoBehaviour
 	{
 		private Modifier[] modifiers;
-		private Modifier[] activeModifiers;
+		private Modifier[] modifiersU;
+		private List<Modifier> activeModifiers;
 
 		private int spaCount;
 		private int numActiveModifiers;
@@ -19,18 +19,19 @@ namespace ChallengeMode
 
 		private List<string> sceneBlacklist;
 		private List<string> foolSceneBlacklist;
+		private List<string> sceneUniqueList;
 
 		public void Initialize()
 		{
 			Unload();
 
 			modifiers = ChallengeMode.Instance.modifiers;
+			modifiersU = ChallengeMode.Instance.modifiersU;
+			activeModifiers = new List<Modifier>();
 			spaCount = 0;
 			numActiveModifiers = 1;
 			currentScene = "none lol";
-			activeModifiers = new Modifier[numActiveModifiers];
 			random = new Random();
-
 			sceneBlacklist = new List<string>()
 			{
 				"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
@@ -42,12 +43,20 @@ namespace ChallengeMode
 				"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V",
 				"GG_Grimm_Nightmare", "GG_Radiance"
 			};
+			sceneUniqueList = new List<string>()
+			{
+				"GG_Nailmasters", "GG_Painter", "GG_Sly", "GG_Grey_Prince_Zote",
+				"GG_Grimm_Nightmare", "GG_Hollow_Knight", "GG_Radiance"
+			};
 
 			ModHooks.BeforeSceneLoadHook += BeforeSceneLoadHook;
 		}
 
 		private string BeforeSceneLoadHook(string sceneName)
 		{
+			//Overrides scene for testing bosses
+			//if(sceneName == "GG_Mage_Knight") sceneName = "GG_Radiance";
+
 			Stop();
 
 			if(sceneName == "GG_Spa") spaCount++;
@@ -70,57 +79,82 @@ namespace ChallengeMode
 			if(currentScene.Substring(0, 2) != "GG" || sceneBlacklist.Contains(currentScene)) return;
 
 			//Select modifiers
-			for(int i = 0; i < numActiveModifiers; i++)
+			if(sceneUniqueList.Contains(currentScene))
 			{
-				Modifier modifier = modifiers[random.Next(0, modifiers.Length)];
+				int i = sceneUniqueList.IndexOf(currentScene) - 2;
+				if(i < 0) i = 0;
+				activeModifiers.Add(modifiersU[i]);
 
-				ChallengeMode.Instance.Log("Checking if " + modifier.ToString() + " is valid...");
-				if(CheckValidModifier(modifier))
+				//Sheo/Sly have one extra modifier
+				if((currentScene == "GG_Painter" || currentScene == "GG_Sly") && numActiveModifiers > 1)
 				{
-					ChallengeMode.Instance.Log(modifier.ToString() + " is valid");
-					activeModifiers[i] = modifier;
-					//Frail Shell must appear before High Stress
-					if(modifier.ToString() == "ChallengeMode_Frail Shell")
+					while(activeModifiers.Count < 2)
 					{
-						for(int j = 0; j < numActiveModifiers; j++)
+						Modifier modifier = SelectModifier();
+						if(modifier != null)
 						{
-							if(activeModifiers[j] != null && activeModifiers[j].ToString() == "ChallengeMode_High Stress")
-							{
-								ChallengeMode.Instance.Log("Swapping Frail Shell and High Stress");
-								(activeModifiers[i], activeModifiers[j]) = (activeModifiers[j], activeModifiers[i]);
-								break;
-							}
+							activeModifiers.Add(modifier);
 						}
 					}
 				}
-				else
+				//Absrad has High Stress
+				if(currentScene == "GG_Radiance" && numActiveModifiers > 1)
 				{
-					ChallengeMode.Instance.Log(modifier.ToString() + " is not valid");
-					i--;
+					activeModifiers.Add(modifiers[0]);
+				}
+			}
+			else
+			{
+				while(activeModifiers.Count < numActiveModifiers)
+				{
+					Modifier modifier = SelectModifier();
+
+					if(modifier != null)
+					{
+						activeModifiers.Add(modifier);
+						//Frail Shell must appear before High Stress
+						if(modifier.ToString() == "ChallengeMode_Frail Shell")
+						{
+							ChallengeMode.Instance.Log("Swapping Frail Shell and High Stress");
+
+							int j = activeModifiers.FindIndex((m) => m.ToString() == "ChallengeMode_High Stress");
+							if(j != -1)
+							{
+								activeModifiers.RemoveAt(j);
+								activeModifiers.Add(modifiers[0]);
+							}
+						}
+					}
 				}
 			}
 			GameManager.instance.OnFinishedEnteringScene += OnFinishedEnteringScene;
 		}
 
-		public bool CheckValidModifier(Modifier modifier)
+		public Modifier SelectModifier()
+		{
+			Modifier modifier = modifiers[random.Next(0, modifiers.Length)];
+
+			if(CheckValidModifier(modifier))
+			{
+				ChallengeMode.Instance.Log(modifier.ToString() + " is valid");
+				return modifier;
+			}
+			ChallengeMode.Instance.Log(modifier.ToString() + " is not valid");
+			return null;
+		}
+
+		private bool CheckValidModifier(Modifier modifier)
 		{
 			//A Fool's Errand
 			if(modifier.ToString() == "ChallengeMode_A Fool's Errand")
 			{
-				if(foolSceneBlacklist.Contains(currentScene))
-				{
-					return false;
-				}
+				if(foolSceneBlacklist.Contains(currentScene)) return false;
 			}
 
 			foreach(Modifier m in activeModifiers)
 			{
-				if(m != null && m.GetBlacklistedModifiers().Contains(modifier.ToString()))
-				{
-					return false;
-				}
+				if(m != null && m.GetBlacklistedModifiers().Contains(modifier.ToString())) return false;
 			}
-
 			return true;
 		}
 
@@ -142,6 +176,12 @@ namespace ChallengeMode
 
 			foreach(Modifier modifier in activeModifiers)
 			{
+				if(modifier == null)
+				{
+					ChallengeMode.Instance.Log("Modifier is null, breaking");
+					break;
+				}
+
 				ChallengeMode.Instance.Log("Starting " + modifier.ToString().Substring(14));
 
 				aa.Invoke(modifier.ToString());
@@ -163,7 +203,7 @@ namespace ChallengeMode
 
 		private void Stop()
 		{
-			if(activeModifiers != null && activeModifiers.Length != 0)
+			if(activeModifiers != null && activeModifiers.Count != 0)
 			{
 				ChallengeMode.Instance.Log("Stopping modifiers");
 				foreach(Modifier modifier in activeModifiers)
@@ -178,12 +218,11 @@ namespace ChallengeMode
 						catch
 						{
 							ChallengeMode.Instance.Log("Failed to stop " + modifier.ToString().Substring(14));
-
 						}
 					}
 				}
+				activeModifiers.Clear();
 			}
-			activeModifiers = new Modifier[numActiveModifiers];
 		}
 
 		public void Unload()

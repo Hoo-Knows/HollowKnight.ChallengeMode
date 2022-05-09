@@ -61,7 +61,7 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Speedrunner's Curse", "ChallengeMode_Salubra's Curse"
+				"ChallengeMode_Speedrunner's Curse", "ChallengeMode_Salubra's Curse", "ChallengeMode_Nail Only", "ChallengeMode_Nailmaster"
 			};
 		}
 	}

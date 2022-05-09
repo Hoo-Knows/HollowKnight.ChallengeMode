@@ -37,6 +37,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="MMHOOK_Assembly-CSharp">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\MMHOOK_Assembly-CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="PlayMaker, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed\PlayMaker.dll</HintPath>
@@ -68,17 +71,22 @@
     <Compile Include="Modifier.cs" />
     <Compile Include="ModifierControl.cs" />
     <Compile Include="Modifiers\AdrenalineRush.cs" />
-    <Compile Include="Modifiers\AFoolsErrand.cs" />
+    <Compile Include="Modifiers\FoolsErrand.cs" />
     <Compile Include="Modifiers\Ascension.cs" />
     <Compile Include="Modifiers\AspidRancher.cs" />
     <Compile Include="Modifiers\ChaosChaos.cs" />
+    <Compile Include="Modifiers\EphemeralOrdealU.cs" />
+    <Compile Include="Modifiers\ForgottenLightU.cs" />
     <Compile Include="Modifiers\FrailShell.cs" />
     <Compile Include="Modifiers\HighStress.cs" />
     <Compile Include="Modifiers\HungryKnight.cs" />
     <Compile Include="Modifiers\InfectedWounds.cs" />
+    <Compile Include="Modifiers\NailmasterU.cs" />
     <Compile Include="Modifiers\NailOnly.cs" />
     <Compile Include="Modifiers\PastRegrets.cs" />
     <Compile Include="Modifiers\PoorMemory.cs" />
+    <Compile Include="Modifiers\PaleWatchU.cs" />
+    <Compile Include="Modifiers\SomethingWickedU.cs" />
     <Compile Include="Modifiers\SalubrasCurse.cs" />
     <Compile Include="Modifiers\SoulMaster.cs" />
     <Compile Include="Modifiers\SpeedrunnersCurse.cs" />
