@@ -34,5 +34,5 @@ A mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight. Each bos
   - Eye Beams: light beams last longer and rotate in alternating directions
   - Sword Burst: both swords waves spawn at the same time and move slower with a sharper curve
   - Sword Wall/Sword Rain: accelerate as they move across the arena
-  - Orbs: spawn a light beam when they collide with an object
+  - Orbs: spawn a light beam when they collide with an object or dissipate
   - Climb: light beams fire slightly faster and target the player with perfect accuracy
