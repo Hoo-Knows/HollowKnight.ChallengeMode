@@ -19,7 +19,7 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_" + i, false);
 				GameManager.instance.UnequipCharm(i);
 			}
-			GameManager.instance.RefreshOvercharm();
+			HeroController.instance.CharmUpdate();
 		}
 
 		public override void StopEffect()
@@ -29,7 +29,7 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_" + i, true);
 				GameManager.instance.EquipCharm(i);
 			}
-			GameManager.instance.RefreshOvercharm();
+			HeroController.instance.CharmUpdate();
 		}
 
 		public override string ToString()

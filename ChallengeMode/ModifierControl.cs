@@ -8,8 +8,7 @@ namespace ChallengeMode
 {
 	public class ModifierControl : MonoBehaviour
 	{
-		private Modifier[] modifiers;
-		private Modifier[] modifiersU;
+		private ChallengeMode cm;
 		private List<Modifier> activeModifiers;
 
 		private int spaCount;
@@ -25,8 +24,7 @@ namespace ChallengeMode
 		{
 			Unload();
 
-			modifiers = ChallengeMode.Instance.modifiers;
-			modifiersU = ChallengeMode.Instance.modifiersU;
+			cm = ChallengeMode.Instance;
 			activeModifiers = new List<Modifier>();
 			spaCount = 0;
 			numActiveModifiers = 1;
@@ -83,12 +81,12 @@ namespace ChallengeMode
 			{
 				int i = sceneUniqueList.IndexOf(currentScene) - 2;
 				if(i < 0) i = 0;
-				activeModifiers.Add(modifiersU[i]);
+				activeModifiers.Add(cm.modifiersU[i]);
 
-				//Sheo/Sly have one extra modifier
-				if((currentScene == "GG_Painter" || currentScene == "GG_Sly") && numActiveModifiers > 1)
+				//Nailmasters can have extra modifiers
+				if(currentScene == "GG_Nailmasters" || currentScene == "GG_Painter" || currentScene == "GG_Sly")
 				{
-					while(activeModifiers.Count < 2)
+					while(activeModifiers.Count < numActiveModifiers)
 					{
 						Modifier modifier = SelectModifier();
 						if(modifier != null)
@@ -100,7 +98,7 @@ namespace ChallengeMode
 				//Absrad has High Stress
 				if(currentScene == "GG_Radiance" && numActiveModifiers > 1)
 				{
-					activeModifiers.Add(modifiers[0]);
+					activeModifiers.Add(cm.modifiers[0]);
 				}
 			}
 			else
@@ -112,16 +110,20 @@ namespace ChallengeMode
 					if(modifier != null)
 					{
 						activeModifiers.Add(modifier);
-						//Frail Shell must appear before High Stress
+						//Frail Shell must appear before High Stress and Poor Memory
 						if(modifier.ToString() == "ChallengeMode_Frail Shell")
 						{
-							ChallengeMode.Instance.Log("Swapping Frail Shell and High Stress");
-
 							int j = activeModifiers.FindIndex((m) => m.ToString() == "ChallengeMode_High Stress");
 							if(j != -1)
 							{
 								activeModifiers.RemoveAt(j);
-								activeModifiers.Add(modifiers[0]);
+								activeModifiers.Add(cm.modifiers[0]);
+							}
+							j = activeModifiers.FindIndex((m) => m.ToString() == "ChallengeMode_Poor Memory");
+							if(j != -1)
+							{
+								activeModifiers.RemoveAt(j);
+								activeModifiers.Add(cm.modifiers[16]);
 							}
 						}
 					}
@@ -132,14 +134,14 @@ namespace ChallengeMode
 
 		public Modifier SelectModifier()
 		{
-			Modifier modifier = modifiers[random.Next(0, modifiers.Length)];
+			Modifier modifier = cm.modifiers[random.Next(0, cm.modifiers.Count)];
 
 			if(CheckValidModifier(modifier))
 			{
-				ChallengeMode.Instance.Log(modifier.ToString() + " is valid");
+				cm.Log(modifier.ToString() + " is valid");
 				return modifier;
 			}
-			ChallengeMode.Instance.Log(modifier.ToString() + " is not valid");
+			cm.Log(modifier.ToString() + " is not valid");
 			return null;
 		}
 
@@ -165,7 +167,7 @@ namespace ChallengeMode
 
 		private IEnumerator StartModifiers()
 		{
-			ChallengeMode.Instance.Log("Starting modifiers");
+			cm.Log("Starting modifiers");
 
 			//Reflection magic to award achievements
 			AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
@@ -176,13 +178,7 @@ namespace ChallengeMode
 
 			foreach(Modifier modifier in activeModifiers)
 			{
-				if(modifier == null)
-				{
-					ChallengeMode.Instance.Log("Modifier is null, breaking");
-					break;
-				}
-
-				ChallengeMode.Instance.Log("Starting " + modifier.ToString().Substring(14));
+				cm.Log("Starting " + modifier.ToString().Substring(14));
 
 				aa.Invoke(modifier.ToString());
 				try
@@ -191,7 +187,7 @@ namespace ChallengeMode
 				}
 				catch
 				{
-					ChallengeMode.Instance.Log("Failed to start " + modifier.ToString().Substring(14));
+					cm.Log("Failed to start " + modifier.ToString().Substring(14));
 				}
 				yield return new WaitForSecondsRealtime(0.75f);
 			}
@@ -205,19 +201,19 @@ namespace ChallengeMode
 		{
 			if(activeModifiers != null && activeModifiers.Count != 0)
 			{
-				ChallengeMode.Instance.Log("Stopping modifiers");
+				cm.Log("Stopping modifiers");
 				foreach(Modifier modifier in activeModifiers)
 				{
 					if(modifier != null)
 					{
-						ChallengeMode.Instance.Log("Stopping " + modifier.ToString().Substring(14));
+						cm.Log("Stopping " + modifier.ToString().Substring(14));
 						try
 						{
 							modifier.StopEffect();
 						}
 						catch
 						{
-							ChallengeMode.Instance.Log("Failed to stop " + modifier.ToString().Substring(14));
+							cm.Log("Failed to stop " + modifier.ToString().Substring(14));
 						}
 					}
 				}

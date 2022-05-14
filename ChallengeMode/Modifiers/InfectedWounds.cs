@@ -59,10 +59,10 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator SoulControl()
 		{
-			for(int i = 0; i < 9; i++)
+			for(int i = 0; i < 33; i++)
 			{
-				HeroController.instance.TakeMPQuick(11);
-				yield return new WaitForSeconds(0.5f);
+				HeroController.instance.TakeMPQuick(3);
+				yield return new WaitForSeconds(0.3f);
 			}
 			yield break;
 		}

@@ -7,56 +7,69 @@ namespace ChallengeMode
 {
 	public class ChallengeMode : Mod
 	{
-		public Modifier[] modifiers;
-		public Modifier[] modifiersU;
+		public List<Modifier> modifiers;
+		public List<Modifier> modifiersU;
 		public ModifierControl modifierControl;
+		public GameObject modifierObject;
 
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
 
-		public override string GetVersion() => "0.4.0.0";
+		public override string GetVersion() => "0.4.1.0";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
 		public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
 		{
+			Log("Initializing");
+
 			Instance = this;
 			this.preloadedObjects = preloadedObjects;
 
+			//GameObject that all modifiers are attached to
+			modifierObject = new GameObject("Modifier Object");
+			Object.DontDestroyOnLoad(modifierObject);
+
 			//Modifiers
-			modifiers = new Modifier[18];
-			modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
-			modifiers[1] = GameManager.instance.gameObject.AddComponent<Modifiers.FrailShell>();
-			modifiers[2] = GameManager.instance.gameObject.AddComponent<Modifiers.AdrenalineRush>();
-			modifiers[3] = GameManager.instance.gameObject.AddComponent<Modifiers.AspidRancher>();
-			modifiers[4] = GameManager.instance.gameObject.AddComponent<Modifiers.VoidVision>();
-			modifiers[5] = GameManager.instance.gameObject.AddComponent<Modifiers.SpeedrunnersCurse>();
-			modifiers[6] = GameManager.instance.gameObject.AddComponent<Modifiers.NailOnly>();
-			modifiers[7] = GameManager.instance.gameObject.AddComponent<Modifiers.SoulMaster>();
-			modifiers[8] = GameManager.instance.gameObject.AddComponent<Modifiers.HungryKnight>();
-			modifiers[9] = GameManager.instance.gameObject.AddComponent<Modifiers.UnfriendlyFire>();
-			modifiers[10] = GameManager.instance.gameObject.AddComponent<Modifiers.Ascension>();
-			modifiers[11] = GameManager.instance.gameObject.AddComponent<Modifiers.SalubrasCurse>();
-			modifiers[12] = GameManager.instance.gameObject.AddComponent<Modifiers.PastRegrets>();
-			modifiers[13] = GameManager.instance.gameObject.AddComponent<Modifiers.InfectedWounds>();
-			modifiers[14] = GameManager.instance.gameObject.AddComponent<Modifiers.ChaosChaos>();
-			modifiers[15] = GameManager.instance.gameObject.AddComponent<Modifiers.TemporalDistortion>();
-			modifiers[16] = GameManager.instance.gameObject.AddComponent<Modifiers.PoorMemory>();
-			modifiers[17] = GameManager.instance.gameObject.AddComponent<Modifiers.FoolsErrand>();
+			modifiers = new List<Modifier>()
+			{
+				modifierObject.AddComponent<Modifiers.HighStress>(),
+				modifierObject.AddComponent<Modifiers.FrailShell>(),
+				modifierObject.AddComponent<Modifiers.AdrenalineRush>(),
+				modifierObject.AddComponent<Modifiers.AspidRancher>(),
+				modifierObject.AddComponent<Modifiers.VoidVision>(),
+				modifierObject.AddComponent<Modifiers.SpeedrunnersCurse>(),
+				modifierObject.AddComponent<Modifiers.NailOnly>(),
+				modifierObject.AddComponent<Modifiers.SoulMaster>(),
+				modifierObject.AddComponent<Modifiers.HungryKnight>(),
+				modifierObject.AddComponent<Modifiers.UnfriendlyFire>(),
+				modifierObject.AddComponent<Modifiers.Ascension>(),
+				modifierObject.AddComponent<Modifiers.SalubrasCurse>(),
+				modifierObject.AddComponent<Modifiers.PastRegrets>(),
+				modifierObject.AddComponent<Modifiers.InfectedWounds>(),
+				modifierObject.AddComponent<Modifiers.ChaosChaos>(),
+				modifierObject.AddComponent<Modifiers.TemporalDistortion>(),
+				modifierObject.AddComponent<Modifiers.PoorMemory>(),
+				modifierObject.AddComponent<Modifiers.FoolsErrand>()
+			};
 
 			//Unique modifiers
-			modifiersU = new Modifier[5];
-			modifiersU[0] = GameManager.instance.gameObject.AddComponent<Modifiers.NailmasterU>();
-			modifiersU[1] = GameManager.instance.gameObject.AddComponent<Modifiers.EphemeralOrdealU>();
-			modifiersU[2] = GameManager.instance.gameObject.AddComponent<Modifiers.SomethingWickedU>();
-			modifiersU[3] = GameManager.instance.gameObject.AddComponent<Modifiers.PaleWatchU>();
-			modifiersU[4] = GameManager.instance.gameObject.AddComponent<Modifiers.ForgottenLightU>();
+			modifiersU = new List<Modifier>()
+			{
+				modifierObject.AddComponent<Modifiers.NailmasterU>(),
+				modifierObject.AddComponent<Modifiers.EphemeralOrdealU>(),
+				modifierObject.AddComponent<Modifiers.SomethingWickedU>(),
+				modifierObject.AddComponent<Modifiers.PaleWatchU>(),
+				modifierObject.AddComponent<Modifiers.ForgottenLightU>()
+			};
 
 			//Test individual modifier
-			//modifiers = new Modifier[1];
-			//modifiers[0] = GameManager.instance.gameObject.AddComponent<Modifiers.HighStress>();
+			//modifiers = new List<Modifier>()
+			//{
+			//	modifierObject.AddComponent<Modifiers.PoorMemory>()
+			//};
 
-			modifierControl = GameManager.instance.gameObject.AddComponent<ModifierControl>();
+			modifierControl = modifierObject.AddComponent<ModifierControl>();
 			modifierControl.Initialize();
 
 			//Create achievements
@@ -75,6 +88,8 @@ namespace ChallengeMode
 			UIManager.instance.RefreshAchievementsList();
 
 			ModHooks.LanguageGetHook += LanguageGetHook;
+
+			Log("Initialized");
 		}
 
 		public override List<(string, string)> GetPreloadNames()
@@ -102,11 +117,11 @@ namespace ChallengeMode
 		{
 			foreach(Modifier modifier in modifiers)
 			{
-				if(key == modifier.ToString()) return modifier.ToString().Substring(14);
+				if(key == modifier.ToString()) return modifier.ToString().Split(new char[] { '_' })[1];
 			}
 			foreach(Modifier modifier in modifiersU)
 			{
-				if(key == modifier.ToString()) return modifier.ToString().Substring(14);
+				if(key == modifier.ToString()) return modifier.ToString().Split(new char[] { '_' })[1];
 			}
 			if(key == "ChallengeMode_AchievementText") return "";
 			return orig;
@@ -114,7 +129,7 @@ namespace ChallengeMode
 
 		public void Unload()
 		{
-			modifierControl.Unload();
+			if(modifierControl != null) modifierControl.Unload();
 
 			ModHooks.LanguageGetHook -= LanguageGetHook;
 		}

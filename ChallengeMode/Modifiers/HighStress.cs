@@ -38,11 +38,13 @@ namespace ChallengeMode.Modifiers
 			flag = true;
 			PlayerData.instance.SetInt("health", 1);
 			PlayerData.instance.SetInt("healthBlue", 0);
-			EventRegister.SendEvent("HERO DAMAGED");
+			PlayMakerFSM.BroadcastEvent("HERO DAMAGED");
 			yield return new WaitForSeconds(5f);
 			HeroController.instance.AddHealth(Math.Min(health, health + healthBlue - damage) - 1);
 			for(int i = 0; i < Math.Max(healthBlue - damage, 0); i++)
-				EventRegister.SendEvent("ADD BLUE HEALTH");
+			{
+				PlayMakerFSM.BroadcastEvent("ADD BLUE HEALTH");
+			}
 			flag = false;
 			yield break;
 		}
@@ -55,7 +57,9 @@ namespace ChallengeMode.Modifiers
 			{
 				HeroController.instance.AddHealth(Math.Min(health, health + healthBlue - damage) - 1);
 				for(int i = 0; i < Math.Max(healthBlue - damage, 0); i++)
-					EventRegister.SendEvent("ADD BLUE HEALTH");
+				{
+					PlayMakerFSM.BroadcastEvent("ADD BLUE HEALTH");
+				}
 			}
 		}
 
@@ -69,7 +73,7 @@ namespace ChallengeMode.Modifiers
 			return new List<string>()
 			{
 				"ChallengeMode_High Stress", "ChallengeMode_Unfriendly Fire", "ChallengeMode_Ascension",
-				"ChallengeMode_Past Regrets", "ChallengeMode_A Fool's Errand"
+				"ChallengeMode_Past Regrets", "ChallengeMode_A Fool's Errand", "ChallengeMode_Poor Memory"
 			};
 		}
 	}

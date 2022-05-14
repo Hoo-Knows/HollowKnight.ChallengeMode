@@ -22,7 +22,7 @@ A mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight. Each bos
 - Infected Wounds: taking damage drains soul, halves nail damage for 5 seconds, and spawns 1-3 Infected Balloons
 - Chaos, Chaos: applies a different modifier every 20 seconds
 - Temporal Distortion: occasionally warps the Knight back in time 3 seconds
-- Poor Memory: disables the HUD
+- Poor Memory: makes the HUD lie to you (currently doesn't do anything if you equip Hiveblood or Joni's Blessing)
 - A Fool’s Errand: covers the ground in spikes or spawns enemies from the Colosseum in regular intervals
 
 ## Unique Modifiers
@@ -33,6 +33,6 @@ A mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight. Each bos
 - Forgotten Light: modifies Absolute Radiance’s attack patterns, guaranteed to appear with High Stress (applies to Absolute Radiance)
   - Eye Beams: light beams last longer and rotate in alternating directions
   - Sword Burst: both swords waves spawn at the same time and move slower with a sharper curve
-  - Sword Wall/Sword Rain: accelerate and decelerate as they move across the arena
+  - Sword Wall/Sword Rain: accelerate as they move across the arena
   - Orbs: spawn a light beam when they collide with an object
   - Climb: light beams fire slightly faster and target the player with perfect accuracy

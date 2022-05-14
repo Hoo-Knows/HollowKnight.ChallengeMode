@@ -60,7 +60,7 @@ namespace ChallengeMode.Modifiers
 			absradAttackFSM.InsertMethod("NF Glow", () =>
 			{
 				if(absradChoiceFSM.FsmVariables.FindFsmInt("Arena").Value == 1) beamsRotation = 0.2f;
-				else beamsRotation = 0.12f;
+				else beamsRotation = 0.13f;
 				beamsRotation *= random.Next(0, 2) == 0 ? -1f : 1f;
 			}, 0);
 
@@ -103,6 +103,14 @@ namespace ChallengeMode.Modifiers
 			//Prevent last eye beam from disappearing early
 			absradAttackFSM.GetAction<Wait>("EB 3", 11).time = 2f;
 			absradAttackFSM.GetAction<Wait>("EB 9", 10).time = 2f;
+
+			//Change light beam rotation to be more consistent
+			state = new string[] { "EB 2", "EB 3", "EB 8", "EB 9" };
+			for(int i = 0; i < 4; i++)
+			{
+				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).min = 15f;
+				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).max = 20f;
+			}
 		}
 
 		private IEnumerator EyeBeams(GameObject beams, int num)
@@ -174,13 +182,13 @@ namespace ChallengeMode.Modifiers
 			//Change sword speed and curve
 			foreach(GameObject sword in swordsCW)
 			{
-				sword.LocateMyFSM("Control").GetAction<SetVelocityAsAngle>("Fire CW", 0).speed = 15f;
+				sword.LocateMyFSM("Control").GetAction<SetVelocityAsAngle>("Fire CW", 0).speed = 12f;
 				sword.LocateMyFSM("Control").GetAction<FloatAdd>("Fire CW", 2).add = 30f;
 				sword.LocateMyFSM("Control").SendEvent("FAN ATTACK CW");
 			}
 			foreach(GameObject sword in swordsCCW)
 			{
-				sword.LocateMyFSM("Control").GetAction<SetVelocityAsAngle>("Fire CCW", 0).speed = 15f;
+				sword.LocateMyFSM("Control").GetAction<SetVelocityAsAngle>("Fire CCW", 0).speed = 12f;
 				sword.LocateMyFSM("Control").GetAction<FloatAdd>("Fire CCW", 2).add = -30f;
 				sword.LocateMyFSM("Control").SendEvent("FAN ATTACK CCW");
 			}
@@ -212,8 +220,8 @@ namespace ChallengeMode.Modifiers
 				orbBeam = absradAttackFSM.FsmVariables.FindFsmGameObject("Ascend Beam").Value;
 				//FSM located in sharedassets407.assets
 				string[] fsm = new string[] { "Orb Control", "Orb Control", "Final Control" };
-				string[] state = new string[] { "Impact", "Dissipate", "Recycle" };
-				for(int i = 0; i < 2; i++)
+				string[] state = new string[] { "Impact", "Stop Particles", "Recycle" };
+				for(int i = 0; i < 3; i++)
 				{
 					string fsmLocal = fsm[i];
 					string stateLocal = state[i];
@@ -244,7 +252,7 @@ namespace ChallengeMode.Modifiers
 			yield return new WaitForSeconds(0.5f);
 			beamFSM.SendEvent("FIRE");
 			AudioSource.PlayClipAtPoint(orbBeamFireClip, pos, 1f);
-			yield return new WaitForSeconds(0.15f);
+			yield return new WaitForSeconds(0.3f);
 			beamFSM.SendEvent("END");
 			yield return new WaitForSeconds(1f);
 			Destroy(beam);
