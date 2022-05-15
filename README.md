@@ -4,7 +4,7 @@ A mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight. Each bos
 
 ### Dependencies
 - SFCore
-- Scarab
+- Satchel
 
 ## List of Modifiers
 - High Stress: sets the player’s health to 1 for 5 seconds after they get hit
@@ -36,4 +36,4 @@ A mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight. Each bos
   - Sword Burst: both swords waves spawn at the same time and move slower with a sharper curve
   - Sword Wall/Sword Rain: accelerate as they move across the arena
   - Orbs: spawn a light beam when they collide with an object or dissipate
-  - Climb: light beams fire slightly faster and target the player with perfect accuracy
+  - Climb: light beams have a shorter telegraph and target the player with perfect accuracy
