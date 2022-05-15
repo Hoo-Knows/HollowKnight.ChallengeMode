@@ -2,6 +2,7 @@
 using Modding;
 using SFCore.Utils;
 using System.Collections.Generic;
+using System;
 
 namespace ChallengeMode.Modifiers
 {
@@ -57,7 +58,7 @@ namespace ChallengeMode.Modifiers
 		private int TakeHealthHook(int damage)
 		{
 			RandomizeHealth();
-			int damageBlue = System.Math.Min(healthBlue, damage);
+			int damageBlue = Math.Min(healthBlue, damage);
 			healthBlue -= damageBlue;
 			damage -= damageBlue;
 			if(damage > 0)
@@ -77,10 +78,7 @@ namespace ChallengeMode.Modifiers
 		private void AddHealth(On.HeroController.orig_AddHealth orig, HeroController self, int amount)
 		{
 			RandomizeHealth();
-			if(health + amount <= healthMax)
-			{
-				health += amount;
-			}
+			health = Math.Min(health + amount, healthMax);
 			//ChallengeMode.Instance.Log("health: " + health);
 			//ChallengeMode.Instance.Log("healthBlue: " + healthBlue);
 		}

@@ -9,14 +9,15 @@ namespace ChallengeMode
 	public class ModifierControl : MonoBehaviour
 	{
 		private ChallengeMode cm;
-		private List<Modifier> activeModifiers;
-		private string currentScene;
+		private Modifier[] activeModifiers;
 		private Random random;
+
+		private string currentScene;
 
 		private readonly List<string> sceneBlacklist = new List<string>()
 		{
 			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
-			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
+			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa", "GG_Boss_Door_Entrance"
 		};
 		private readonly List<string> foolSceneBlacklist = new List<string>()
 		{
@@ -34,64 +35,67 @@ namespace ChallengeMode
 		{
 			Unload();
 
-			cm = ChallengeMode.Instance;
-			activeModifiers = new List<Modifier>();
 			this.currentScene = currentScene;
-			random = new Random();
 
 			if(currentScene.Substring(0, 2) != "GG" || sceneBlacklist.Contains(currentScene)) return;
+
+			cm = ChallengeMode.Instance;
+			activeModifiers = new Modifier[numActiveModifiers];
+			random = new Random();
 
 			//Select modifiers
 			if(sceneUniqueList.Contains(currentScene))
 			{
 				int i = sceneUniqueList.IndexOf(currentScene) - 2;
 				if(i < 0) i = 0;
-				activeModifiers.Add(cm.modifiersU[i]);
+				activeModifiers[0] = cm.modifiersU[i];
 
 				//Nailmasters can have extra modifiers
 				if(currentScene == "GG_Nailmasters" || currentScene == "GG_Painter" || currentScene == "GG_Sly")
 				{
-					while(activeModifiers.Count < numActiveModifiers)
+					for(int j = 1; j < numActiveModifiers; j++)
 					{
 						Modifier modifier = SelectModifier();
 						if(modifier != null)
 						{
-							activeModifiers.Add(modifier);
+							activeModifiers[j] = modifier;
+						}
+						else
+						{
+							j--;
 						}
 					}
 				}
 				//Absrad has High Stress
 				if(currentScene == "GG_Radiance" && numActiveModifiers > 1)
 				{
-					activeModifiers.Add(cm.modifiers[0]);
+					activeModifiers[1] = cm.modifiers[0];
 				}
 			}
 			else
 			{
-				while(activeModifiers.Count < numActiveModifiers)
+				for(int i = 0; i < numActiveModifiers; i++)
 				{
 					Modifier modifier = SelectModifier();
 
 					if(modifier != null)
 					{
-						activeModifiers.Add(modifier);
+						activeModifiers[i] = modifier;
 						//Frail Shell must appear before High Stress and Poor Memory
 						if(modifier.ToString() == "ChallengeMode_Frail Shell")
 						{
-							int j = activeModifiers.FindIndex((m) => m.ToString() == "ChallengeMode_High Stress");
-							if(j != -1)
+							for(int j = 0; j < numActiveModifiers; j++)
 							{
-								activeModifiers.RemoveAt(j);
-								activeModifiers.Add(cm.modifiers[0]);
-							}
-							j = activeModifiers.FindIndex((m) => m.ToString() == "ChallengeMode_Poor Memory");
-							if(j != -1)
-							{
-								activeModifiers.RemoveAt(j);
-								activeModifiers.Add(cm.modifiers[16]);
+								if(activeModifiers[j].ToString() == "ChallengeMode_High Stress" ||
+									activeModifiers[j].ToString() == "ChallengeMode_Poor Memory")
+								{
+									(activeModifiers[i], activeModifiers[j]) = (activeModifiers[j], activeModifiers[i]);
+									break;
+								}
 							}
 						}
 					}
+					else i--;
 				}
 			}
 			GameManager.instance.OnFinishedEnteringScene += OnFinishedEnteringScene;
@@ -99,7 +103,7 @@ namespace ChallengeMode
 
 		public Modifier SelectModifier()
 		{
-			Modifier modifier = cm.modifiers[random.Next(0, cm.modifiers.Count)];
+			Modifier modifier = cm.modifiers[random.Next(0, cm.modifiers.Length)];
 
 			if(CheckValidModifier(modifier))
 			{
@@ -120,7 +124,7 @@ namespace ChallengeMode
 
 			foreach(Modifier m in activeModifiers)
 			{
-				if(m.GetBlacklistedModifiers().Contains(modifier.ToString())) return false;
+				if(m != null && m.GetBlacklistedModifiers().Contains(modifier.ToString())) return false;
 			}
 			return true;
 		}
@@ -132,7 +136,7 @@ namespace ChallengeMode
 
 		private IEnumerator StartModifiers()
 		{
-			cm.Log("Starting modifiers");
+			cm.Log("Starting modifiers for " + currentScene);
 
 			//Reflection magic to award achievements
 			AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
@@ -164,9 +168,9 @@ namespace ChallengeMode
 
 		private void StopModifiers()
 		{
-			if(activeModifiers != null && activeModifiers.Count != 0)
+			if(activeModifiers != null)
 			{
-				cm.Log("Stopping modifiers");
+				cm.Log("Stopping modifiers for " + currentScene);
 				foreach(Modifier modifier in activeModifiers)
 				{
 					if(modifier != null)
@@ -182,8 +186,8 @@ namespace ChallengeMode
 						}
 					}
 				}
-				activeModifiers.Clear();
 			}
+			activeModifiers = null;
 		}
 
 		public void Unload()

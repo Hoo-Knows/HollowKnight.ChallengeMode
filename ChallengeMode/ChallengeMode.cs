@@ -2,23 +2,26 @@
 using Modding;
 using SFCore;
 using UnityEngine;
+using Satchel;
+using System.IO;
 
 namespace ChallengeMode
 {
 	public class ChallengeMode : Mod
 	{
-		public List<Modifier> modifiers;
-		public List<Modifier> modifiersU;
+		public Modifier[] modifiers;
+		public Modifier[] modifiersU;
 		public ModifierControl modifierControl;
 		private GameObject modifierObject;
 
 		private int numActiveModifiers;
 		private int spaCount;
+		private string iconPath;
 
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
 
-		public override string GetVersion() => "0.4.2.0";
+		public override string GetVersion() => "0.4.2.1";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -34,7 +37,7 @@ namespace ChallengeMode
 			Object.DontDestroyOnLoad(modifierObject);
 
 			//Modifiers
-			modifiers = new List<Modifier>()
+			modifiers = new Modifier[]
 			{
 				modifierObject.AddComponent<Modifiers.HighStress>(),
 				modifierObject.AddComponent<Modifiers.FrailShell>(),
@@ -57,7 +60,7 @@ namespace ChallengeMode
 			};
 
 			//Unique modifiers
-			modifiersU = new List<Modifier>()
+			modifiersU = new Modifier[]
 			{
 				modifierObject.AddComponent<Modifiers.NailmasterU>(),
 				modifierObject.AddComponent<Modifiers.EphemeralOrdealU>(),
@@ -67,9 +70,9 @@ namespace ChallengeMode
 			};
 
 			//Test individual modifier
-			//modifiers = new List<Modifier>()
+			//modifiers = new Modifier[]
 			//{
-			//	modifierObject.AddComponent<Modifiers.PoorMemory>()
+			//	modifierObject.AddComponent<Modifiers.SalubrasCurse>()
 			//};
 
 			modifierControl = modifierObject.AddComponent<ModifierControl>();
@@ -77,16 +80,26 @@ namespace ChallengeMode
 			numActiveModifiers = 1;
 
 			//Create achievements
-			foreach(Modifier modifier in modifiers)
+			iconPath = Path.Combine(AssemblyUtils.getCurrentDirectory(), "Icons");
+			IoUtils.EnsureDirectory(iconPath);
+			for(int i = 0; i < modifiers.Length + modifiersU.Length; i++)
 			{
+				//Get modifier
+				Modifier modifier;
+				if(i < modifiers.Length) modifier = modifiers[i];
+				else modifier = modifiersU[i - modifiers.Length];
+
+				//Load texture
+				Texture2D texture = TextureUtils.createTextureOfColor(64, 64, Color.clear);
+				string path = Path.Combine(iconPath, "ChallengeMode_PlaceholderIcon.png");
+				if(File.Exists(path))
+				{
+					texture = TextureUtils.LoadTextureFromFile(path);
+				}
+
+				//Add achievement
 				AchievementHelper.AddAchievement(modifier.ToString(),
-					Sprite.Create(new Texture2D(80, 80), new Rect(0f, 0f, 80f, 80f), new Vector2(0f, 0f)),
-					modifier.ToString(), "ChallengeMode_AchievementText", false);
-			}
-			foreach(Modifier modifier in modifiersU)
-			{
-				AchievementHelper.AddAchievement(modifier.ToString(),
-					Sprite.Create(new Texture2D(80, 80), new Rect(0f, 0f, 80f, 80f), new Vector2(0f, 0f)),
+					Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 64f),
 					modifier.ToString(), "ChallengeMode_AchievementText", false);
 			}
 			UIManager.instance.RefreshAchievementsList();
@@ -120,6 +133,9 @@ namespace ChallengeMode
 
 		private string BeforeSceneLoadHook(string sceneName)
 		{
+			//Used to override scene
+			//if(sceneName == "GG_Mage_Knight") sceneName = "GG_Radiance";
+
 			if(modifierControl == null) modifierControl = modifierObject.AddComponent<ModifierControl>();
 			modifierControl.Initialize(numActiveModifiers, sceneName);
 

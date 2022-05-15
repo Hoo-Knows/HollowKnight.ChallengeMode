@@ -18,7 +18,7 @@ namespace ChallengeMode.Modifiers
 
 		private int TakeHealthHook(int damage)
 		{
-			customTimeScale = Mathf.Min(customTimeScale + 0.025f, 1.25f);
+			customTimeScale = Mathf.Min(customTimeScale + 0.02f, 1.2f);
 			return damage;
 		}
 

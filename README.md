@@ -4,11 +4,12 @@ A mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight. Each bos
 
 ### Dependencies
 - SFCore
+- Scarab
 
 ## List of Modifiers
 - High Stress: sets the player’s health to 1 for 5 seconds after they get hit
 - Frail Shell: makes the player take 1 extra damage from all sources
-- Adrenaline Rush: taking damage speeds up the game slightly, up to a max of 1.25 speed
+- Adrenaline Rush: taking damage speeds up the game slightly, up to a max of 1.2 speed
 - Aspid Rancher: failing to hit an enemy spawns a Primal Aspid
 - Void Vision: reduces the player's field of vision
 - Speedrunner’s Curse: removes Steady Body, equips Thorns of Agony, and makes the player take hazard damage when they try to Descending Dark

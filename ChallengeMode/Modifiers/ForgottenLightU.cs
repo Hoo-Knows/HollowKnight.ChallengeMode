@@ -60,7 +60,7 @@ namespace ChallengeMode.Modifiers
 			absradAttackFSM.InsertMethod("NF Glow", () =>
 			{
 				if(absradChoiceFSM.FsmVariables.FindFsmInt("Arena").Value == 1) beamsRotation = 0.2f;
-				else beamsRotation = 0.13f;
+				else beamsRotation = 0.14f;
 				beamsRotation *= random.Next(0, 2) == 0 ? -1f : 1f;
 			}, 0);
 
@@ -104,12 +104,12 @@ namespace ChallengeMode.Modifiers
 			absradAttackFSM.GetAction<Wait>("EB 3", 11).time = 2f;
 			absradAttackFSM.GetAction<Wait>("EB 9", 10).time = 2f;
 
-			//Change light beam rotation to be more consistent
+			//Change light beam rotation to be consistently dodgeable
 			state = new string[] { "EB 2", "EB 3", "EB 8", "EB 9" };
 			for(int i = 0; i < 4; i++)
 			{
-				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).min = 15f;
-				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).max = 20f;
+				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).min = 22.5f;
+				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).max = 22.5f;
 			}
 		}
 
@@ -206,7 +206,8 @@ namespace ChallengeMode.Modifiers
 				{
 					swordWall = absradAttackFSM.FsmVariables.FindFsmGameObject("Attack Obj").Value;
 					//FSM located in sharedassets407.assets
-					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).easeType = iTween.EaseType.easeInOutCubic;
+					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).easeType = iTween.EaseType.easeInOutQuad;
+					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).speed = 20f;
 				}, 3);
 			}
 		}
@@ -252,7 +253,7 @@ namespace ChallengeMode.Modifiers
 			yield return new WaitForSeconds(0.5f);
 			beamFSM.SendEvent("FIRE");
 			AudioSource.PlayClipAtPoint(orbBeamFireClip, pos, 1f);
-			yield return new WaitForSeconds(0.3f);
+			yield return new WaitForSeconds(0.5f);
 			beamFSM.SendEvent("END");
 			yield return new WaitForSeconds(1f);
 			Destroy(beam);

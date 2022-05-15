@@ -20,6 +20,9 @@ namespace ChallengeMode.Modifiers
 				GameManager.instance.UnequipCharm(i);
 			}
 			HeroController.instance.CharmUpdate();
+			GameManager.instance.RefreshOvercharm();
+			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
+			EventRegister.SendEvent("UPDATE BLUE HEALTH");
 		}
 
 		public override void StopEffect()
@@ -30,6 +33,9 @@ namespace ChallengeMode.Modifiers
 				GameManager.instance.EquipCharm(i);
 			}
 			HeroController.instance.CharmUpdate();
+			GameManager.instance.RefreshOvercharm();
+			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
+			EventRegister.SendEvent("UPDATE BLUE HEALTH");
 		}
 
 		public override string ToString()
