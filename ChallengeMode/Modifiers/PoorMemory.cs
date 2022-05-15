@@ -31,24 +31,26 @@ namespace ChallengeMode.Modifiers
 				healthBlueMax = pd.GetInt("healthBlue");
 				random = new Random();
 
-				//Fix Fury
-				furyFSM = HeroController.instance.transform.Find("Charm Effects").gameObject.LocateMyFSM("Fury");
-				furyFSM.InsertMethod("Check HP", () =>
+				if(pd.GetBool("equippedCharm_6"))
 				{
-					furyFSM.FsmVariables.FindFsmInt("HP").Value = health;
-				}, 6);
-				furyFSM.InsertMethod("Recheck", () =>
-				{
-					furyFSM.FsmVariables.FindFsmInt("HP").Value = health;
-				}, 1);
+					//Fix Fury
+					furyFSM = HeroController.instance.transform.Find("Charm Effects").gameObject.LocateMyFSM("Fury");
+					furyFSM.InsertMethod("Check HP", () =>
+					{
+						furyFSM.FsmVariables.FindFsmInt("HP").Value = health;
+					}, 6);
+					furyFSM.InsertMethod("Recheck", () =>
+					{
+						furyFSM.FsmVariables.FindFsmInt("HP").Value = health;
+					}, 1);
+				}
 
 				//Fix Elegy
 				ModHooks.AttackHook += AttackHook;
 				ModHooks.AfterAttackHook += AfterAttackHook;
 
 				ModHooks.TakeHealthHook += TakeHealthHook;
-				On.HeroController.AddHealth += HeroControllerAddHealth;
-				On.HeroController.CanFocus += HeroControllerCanFocus;
+				On.HeroController.AddHealth += AddHealth;
 			}
 		}
 
@@ -67,26 +69,20 @@ namespace ChallengeMode.Modifiers
 				pd.SetInt("health", 0);
 				PlayMakerFSM.BroadcastEvent("HERO DAMAGED");
 			}
-			ChallengeMode.Instance.Log("health: " + health);
-			ChallengeMode.Instance.Log("healthBlue: " + healthBlue);
+			//ChallengeMode.Instance.Log("health: " + health);
+			//ChallengeMode.Instance.Log("healthBlue: " + healthBlue);
 			return 0;
 		}
 
-		private void HeroControllerAddHealth(On.HeroController.orig_AddHealth orig, HeroController self, int amount)
+		private void AddHealth(On.HeroController.orig_AddHealth orig, HeroController self, int amount)
 		{
 			RandomizeHealth();
 			if(health + amount <= healthMax)
 			{
 				health += amount;
 			}
-			ChallengeMode.Instance.Log("health: " + health);
-			ChallengeMode.Instance.Log("healthBlue: " + healthBlue);
-		}
-
-		private bool HeroControllerCanFocus(On.HeroController.orig_CanFocus orig, HeroController self)
-		{
-			if(health == healthMax) return false;
-			return orig(self);
+			//ChallengeMode.Instance.Log("health: " + health);
+			//ChallengeMode.Instance.Log("healthBlue: " + healthBlue);
 		}
 
 		private void AttackHook(GlobalEnums.AttackDirection obj)
@@ -103,29 +99,34 @@ namespace ChallengeMode.Modifiers
 			pd.SetInt("healthBlue", pd.GetInt("healthBlue") - healthBlueDiff);
 		}
 
+
 		private void RandomizeHealth()
 		{
-			//Health
 			int healthFake = random.Next(1, healthMax + 1);
-			bool healthFlag = healthFake > pd.GetInt("health");
-			pd.SetInt("health", healthFake);
+			int healthBlueFake = random.Next(0, healthBlueMax + 1);
+			SetHealth(healthFake, healthBlueFake);
+		}
+
+		private void SetHealth(int health, int healthBlue)
+		{
+			//Regular
+			bool healthFlag = health > pd.GetInt("health");
+			pd.SetInt("health", health);
 
 			//Lifeblood
-			int healthBlueFake = random.Next(0, healthBlueMax + 1);
-			bool healthBlueFlag = healthBlueFake > pd.GetInt("healthBlue");
+			bool healthBlueFlag = healthBlue > pd.GetInt("healthBlue");
 			if(healthBlueFlag)
 			{
-				for(int i = 0; i < healthBlueFake - pd.GetInt("healthBlue"); i++)
+				for(int i = 0; i < healthBlue - pd.GetInt("healthBlue"); i++)
 				{
 					PlayMakerFSM.BroadcastEvent("ADD BLUE HEALTH");
 				}
 			}
 			else
 			{
-				pd.SetInt("healthBlue", healthBlueFake);
+				pd.SetInt("healthBlue", healthBlue);
 				PlayMakerFSM.BroadcastEvent("HERO DAMAGED");
 			}
-
 			if(healthFlag) PlayMakerFSM.BroadcastEvent("HERO HEALED");
 		}
 
@@ -134,19 +135,17 @@ namespace ChallengeMode.Modifiers
 			if(!pd.GetBool("equippedCharm_27") && !pd.GetBool("equippedCharm_29"))
 			{
 				ModHooks.TakeHealthHook -= TakeHealthHook;
-				On.HeroController.AddHealth -= HeroControllerAddHealth;
-				On.HeroController.CanFocus -= HeroControllerCanFocus;
+				On.HeroController.AddHealth -= AddHealth;
 				ModHooks.AttackHook -= AttackHook;
 				ModHooks.AfterAttackHook -= AfterAttackHook;
 
-				furyFSM.RemoveAction("Check HP", 6);
-				furyFSM.RemoveAction("Recheck", 1);
+				if(pd.GetBool("equippedCharm_6"))
+				{
+					furyFSM.RemoveAction("Check HP", 6);
+					furyFSM.RemoveAction("Recheck", 1);
+				}
 
-				pd.SetInt("health", health);
-				pd.SetInt("healthBlue", healthBlue);
-
-				GameCameras.instance.hudCanvas.gameObject.SetActive(false);
-				GameCameras.instance.hudCanvas.gameObject.SetActive(true);
+				SetHealth(health, healthBlue);
 			}
 		}
 

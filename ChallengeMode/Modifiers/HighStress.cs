@@ -40,27 +40,25 @@ namespace ChallengeMode.Modifiers
 			PlayerData.instance.SetInt("healthBlue", 0);
 			PlayMakerFSM.BroadcastEvent("HERO DAMAGED");
 			yield return new WaitForSeconds(5f);
+			RestoreHealth();
+			flag = false;
+			yield break;
+		}
+
+		private void RestoreHealth()
+		{
 			HeroController.instance.AddHealth(Math.Min(health, health + healthBlue - damage) - 1);
 			for(int i = 0; i < Math.Max(healthBlue - damage, 0); i++)
 			{
 				PlayMakerFSM.BroadcastEvent("ADD BLUE HEALTH");
 			}
-			flag = false;
-			yield break;
 		}
 
 		public override void StopEffect()
 		{
 			ModHooks.TakeHealthHook -= TakeHealthHook;
 			StopAllCoroutines();
-			if(flag)
-			{
-				HeroController.instance.AddHealth(Math.Min(health, health + healthBlue - damage) - 1);
-				for(int i = 0; i < Math.Max(healthBlue - damage, 0); i++)
-				{
-					PlayMakerFSM.BroadcastEvent("ADD BLUE HEALTH");
-				}
-			}
+			if(flag) RestoreHealth();
 		}
 
 		public override string ToString()

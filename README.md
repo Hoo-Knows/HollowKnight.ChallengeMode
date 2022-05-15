@@ -8,22 +8,22 @@ A mod that adds Challenge Mode from Enter the Gungeon to Hollow Knight. Each bos
 ## List of Modifiers
 - High Stress: sets the player’s health to 1 for 5 seconds after they get hit
 - Frail Shell: makes the player take 1 extra damage from all sources
-- Adrenaline Rush: taking damage speeds up the game slightly, up to a max of 1.5 speed
+- Adrenaline Rush: taking damage speeds up the game slightly, up to a max of 1.25 speed
 - Aspid Rancher: failing to hit an enemy spawns a Primal Aspid
-- Void Vision: makes the room dark
+- Void Vision: reduces the player's field of vision
 - Speedrunner’s Curse: removes Steady Body, equips Thorns of Agony, and makes the player take hazard damage when they try to Descending Dark
 - Nail Only: disables spells
 - Soul Master: gives the player the soul over time, but sets nail damage to 1
-- Hungry Knight: drains soul over time, and the Knight begins taking damage after soul is empty
+- Hungry Knight: drains soul over time, the player begins taking damage after soul is empty
 - Unfriendly Fire: spawns a Grimmchild that attacks the player
 - Ascension: Gorb occasionally teleports onto the player and fires a ring of spears
 - Salubra’s Curse: unequips all charms
 - Past Regrets: spawns a Shade that slashes at the player and copies any spell the player uses
 - Infected Wounds: taking damage drains soul, halves nail damage for 5 seconds, and spawns 1-3 Infected Balloons
-- Chaos, Chaos: applies a different modifier every 20 seconds
-- Temporal Distortion: occasionally warps the Knight back in time 3 seconds
-- Poor Memory: makes the HUD lie to you (currently doesn't do anything if you equip Hiveblood or Joni's Blessing)
-- A Fool’s Errand: covers the ground in spikes or spawns enemies from the Colosseum in regular intervals
+- Chaos, Chaos: applies a different modifier every 15 seconds
+- Temporal Distortion: occasionally warps the player back to where it was 3 seconds ago
+- Poor Memory: makes the HUD lie to you (currently doesn't do anything if you have Hiveblood or Joni's Blessing equipped)
+- A Fool’s Errand: covers the ground in spikes or spawns enemies from the Colosseum in waves
 
 ## Unique Modifiers
 - Nailmaster: disables all attacks except for Nail Arts (applies to the Nailmasters)

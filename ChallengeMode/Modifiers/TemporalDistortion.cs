@@ -34,7 +34,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator TeleportControl()
 		{
-			yield return new WaitForSeconds(7.5f);
+			yield return new WaitForSeconds(5f);
 			while(flag)
 			{
 				//Set gate

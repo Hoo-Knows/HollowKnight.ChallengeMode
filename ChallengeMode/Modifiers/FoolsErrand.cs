@@ -166,7 +166,7 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_A Fool's Errand", "ChallengeMode_High Stress", "ChallengeMode_Chaos, Chaos",
+				"ChallengeMode_A Fool's Errand", "ChallengeMode_High Stress", "ChallengeMode_Ascension",
 				"ChallengeMode_Nailmaster", "ChallengeMode_Past Regrets", "ChallengeMode_Unfriendly Fire"
 			};
 		}

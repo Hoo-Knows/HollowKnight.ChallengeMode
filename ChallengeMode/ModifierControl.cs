@@ -10,70 +10,35 @@ namespace ChallengeMode
 	{
 		private ChallengeMode cm;
 		private List<Modifier> activeModifiers;
-
-		private int spaCount;
-		private int numActiveModifiers;
 		private string currentScene;
 		private Random random;
 
-		private List<string> sceneBlacklist;
-		private List<string> foolSceneBlacklist;
-		private List<string> sceneUniqueList;
+		private readonly List<string> sceneBlacklist = new List<string>()
+		{
+			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
+			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
+		};
+		private readonly List<string> foolSceneBlacklist = new List<string>()
+		{
+			"GG_Vengefly", "GG_Vengefly_V", "GG_Ghost_Gorb", "GG_Ghost_Gorb_V", "GG_Ghost_Xero", "GG_Ghost_Xero_V",
+			"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V",
+			"GG_Grimm_Nightmare", "GG_Radiance"
+		};
+		private readonly List<string> sceneUniqueList = new List<string>()
+		{
+			"GG_Nailmasters", "GG_Painter", "GG_Sly", "GG_Grey_Prince_Zote", "GG_Grimm_Nightmare",
+			"GG_Hollow_Knight", "GG_Radiance"
+		};
 
-		public void Initialize()
+		public void Initialize(int numActiveModifiers, string currentScene)
 		{
 			Unload();
 
 			cm = ChallengeMode.Instance;
 			activeModifiers = new List<Modifier>();
-			spaCount = 0;
-			numActiveModifiers = 1;
-			currentScene = "none lol";
+			this.currentScene = currentScene;
 			random = new Random();
-			sceneBlacklist = new List<string>()
-			{
-				"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
-				"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa"
-			};
-			foolSceneBlacklist = new List<string>()
-			{
-				"GG_Vengefly", "GG_Vengefly_V", "GG_Ghost_Gorb", "GG_Ghost_Gorb_V", "GG_Ghost_Xero", "GG_Ghost_Xero_V",
-				"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V",
-				"GG_Grimm_Nightmare", "GG_Radiance"
-			};
-			sceneUniqueList = new List<string>()
-			{
-				"GG_Nailmasters", "GG_Painter", "GG_Sly", "GG_Grey_Prince_Zote",
-				"GG_Grimm_Nightmare", "GG_Hollow_Knight", "GG_Radiance"
-			};
 
-			ModHooks.BeforeSceneLoadHook += BeforeSceneLoadHook;
-		}
-
-		private string BeforeSceneLoadHook(string sceneName)
-		{
-			//Overrides scene for testing bosses
-			//if(sceneName == "GG_Mage_Knight") sceneName = "GG_Radiance";
-
-			Stop();
-
-			if(sceneName == "GG_Spa") spaCount++;
-			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;
-			//P1 section in P5
-			if(spaCount == 0) numActiveModifiers = 1;
-			//P2 and P3 sections in P5
-			if(spaCount == 1) numActiveModifiers = 2;
-			//P4 section in P5
-			if(spaCount == 5) numActiveModifiers = 3;
-			currentScene = sceneName;
-
-			Start();
-
-			return sceneName;
-		}
-
-		private void Start()
-		{
 			if(currentScene.Substring(0, 2) != "GG" || sceneBlacklist.Contains(currentScene)) return;
 
 			//Select modifiers
@@ -155,7 +120,7 @@ namespace ChallengeMode
 
 			foreach(Modifier m in activeModifiers)
 			{
-				if(m != null && m.GetBlacklistedModifiers().Contains(modifier.ToString())) return false;
+				if(m.GetBlacklistedModifiers().Contains(modifier.ToString())) return false;
 			}
 			return true;
 		}
@@ -197,7 +162,7 @@ namespace ChallengeMode
 			yield break;
 		}
 
-		private void Stop()
+		private void StopModifiers()
 		{
 			if(activeModifiers != null && activeModifiers.Count != 0)
 			{
@@ -223,9 +188,8 @@ namespace ChallengeMode
 
 		public void Unload()
 		{
-			Stop();
+			StopModifiers();
 
-			ModHooks.BeforeSceneLoadHook -= BeforeSceneLoadHook;
 			GameManager.instance.OnFinishedEnteringScene -= OnFinishedEnteringScene;
 			StopAllCoroutines();
 		}

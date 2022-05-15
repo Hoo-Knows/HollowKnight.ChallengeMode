@@ -10,12 +10,15 @@ namespace ChallengeMode
 		public List<Modifier> modifiers;
 		public List<Modifier> modifiersU;
 		public ModifierControl modifierControl;
-		public GameObject modifierObject;
+		private GameObject modifierObject;
+
+		private int numActiveModifiers;
+		private int spaCount;
 
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
 		public static ChallengeMode Instance;
 
-		public override string GetVersion() => "0.4.1.0";
+		public override string GetVersion() => "0.4.2.0";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -26,7 +29,7 @@ namespace ChallengeMode
 			Instance = this;
 			this.preloadedObjects = preloadedObjects;
 
-			//GameObject that all modifiers are attached to
+			//Modifier Object, all Monobehaviours are attached to this
 			modifierObject = new GameObject("Modifier Object");
 			Object.DontDestroyOnLoad(modifierObject);
 
@@ -70,7 +73,8 @@ namespace ChallengeMode
 			//};
 
 			modifierControl = modifierObject.AddComponent<ModifierControl>();
-			modifierControl.Initialize();
+			spaCount = 0;
+			numActiveModifiers = 1;
 
 			//Create achievements
 			foreach(Modifier modifier in modifiers)
@@ -88,6 +92,7 @@ namespace ChallengeMode
 			UIManager.instance.RefreshAchievementsList();
 
 			ModHooks.LanguageGetHook += LanguageGetHook;
+			ModHooks.BeforeSceneLoadHook += BeforeSceneLoadHook;
 
 			Log("Initialized");
 		}
@@ -113,6 +118,23 @@ namespace ChallengeMode
 			};
 		}
 
+		private string BeforeSceneLoadHook(string sceneName)
+		{
+			if(modifierControl == null) modifierControl = modifierObject.AddComponent<ModifierControl>();
+			modifierControl.Initialize(numActiveModifiers, sceneName);
+
+			if(sceneName == "GG_Spa") spaCount++;
+			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;
+			//P1 section in P5
+			if(spaCount == 0) numActiveModifiers = 1;
+			//P2 and P3 sections in P5
+			if(spaCount == 1) numActiveModifiers = 2;
+			//P4 section in P5
+			if(spaCount == 5) numActiveModifiers = 3;
+
+			return sceneName;
+		}
+
 		private string LanguageGetHook(string key, string sheetTitle, string orig)
 		{
 			foreach(Modifier modifier in modifiers)
@@ -132,6 +154,7 @@ namespace ChallengeMode
 			if(modifierControl != null) modifierControl.Unload();
 
 			ModHooks.LanguageGetHook -= LanguageGetHook;
+			ModHooks.BeforeSceneLoadHook -= BeforeSceneLoadHook;
 		}
 	}
 }

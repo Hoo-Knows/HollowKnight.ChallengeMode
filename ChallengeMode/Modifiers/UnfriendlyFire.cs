@@ -93,7 +93,7 @@ namespace ChallengeMode.Modifiers
 			return new List<string>()
 			{
 				"ChallengeMode_Unfriendly Fire", "ChallengeMode_High Stress", "ChallengeMode_A Fool's Errand",
-				"ChallengeMode_Past Regrets"
+				"ChallengeMode_Ascension", "ChallengeMode_Past Regrets"
 			};
 		}
 	}

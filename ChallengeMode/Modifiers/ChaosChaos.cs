@@ -42,7 +42,7 @@ namespace ChallengeMode.Modifiers
 				{
 					ChallengeMode.Instance.Log("Failed to start " + activeModifier.ToString().Substring(14));
 				}
-				yield return new WaitForSeconds(20f);
+				yield return new WaitForSeconds(15f);
 				try
 				{
 					ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
@@ -81,7 +81,7 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Chaos, Chaos", "ChallengeMode_A Fool's Errand"
+				"ChallengeMode_Chaos, Chaos"
 			};
 		}
 	}

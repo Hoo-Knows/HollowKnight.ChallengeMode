@@ -12,8 +12,8 @@ namespace ChallengeMode.Modifiers
 		public override void StartEffect()
 		{
 			flag = true;
-			nailDamage = PlayerData.instance.nailDamage;
-			PlayerData.instance.nailDamage = 1;
+			nailDamage = PlayerData.instance.GetInt("nailDamage");
+			PlayerData.instance.SetInt("nailDamage", 1);
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
 			StartCoroutine(HandleSoul());

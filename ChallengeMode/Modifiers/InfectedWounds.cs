@@ -49,7 +49,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator NailControl()
 		{
-			PlayerData.instance.nailDamage /= 2;
+			PlayerData.instance.SetInt("nailDamage", nailDamage / 2 > 0 ? nailDamage / 2 : 1);
 			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 			yield return new WaitForSeconds(5f);
 			PlayerData.instance.SetInt("nailDamage", nailDamage);
