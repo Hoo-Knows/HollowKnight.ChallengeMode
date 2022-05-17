@@ -1,6 +1,13 @@
 # HK Challenge Mode
 
-This mod is inspired by Challenge Mode from Enter the Gungeon. Each boss arena in Godhome now has randomly selected **modifiers** that make the game more challenging in a variety of ways, such as spawning enemies, adding a new mechanic to juggle, disabling or nerfing certain attacks, etc. The further the player gets in a pantheon, the more modifiers there are. Certain bosses will have unique modifiers. The mod works in both Pantheons and Hall of Gods (highly suggested to practice the boss modifiers).
+This mod is inspired by Challenge Mode from Enter the Gungeon. Each boss arena in Godhome now has randomly selected **modifiers** that make the game more challenging in a variety of ways, such as spawning enemies, adding a new mechanic to juggle, disabling or nerfing certain attacks, etc. The further the player gets in a pantheon, the more modifiers there are, and certain bosses will have unique modifiers. The mod works in both Pantheons and Hall of Gods (highly suggested to practice the boss modifiers).
+
+### Menu Options
+- Number of modifiers: determines the number of modifiers active by default (1 to 10)
+- Increment modifiers: determines how much the number of modifiers is incremented after each section in a pantheon (0 to 4)
+- Guarantee modifier: guarantee that a modifier will appear
+- Use logic: whether or not to use logic to prevent easy or unfair modifier combinations (ex. High Stress with Unfriendly Fire and A Fool's Errand)
+- Reset settings: figure it out
 
 ### Dependencies
 - SFCore
