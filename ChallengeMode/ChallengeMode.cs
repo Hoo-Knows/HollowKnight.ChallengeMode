@@ -239,7 +239,7 @@ namespace ChallengeMode
 						},
 
 						new HorizontalOption("Use logic",
-						"Whether or not to prevent easy or unfair modifier combinations",
+						"Prevent easy or unfair modifier combinations",
 						new string[] { "True", "False" },
 						(i) =>
 						{
@@ -248,7 +248,7 @@ namespace ChallengeMode
 						},
 						() => Settings.logicOption ? 0 : 1, Id: "LogicOption"),
 
-						new MenuButton("Reset default settings", "",
+						new MenuButton("Reset settings", "",
 						(_) =>
 						{
 							Settings.numModifiers = 1;
