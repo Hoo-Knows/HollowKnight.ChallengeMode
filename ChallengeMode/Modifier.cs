@@ -11,9 +11,10 @@ namespace ChallengeMode
 
 		public abstract override string ToString();
 
-		public virtual List<string> GetBlacklistedModifiers()
-		{
-			return new List<string>() { ToString() };
-		}
+		//Modifiers that are fundamentally incompatible
+		public virtual List<string> GetCodeBlacklist() => new List<string>() { ToString() };
+
+		//Modifiers that are too difficult/too easy when they appear together
+		public virtual List<string> GetBalanceBlacklist() => new List<string>();
 	}
 }

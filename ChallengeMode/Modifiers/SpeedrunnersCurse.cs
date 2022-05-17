@@ -57,11 +57,13 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_Speedrunner's Curse";
 		}
 
-		public override List<string> GetBlacklistedModifiers()
+		public override List<string> GetBalanceBlacklist()
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Speedrunner's Curse", "ChallengeMode_Salubra's Curse", "ChallengeMode_Nail Only", "ChallengeMode_Nailmaster"
+				"ChallengeMode_Salubra's Curse",
+				"ChallengeMode_Nail Only",
+				"ChallengeMode_Nailmaster"
 			};
 		}
 	}

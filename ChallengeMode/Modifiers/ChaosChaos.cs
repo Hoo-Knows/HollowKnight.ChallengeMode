@@ -23,10 +23,14 @@ namespace ChallengeMode.Modifiers
 			while(flag)
 			{
 				activeModifier = null;
+				int loops = 0;
 				while(activeModifier == null)
 				{
 					activeModifier = ChallengeMode.Instance.modifierControl.SelectModifier();
+					loops++;
+					if(loops > 1000) break;
 				}
+				if(loops > 1000) break;
 
 				AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
 				AchievementHandler.AchievementAwarded aa =
@@ -75,14 +79,6 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Chaos, Chaos";
-		}
-
-		public override List<string> GetBlacklistedModifiers()
-		{
-			return new List<string>()
-			{
-				"ChallengeMode_Chaos, Chaos"
-			};
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Modding;
+﻿using System.Collections.Generic;
+using Modding;
 
 namespace ChallengeMode.Modifiers
 {
@@ -22,6 +23,15 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Frail Shell";
+		}
+
+		public override List<string> GetCodeBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Frail Shell",
+				"ChallengeMode_High Stress"
+			};
 		}
 	}
 }

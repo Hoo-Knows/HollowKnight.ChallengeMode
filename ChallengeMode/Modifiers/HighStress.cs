@@ -66,12 +66,24 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_High Stress";
 		}
 
-		public override List<string> GetBlacklistedModifiers()
+		public override List<string> GetCodeBlacklist()
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_High Stress", "ChallengeMode_Unfriendly Fire", "ChallengeMode_Ascension",
-				"ChallengeMode_Past Regrets", "ChallengeMode_A Fool's Errand", "ChallengeMode_Poor Memory"
+				"ChallengeMode_High Stress",
+				"ChallengeMode_Poor Memory",
+				"ChallengeMode_Frail Shell"
+			};
+		}
+
+		public override List<string> GetBalanceBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Unfriendly Fire",
+				"ChallengeMode_Ascension",
+				"ChallengeMode_Past Regrets",
+				"ChallengeMode_A Fool's Errand"
 			};
 		}
 	}

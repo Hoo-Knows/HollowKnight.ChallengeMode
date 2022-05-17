@@ -74,11 +74,11 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_Temporal Distortion";
 		}
 
-		public override List<string> GetBlacklistedModifiers()
+		public override List<string> GetBalanceBlacklist()
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Temporal Distortion", "ChallengeMode_A Fool's Errand"
+				"ChallengeMode_A Fool's Errand"
 			};
 		}
 	}

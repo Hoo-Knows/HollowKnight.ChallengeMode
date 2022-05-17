@@ -43,7 +43,7 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_Soul Master";
 		}
 
-		public override List<string> GetBlacklistedModifiers()
+		public override List<string> GetCodeBlacklist()
 		{
 			return new List<string>()
 			{

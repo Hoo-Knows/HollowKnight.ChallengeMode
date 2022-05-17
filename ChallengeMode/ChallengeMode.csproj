@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChallengeMode.cs" />
+    <Compile Include="GlobalSettings.cs" />
     <Compile Include="Modifier.cs" />
     <Compile Include="ModifierControl.cs" />
     <Compile Include="Modifiers\AdrenalineRush.cs" />

@@ -24,12 +24,22 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_Nail Only";
 		}
 
-		public override List<string> GetBlacklistedModifiers()
+		public override List<string> GetCodeBlacklist()
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Nail Only", "ChallengeMode_Soul Master", "ChallengeMode_Past Regrets",
-				"ChallengeMode_Speedrunner's Curse", "ChallengeMode_Nailmaster"
+				"ChallengeMode_Nail Only",
+				"ChallengeMode_Soul Master"
+			};
+		}
+
+		public override List<string> GetBalanceBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Past Regrets",
+				"ChallengeMode_Speedrunner's Curse",
+				"ChallengeMode_Nailmaster"
 			};
 		}
 	}

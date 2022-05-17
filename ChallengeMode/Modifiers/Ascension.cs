@@ -91,12 +91,14 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_Ascension";
 		}
 
-		public override List<string> GetBlacklistedModifiers()
+		public override List<string> GetBalanceBlacklist()
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Ascension", "ChallengeMode_High Stress", "ChallengeMode_A Fool's Errand",
-				"ChallengeMode_Past Regrets", "ChallengeMode_Unfriendly Fire"
+				"ChallengeMode_High Stress",
+				"ChallengeMode_A Fool's Errand",
+				"ChallengeMode_Past Regrets",
+				"ChallengeMode_Unfriendly Fire"
 			};
 		}
 	}

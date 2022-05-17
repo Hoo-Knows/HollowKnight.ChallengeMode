@@ -31,7 +31,7 @@ namespace ChallengeMode
 			"GG_Hollow_Knight", "GG_Radiance"
 		};
 
-		public void Initialize(int numActiveModifiers, string currentScene)
+		public void Initialize(int numModifiers, string currentScene)
 		{
 			Unload();
 
@@ -40,7 +40,7 @@ namespace ChallengeMode
 			if(currentScene.Substring(0, 2) != "GG" || sceneBlacklist.Contains(currentScene)) return;
 
 			cm = ChallengeMode.Instance;
-			activeModifiers = new Modifier[numActiveModifiers];
+			activeModifiers = new Modifier[numModifiers];
 			random = new Random();
 
 			//Select modifiers
@@ -53,29 +53,36 @@ namespace ChallengeMode
 				//Nailmasters can have extra modifiers
 				if(currentScene == "GG_Nailmasters" || currentScene == "GG_Painter" || currentScene == "GG_Sly")
 				{
-					for(int j = 1; j < numActiveModifiers; j++)
+					for(int j = 1; j < numModifiers; j++)
 					{
+						if(j == 1 && ChallengeMode.Settings.modifierOption)
+						{
+							activeModifiers[j] = cm.modifiers[ChallengeMode.Settings.modifierValue];
+							continue;
+						}
+
 						Modifier modifier = SelectModifier();
-						if(modifier != null)
-						{
-							activeModifiers[j] = modifier;
-						}
-						else
-						{
-							j--;
-						}
+						if(modifier != null) activeModifiers[j] = modifier;
+						else j--;
 					}
 				}
 				//Absrad has High Stress
-				if(currentScene == "GG_Radiance" && numActiveModifiers > 1)
+				if(currentScene == "GG_Radiance" && numModifiers > 1)
 				{
 					activeModifiers[1] = cm.modifiers[0];
 				}
 			}
 			else
 			{
-				for(int i = 0; i < numActiveModifiers; i++)
+				int loops = 0; //Keep track of loops, if it hits 100 then force break to prevent infinite loop
+				for(int i = 0; i < numModifiers; i++)
 				{
+					if(i == 0 && ChallengeMode.Settings.modifierOption)
+					{
+						activeModifiers[i] = cm.modifiers[ChallengeMode.Settings.modifierValue];
+						continue;
+					}
+
 					Modifier modifier = SelectModifier();
 
 					if(modifier != null)
@@ -84,10 +91,11 @@ namespace ChallengeMode
 						//Frail Shell must appear before High Stress and Poor Memory
 						if(modifier.ToString() == "ChallengeMode_Frail Shell")
 						{
-							for(int j = 0; j < numActiveModifiers; j++)
+							for(int j = 0; j < numModifiers; j++)
 							{
-								if(activeModifiers[j].ToString() == "ChallengeMode_High Stress" ||
-									activeModifiers[j].ToString() == "ChallengeMode_Poor Memory")
+								if(activeModifiers[j] != null &&
+									(activeModifiers[j].ToString() == "ChallengeMode_High Stress" ||
+									activeModifiers[j].ToString() == "ChallengeMode_Poor Memory"))
 								{
 									(activeModifiers[i], activeModifiers[j]) = (activeModifiers[j], activeModifiers[i]);
 									break;
@@ -96,6 +104,9 @@ namespace ChallengeMode
 						}
 					}
 					else i--;
+
+					loops++;
+					if(loops > 1000) break;
 				}
 			}
 			GameManager.instance.OnFinishedEnteringScene += OnFinishedEnteringScene;
@@ -116,6 +127,8 @@ namespace ChallengeMode
 
 		private bool CheckValidModifier(Modifier modifier)
 		{
+			if(modifier == null) return false;
+
 			//A Fool's Errand
 			if(modifier.ToString() == "ChallengeMode_A Fool's Errand")
 			{
@@ -124,8 +137,16 @@ namespace ChallengeMode
 
 			foreach(Modifier m in activeModifiers)
 			{
-				if(m != null && m.GetBlacklistedModifiers().Contains(modifier.ToString())) return false;
+				if(m != null && m.GetCodeBlacklist().Contains(modifier.ToString())) return false;
 			}
+			if(ChallengeMode.Settings.logicOption)
+			{
+				foreach(Modifier m in activeModifiers)
+				{
+					if(m != null && m.GetBalanceBlacklist().Contains(modifier.ToString())) return false;
+				}
+			}
+			
 			return true;
 		}
 
@@ -145,8 +166,17 @@ namespace ChallengeMode
 
 			Time.timeScale = 0.2f;
 
-			foreach(Modifier modifier in activeModifiers)
+			for(int i = 0; i < activeModifiers.Length; i++)
 			{
+				//Pause to give time for achievements to display
+				if(i % 3 == 0 && i != 0)
+				{
+					yield return new WaitForSecondsRealtime(3f);
+				}
+
+				if(activeModifiers[i] == null) break;
+				
+				Modifier modifier = activeModifiers[i];
 				cm.Log("Starting " + modifier.ToString().Substring(14));
 
 				aa.Invoke(modifier.ToString());

@@ -152,7 +152,7 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_Poor Memory";
 		}
 
-		public override List<string> GetBlacklistedModifiers()
+		public override List<string> GetCodeBlacklist()
 		{
 			return new List<string>()
 			{
