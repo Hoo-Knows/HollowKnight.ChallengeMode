@@ -75,7 +75,6 @@ namespace ChallengeMode.Modifiers
 			{
 				hc.carefreeShieldEquipped = false;
 			}
-			hc.playerData.UpdateBlueHealth();
 		}
 
 		public override string ToString()

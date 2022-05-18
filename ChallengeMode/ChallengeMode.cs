@@ -28,9 +28,9 @@ namespace ChallengeMode
 		public GlobalSettings OnSaveGlobal() => Settings;
 
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
-		public static ChallengeMode Instance;
+		public static ChallengeMode instance;
 
-		public override string GetVersion() => "0.5.0.0";
+		public override string GetVersion() => "0.5.0.2";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -38,7 +38,7 @@ namespace ChallengeMode
 		{
 			Log("Initializing");
 
-			Instance = this;
+			instance = this;
 			this.preloadedObjects = preloadedObjects;
 
 			//Modifier Object, all Monobehaviours are attached to this
@@ -77,12 +77,6 @@ namespace ChallengeMode
 				modifierObject.AddComponent<Modifiers.PaleWatchU>(),
 				modifierObject.AddComponent<Modifiers.ForgottenLightU>()
 			};
-
-			//Test individual modifier
-			//modifiers = new Modifier[]
-			//{
-			//	modifierObject.AddComponent<Modifiers.SalubrasCurse>()
-			//};
 
 			modifierControl = modifierObject.AddComponent<ModifierControl>();
 			spaCount = 0;

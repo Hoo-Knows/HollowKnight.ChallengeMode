@@ -28,7 +28,7 @@ namespace ChallengeMode.Modifiers
 		public override void StartEffect()
 		{
 			//Set spikes
-			spikeGO = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Bronze"]["Colosseum Manager/Ground Spikes/Colosseum Spike (19)"];
+			spikeGO = ChallengeMode.instance.preloadedObjects["Room_Colosseum_Bronze"]["Colosseum Manager/Ground Spikes/Colosseum Spike (19)"];
 			spikes = new GameObject[31];
 			for(int i = -15; i < 16; i++)
 			{
@@ -41,7 +41,7 @@ namespace ChallengeMode.Modifiers
 			}
 
 			//Spike audio
-			groundSpikesGO = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Bronze"]["Colosseum Manager/Ground Spikes"];
+			groundSpikesGO = ChallengeMode.instance.preloadedObjects["Room_Colosseum_Bronze"]["Colosseum Manager/Ground Spikes"];
 			groundSpikesFSM = groundSpikesGO.LocateMyFSM("Spike Audio");
 			audioSpikeAntic = groundSpikesFSM.GetAction<AudioPlaySimple>("Antic", 1).oneShotClip.Value as AudioClip;
 			audioSpikeExpand = groundSpikesFSM.GetAction<AudioPlaySimple>("Expand", 3).oneShotClip.Value as AudioClip;
@@ -50,17 +50,17 @@ namespace ChallengeMode.Modifiers
 			//Set possible enemies
 			enemies = new GameObject[6];
 			//Armored Squit
-			enemies[0] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 2/Colosseum Cage Small"];
+			enemies[0] = ChallengeMode.instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 2/Colosseum Cage Small"];
 			//Battle Obble
-			enemies[1] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 37/Colosseum Cage Small (3)"];
+			enemies[1] = ChallengeMode.instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 37/Colosseum Cage Small (3)"];
 			//Shielded Fool
-			enemies[2] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 3/Colosseum Cage Large"];
+			enemies[2] = ChallengeMode.instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 3/Colosseum Cage Large"];
 			//Sturdy Fool
-			enemies[3] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 50/Colosseum Cage Large"];
+			enemies[3] = ChallengeMode.instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 50/Colosseum Cage Large"];
 			//Heavy Fool
-			enemies[4] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 1/Colosseum Cage Large"];
+			enemies[4] = ChallengeMode.instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 1/Colosseum Cage Large"];
 			//Winged Fool
-			enemies[5] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"];
+			enemies[5] = ChallengeMode.instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"];
 
 			waveFlag = true;
 			enemyFlag = false;

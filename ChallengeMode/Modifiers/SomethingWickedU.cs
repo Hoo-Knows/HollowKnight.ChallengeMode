@@ -13,7 +13,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
-			GameObject spawnGO = ChallengeMode.Instance.preloadedObjects["Hive_03"]["Flamebearer Spawn"];
+			GameObject spawnGO = ChallengeMode.instance.preloadedObjects["Hive_03"]["Flamebearer Spawn"];
 			grimmkins = new GameObject[2];
 
 			for(int i = 0; i < 2; i++)

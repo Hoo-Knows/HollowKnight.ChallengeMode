@@ -17,7 +17,8 @@ namespace ChallengeMode
 		private readonly List<string> sceneBlacklist = new List<string>()
 		{
 			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
-			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa", "GG_Boss_Door_Entrance"
+			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa", "GG_Boss_Door_Entrance",
+			"GG_End_Sequence"
 		};
 		private readonly List<string> foolSceneBlacklist = new List<string>()
 		{
@@ -39,7 +40,7 @@ namespace ChallengeMode
 
 			if(currentScene.Substring(0, 2) != "GG" || sceneBlacklist.Contains(currentScene)) return;
 
-			cm = ChallengeMode.Instance;
+			cm = ChallengeMode.instance;
 			activeModifiers = new Modifier[numModifiers];
 			random = new Random();
 

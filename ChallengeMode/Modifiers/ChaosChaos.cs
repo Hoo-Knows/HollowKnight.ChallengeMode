@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Modding;
 using UnityEngine;
 
@@ -12,21 +11,19 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
-			flag = true;
-
 			StartCoroutine(BeginChaos());
 		}
 
 		private IEnumerator BeginChaos()
 		{
-			yield return new WaitForSeconds(2f);
+			yield return new WaitForSeconds(4f);
 			while(flag)
 			{
 				activeModifier = null;
 				int loops = 0;
 				while(activeModifier == null)
 				{
-					activeModifier = ChallengeMode.Instance.modifierControl.SelectModifier();
+					activeModifier = ChallengeMode.instance.modifierControl.SelectModifier();
 					loops++;
 					if(loops > 1000) break;
 				}
@@ -37,24 +34,24 @@ namespace ChallengeMode.Modifiers
 					ReflectionHelper.GetField<AchievementHandler, AchievementHandler.AchievementAwarded>(ah, "AwardAchievementEvent");
 				aa.Invoke(activeModifier.ToString());
 
-				ChallengeMode.Instance.Log("Starting " + activeModifier.ToString().Substring(14));
+				ChallengeMode.instance.Log("Starting " + activeModifier.ToString().Substring(14));
 				try
 				{
 					activeModifier.StartEffect();
 				}
 				catch
 				{
-					ChallengeMode.Instance.Log("Failed to start " + activeModifier.ToString().Substring(14));
+					ChallengeMode.instance.Log("Failed to start " + activeModifier.ToString().Substring(14));
 				}
 				yield return new WaitForSeconds(15f);
 				try
 				{
-					ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
+					ChallengeMode.instance.Log("Stopping " + activeModifier.ToString().Substring(14));
 					activeModifier.StopEffect();
 				}
 				catch
 				{
-					ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
+					ChallengeMode.instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
 				}
 			}
 			yield break;
@@ -67,12 +64,12 @@ namespace ChallengeMode.Modifiers
 			flag = false;
 			try
 			{
-				ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
+				ChallengeMode.instance.Log("Stopping " + activeModifier.ToString().Substring(14));
 				activeModifier.StopEffect();
 			}
 			catch
 			{
-				ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
+				ChallengeMode.instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
 			}
 		}
 

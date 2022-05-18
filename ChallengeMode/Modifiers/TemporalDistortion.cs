@@ -51,7 +51,7 @@ namespace ChallengeMode.Modifiers
 				}
 
 				//Warp to gate
-				HeroController.instance.parryInvulnTimer = 0.4f;
+				HeroController.instance.parryInvulnTimer = 0.6f;
 				HeroController.instance.transform.position = position;
 				Destroy(dreamgate);
 				Instantiate(flash, position, Quaternion.identity);

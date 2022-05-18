@@ -17,7 +17,7 @@ namespace ChallengeMode.Modifiers
 		public override void StartEffect()
 		{
 			//Ordeal Control
-			battleCtrl = ChallengeMode.Instance.preloadedObjects["GG_Mighty_Zote"]["Battle Control"];
+			battleCtrl = ChallengeMode.instance.preloadedObjects["GG_Mighty_Zote"]["Battle Control"];
 
 			//Set Zotelings
 			zotelings = new GameObject[7];
