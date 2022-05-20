@@ -1,4 +1,4 @@
-# HK Challenge Mode
+# Hollow Knight Challenge Mode
 
 Each boss arena in Godhome now has randomly selected **modifiers** that make the game more challenging in a variety of ways, such as spawning enemies, adding a new mechanic to juggle, disabling or nerfing certain attacks, etc. The further the player gets in a pantheon, the more modifiers there are, and certain bosses will have unique modifiers. The mod works in both Pantheons and Hall of Gods (highly suggested to practice the boss modifiers).
 
