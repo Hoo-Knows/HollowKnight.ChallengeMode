@@ -95,6 +95,7 @@ namespace ChallengeMode.Modifiers
 				"ChallengeMode_High Stress",
 				"ChallengeMode_A Fool's Errand",
 				"ChallengeMode_Ascension",
+				"ChallengeMode_Salubra's Curse",
 				"ChallengeMode_Past Regrets"
 			};
 		}

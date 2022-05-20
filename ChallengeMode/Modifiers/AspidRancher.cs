@@ -13,7 +13,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
-			aspidGO = ChallengeMode.instance.preloadedObjects["Deepnest_East_04"]["Super Spitter"];
+			aspidGO = ChallengeMode.Instance.preloadedObjects["Deepnest_East_04"]["Super Spitter"];
 			Destroy(aspidGO.GetComponent<PersistentBoolItem>());
 			HealthManager hm = aspidGO.GetComponent<HealthManager>();
 			hm.hp = 1;

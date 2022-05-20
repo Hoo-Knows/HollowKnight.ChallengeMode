@@ -23,8 +23,8 @@ namespace ChallengeMode
 		private readonly List<string> foolSceneBlacklist = new List<string>()
 		{
 			"GG_Vengefly", "GG_Vengefly_V", "GG_Ghost_Gorb", "GG_Ghost_Gorb_V", "GG_Ghost_Xero", "GG_Ghost_Xero_V",
-			"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes_V", "GG_Ghost_Markoth_V",
-			"GG_Grimm_Nightmare", "GG_Radiance"
+			"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes", "GG_Ghost_No_Eyes_V",
+			"GG_Ghost_Markoth_V", "GG_Grimm_Nightmare", "GG_Radiance"
 		};
 		private readonly List<string> sceneUniqueList = new List<string>()
 		{
@@ -40,7 +40,7 @@ namespace ChallengeMode
 
 			if(currentScene.Substring(0, 2) != "GG" || sceneBlacklist.Contains(currentScene)) return;
 
-			cm = ChallengeMode.instance;
+			cm = ChallengeMode.Instance;
 			activeModifiers = new Modifier[numModifiers];
 			random = new Random();
 
@@ -75,9 +75,11 @@ namespace ChallengeMode
 			}
 			else
 			{
-				int loops = 0; //Keep track of loops, if it hits 100 then force break to prevent infinite loop
+				//Keep track of loops, if it hits 1000 then force break to prevent infinite loop
+				int loops = 0;
 				for(int i = 0; i < numModifiers; i++)
 				{
+					//Guaranteed modifier
 					if(i == 0 && ChallengeMode.Settings.modifierOption)
 					{
 						activeModifiers[i] = cm.modifiers[ChallengeMode.Settings.modifierValue];
@@ -110,6 +112,7 @@ namespace ChallengeMode
 					if(loops > 1000) break;
 				}
 			}
+
 			GameManager.instance.OnFinishedEnteringScene += OnFinishedEnteringScene;
 		}
 
@@ -160,27 +163,15 @@ namespace ChallengeMode
 		{
 			cm.Log("Starting modifiers for " + currentScene);
 
-			//Reflection magic to award achievements
-			AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
-			AchievementHandler.AchievementAwarded aa =
-				ReflectionHelper.GetField<AchievementHandler, AchievementHandler.AchievementAwarded>(ah, "AwardAchievementEvent");
-
 			Time.timeScale = 0.2f;
 
 			for(int i = 0; i < activeModifiers.Length; i++)
 			{
-				//Pause to give time for achievements to display
-				if(i % 3 == 0 && i != 0)
-				{
-					yield return new WaitForSecondsRealtime(3f);
-				}
-
 				if(activeModifiers[i] == null) break;
 				
 				Modifier modifier = activeModifiers[i];
 				cm.Log("Starting " + modifier.ToString().Substring(14));
 
-				aa.Invoke(modifier.ToString());
 				try
 				{
 					modifier.StartEffect();
@@ -191,9 +182,33 @@ namespace ChallengeMode
 				}
 				yield return new WaitForSecondsRealtime(0.75f);
 			}
+			StartCoroutine(DisplayModifiers(false));
 			yield return new WaitForSecondsRealtime(2f);
 			if(!GameManager.instance.isPaused) Time.timeScale = 1f;
 			GameManager.instance.OnFinishedEnteringScene -= OnFinishedEnteringScene;
+			yield break;
+		}
+
+		private IEnumerator DisplayModifiers(bool fast)
+		{
+			//Reflection magic to award achievements
+			AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
+			AchievementHandler.AchievementAwarded aa =
+				ReflectionHelper.GetField<AchievementHandler, AchievementHandler.AchievementAwarded>(ah, "AwardAchievementEvent");
+
+			for(int i = 0; i < activeModifiers.Length; i++)
+			{
+				//Pause to give time for achievements to disappear
+				if(i % 3 == 0 && i != 0)
+				{
+					yield return new WaitForSecondsRealtime(3f);
+				}
+				if(activeModifiers[i] == null) break;
+				Modifier modifier = activeModifiers[i];
+				aa.Invoke(modifier.ToString());
+				//Wait between modifiers
+				if(!fast) yield return new WaitForSecondsRealtime(0.75f);
+			}
 			yield break;
 		}
 

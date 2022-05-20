@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFCore.Utils;
+using Modding;
 
 namespace ChallengeMode.Modifiers
 {
@@ -25,7 +26,7 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_12", true);
 				GameManager.instance.EquipCharm(12);
 			}
-			GameManager.instance.RefreshOvercharm();
+			CharmUpdate();
 
 			//Take hazard damage when using DDark
 			spellFSM = HeroController.instance.spellControl;
@@ -47,9 +48,52 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_12", false);
 				GameManager.instance.UnequipCharm(12);
 			}
-			GameManager.instance.RefreshOvercharm();
+			CharmUpdate();
 
 			spellFSM.RemoveAction("Level Check 2", 0);
+		}
+
+		private void CharmUpdate()
+		{
+			//Custom charm update method to prevent healing
+			HeroController hc = HeroController.instance;
+			if(hc.playerData.GetBool("equippedCharm_26"))
+			{
+				ReflectionHelper.SetField(hc, "nailChargeTime", hc.NAIL_CHARGE_TIME_CHARM);
+			}
+			else
+			{
+				ReflectionHelper.SetField(hc, "nailChargeTime", hc.NAIL_CHARGE_TIME_DEFAULT);
+			}
+			if(hc.playerData.GetBool("equippedCharm_23") && !hc.playerData.GetBool("brokenCharm_23"))
+			{
+				hc.playerData.SetInt("maxHealth", hc.playerData.GetInt("maxHealthBase") + 2);
+			}
+			else
+			{
+				hc.playerData.SetInt("maxHealth", hc.playerData.GetInt("maxHealthBase"));
+			}
+			if(hc.playerData.GetBool("equippedCharm_27"))
+			{
+				hc.playerData.SetInt("joniHealthBlue", (int)((float)hc.playerData.GetInt("maxHealth") * 1.4f));
+				hc.playerData.SetInt("maxHealth", 1);
+				ReflectionHelper.SetField(hc, "joniBeam", true);
+			}
+			else
+			{
+				hc.playerData.SetInt("joniHealthBlue", 0);
+			}
+			if(hc.playerData.GetBool("equippedCharm_40") && hc.playerData.GetInt("grimmChildLevel") == 5)
+			{
+				hc.carefreeShieldEquipped = true;
+			}
+			else
+			{
+				hc.carefreeShieldEquipped = false;
+			}
+
+			GameManager.instance.RefreshOvercharm();
+			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
 		}
 
 		public override string ToString()

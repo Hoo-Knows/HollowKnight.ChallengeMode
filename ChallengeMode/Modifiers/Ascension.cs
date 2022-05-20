@@ -17,7 +17,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
-			gorbGO = Instantiate(ChallengeMode.instance.preloadedObjects["GG_Ghost_Gorb"]["Warrior/Ghost Warrior Slug"]);
+			gorbGO = Instantiate(ChallengeMode.Instance.preloadedObjects["GG_Ghost_Gorb"]["Warrior/Ghost Warrior Slug"]);
 			gorbGO.transform.position = HeroController.instance.transform.position;
 			Destroy(gorbGO.GetComponent<DamageHero>());
 			Destroy(gorbGO.GetComponent<Collider2D>());

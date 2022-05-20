@@ -7,16 +7,23 @@ namespace ChallengeMode.Modifiers
 	class SoulMaster : Modifier
 	{
 		private bool flag;
-		private int nailDamage;
 
 		public override void StartEffect()
 		{
 			flag = true;
-			nailDamage = PlayerData.instance.GetInt("nailDamage");
-			PlayerData.instance.SetInt("nailDamage", 1);
-			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
+
+			On.HealthManager.Hit += HealthManagerHit;
 
 			StartCoroutine(HandleSoul());
+		}
+
+		private void HealthManagerHit(On.HealthManager.orig_Hit orig, HealthManager self, HitInstance hitInstance)
+		{
+			if(hitInstance.AttackType == AttackTypes.Nail || hitInstance.AttackType == AttackTypes.NailBeam)
+			{
+				hitInstance.DamageDealt = 1;
+			}
+			orig(self, hitInstance);
 		}
 
 		private IEnumerator HandleSoul()
@@ -33,9 +40,9 @@ namespace ChallengeMode.Modifiers
 		{
 			StopAllCoroutines();
 
+			On.HealthManager.Hit -= HealthManagerHit;
+
 			flag = false;
-			PlayerData.instance.SetInt("nailDamage", nailDamage);
-			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 		}
 
 		public override string ToString()
@@ -47,7 +54,9 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Soul Master", "ChallengeMode_Nail Only", "ChallengeMode_Nailmaster"
+				"ChallengeMode_Soul Master",
+				"ChallengeMode_Nail Only",
+				"ChallengeMode_Nailmaster"
 			};
 		}
 	}

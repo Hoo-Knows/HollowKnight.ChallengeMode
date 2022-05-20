@@ -28,9 +28,9 @@ namespace ChallengeMode
 		public GlobalSettings OnSaveGlobal() => Settings;
 
 		public Dictionary<string, Dictionary<string, GameObject>> preloadedObjects;
-		public static ChallengeMode instance;
+		public static ChallengeMode Instance;
 
-		public override string GetVersion() => "0.5.0.2";
+		public override string GetVersion() => "0.5.0.3";
 
 		public ChallengeMode() : base("ChallengeMode") { }
 
@@ -38,7 +38,7 @@ namespace ChallengeMode
 		{
 			Log("Initializing");
 
-			instance = this;
+			Instance = this;
 			this.preloadedObjects = preloadedObjects;
 
 			//Modifier Object, all Monobehaviours are attached to this

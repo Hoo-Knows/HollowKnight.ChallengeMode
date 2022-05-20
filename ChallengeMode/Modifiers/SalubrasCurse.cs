@@ -21,8 +21,6 @@ namespace ChallengeMode.Modifiers
 				GameManager.instance.UnequipCharm(i);
 			}
 			CharmUpdate();
-			GameManager.instance.RefreshOvercharm();
-			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
 		}
 
 		public override void StopEffect()
@@ -33,8 +31,6 @@ namespace ChallengeMode.Modifiers
 				GameManager.instance.EquipCharm(i);
 			}
 			CharmUpdate();
-			GameManager.instance.RefreshOvercharm();
-			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
 		}
 
 		private void CharmUpdate()
@@ -75,6 +71,9 @@ namespace ChallengeMode.Modifiers
 			{
 				hc.carefreeShieldEquipped = false;
 			}
+
+			GameManager.instance.RefreshOvercharm();
+			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
 		}
 
 		public override string ToString()
@@ -86,7 +85,8 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Speedrunner's Curse"
+				"ChallengeMode_Speedrunner's Curse",
+				"ChallengeMode_Unfriendly Fire"
 			};
 		}
 	}

@@ -100,7 +100,7 @@ namespace ChallengeMode.Modifiers
 
 			//Increase attack speed
 			shadeFSM.GetAction<Wait>("Cast Antic", 8).time = 0.1f;
-			shadeFSM.GetAction<Wait>("Quake Antic", 7).time = 0.1f;
+			shadeFSM.GetAction<Wait>("Quake Antic", 7).time = 0.4f;
 			shadeFSM.GetAction<Wait>("Scream Antic", 6).time = 0.1f;
 
 			//Reset variables after using a spell

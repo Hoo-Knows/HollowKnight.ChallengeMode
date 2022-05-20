@@ -23,7 +23,7 @@ namespace ChallengeMode.Modifiers
 				int loops = 0;
 				while(activeModifier == null)
 				{
-					activeModifier = ChallengeMode.instance.modifierControl.SelectModifier();
+					activeModifier = ChallengeMode.Instance.modifierControl.SelectModifier();
 					loops++;
 					if(loops > 1000) break;
 				}
@@ -34,24 +34,24 @@ namespace ChallengeMode.Modifiers
 					ReflectionHelper.GetField<AchievementHandler, AchievementHandler.AchievementAwarded>(ah, "AwardAchievementEvent");
 				aa.Invoke(activeModifier.ToString());
 
-				ChallengeMode.instance.Log("Starting " + activeModifier.ToString().Substring(14));
+				ChallengeMode.Instance.Log("Starting " + activeModifier.ToString().Substring(14));
 				try
 				{
 					activeModifier.StartEffect();
 				}
 				catch
 				{
-					ChallengeMode.instance.Log("Failed to start " + activeModifier.ToString().Substring(14));
+					ChallengeMode.Instance.Log("Failed to start " + activeModifier.ToString().Substring(14));
 				}
 				yield return new WaitForSeconds(15f);
 				try
 				{
-					ChallengeMode.instance.Log("Stopping " + activeModifier.ToString().Substring(14));
+					ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
 					activeModifier.StopEffect();
 				}
 				catch
 				{
-					ChallengeMode.instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
+					ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
 				}
 			}
 			yield break;
@@ -64,12 +64,12 @@ namespace ChallengeMode.Modifiers
 			flag = false;
 			try
 			{
-				ChallengeMode.instance.Log("Stopping " + activeModifier.ToString().Substring(14));
+				ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
 				activeModifier.StopEffect();
 			}
 			catch
 			{
-				ChallengeMode.instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
+				ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
 			}
 		}
 

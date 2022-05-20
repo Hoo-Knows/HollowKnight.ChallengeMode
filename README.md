@@ -3,8 +3,8 @@
 This mod is inspired by Challenge Mode from Enter the Gungeon. Each boss arena in Godhome now has randomly selected **modifiers** that make the game more challenging in a variety of ways, such as spawning enemies, adding a new mechanic to juggle, disabling or nerfing certain attacks, etc. The further the player gets in a pantheon, the more modifiers there are, and certain bosses will have unique modifiers. The mod works in both Pantheons and Hall of Gods (highly suggested to practice the boss modifiers).
 
 ### Menu Options
-- Number of modifiers: determines the number of modifiers active by default (1 to 10)
-- Increment modifiers: determines how much the number of modifiers is incremented after each section in a pantheon (0 to 4)
+- Number of modifiers: determines the number of modifiers active by default (1 to 5)
+- Increment modifiers: determines how much the number of modifiers is incremented after each section in a pantheon (0 to 3)
 - Guarantee modifier: guarantee that a modifier will appear
 - Use logic: whether or not to use logic to prevent easy or unfair modifier combinations (ex. High Stress with Unfriendly Fire and A Fool's Errand)
 - Reset settings: figure it out
@@ -26,18 +26,18 @@ This mod is inspired by Challenge Mode from Enter the Gungeon. Each boss arena i
 - Unfriendly Fire: spawns a Grimmchild that attacks the player
 - Ascension: Gorb occasionally teleports onto the player and fires a ring of spears
 - Salubra’s Curse: unequips all charms
-- Past Regrets: spawns a Shade that slashes at the player and copies any spell the player uses
+- Past Regrets: spawns an invincible Shade with no contact damage that slashes at the player and copies any spell the player uses
 - Infected Wounds: taking damage drains soul, halves nail damage for 5 seconds, and spawns 1-3 Infected Balloons
 - Chaos, Chaos: applies a different modifier every 15 seconds
-- Temporal Distortion: occasionally warps the player back to where it was 3 seconds ago
+- Temporal Distortion: occasionally warps the player back to where they were 3 seconds ago
 - Poor Memory: makes the HUD lie to you (currently doesn't do anything if you have Hiveblood or Joni's Blessing equipped)
 - A Fool’s Errand: covers the ground in spikes or spawns enemies from the Colosseum in waves
 
 ## Unique Modifiers
 - Nailmaster: disables all attacks except for Nail Arts (applies to the Nailmasters)
 - The Ephemeral Ordeal: Grey Prince Zote can spit out Zotelings from the Eternal Ordeal (applies to Grey Prince Zote)
-- Something Wicked: Grimmkin Nightmares appear in the arena, dash towards the player, and burst into flame pillars (applies to Nightmare King Grimm)
-- Pale Watch: spawns two invincible Kingsmoulds on either end of the arena that occasionally throw boomerangs at the player (applies to Pure Vessel)
+- Something Wicked: invincible Grimmkin Nightmares with no contact damage appear in the arena, dash towards the player, and burst into flame pillars (applies to Nightmare King Grimm)
+- Pale Watch: spawns two invincible Kingsmoulds with no contact damage on either end of the arena that occasionally throw boomerangs at the player (applies to Pure Vessel)
 - Forgotten Light: modifies Absolute Radiance’s attack patterns, guaranteed to appear with High Stress (applies to Absolute Radiance)
   - Eye Beams: light beams last longer and rotate in alternating directions
   - Sword Burst: both swords waves spawn at the same time and move slower with a sharper curve

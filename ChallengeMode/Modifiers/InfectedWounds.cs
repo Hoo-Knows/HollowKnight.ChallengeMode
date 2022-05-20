@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Modding;
 using UnityEngine;
 using Random = System.Random;
@@ -8,18 +9,15 @@ namespace ChallengeMode.Modifiers
 	class InfectedWounds : Modifier
 	{
 		private GameObject balloonGO;
-		private int nailDamage;
 
 		public override void StartEffect()
 		{
-			balloonGO = ChallengeMode.instance.preloadedObjects["Abyss_19"]["Parasite Balloon (1)"];
+			balloonGO = ChallengeMode.Instance.preloadedObjects["Abyss_19"]["Parasite Balloon (1)"];
 			Destroy(balloonGO.GetComponent<PersistentBoolItem>());
 			HealthManager hm = balloonGO.GetComponent<HealthManager>();
 			hm.hp = 1;
 			//Disable soul gain
 			ReflectionHelper.SetField(hm, "enemyType", 6);
-
-			nailDamage = PlayerData.instance.nailDamage;
 
 			ModHooks.TakeHealthHook += TakeHealthHook;
 		}
@@ -27,8 +25,6 @@ namespace ChallengeMode.Modifiers
 		private int TakeHealthHook(int damage)
 		{
 			StopAllCoroutines();
-			PlayerData.instance.SetInt("nailDamage", nailDamage);
-			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
 
 			StartCoroutine(NailControl());
 			StartCoroutine(SoulControl());
@@ -49,12 +45,19 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator NailControl()
 		{
-			PlayerData.instance.SetInt("nailDamage", nailDamage / 2 > 0 ? nailDamage / 2 : 1);
-			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
+			On.HealthManager.Hit += HealthManagerHit;
 			yield return new WaitForSeconds(5f);
-			PlayerData.instance.SetInt("nailDamage", nailDamage);
-			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
+			On.HealthManager.Hit -= HealthManagerHit;
 			yield break;
+		}
+
+		private void HealthManagerHit(On.HealthManager.orig_Hit orig, HealthManager self, HitInstance hitInstance)
+		{
+			if(hitInstance.AttackType == AttackTypes.Nail || hitInstance.AttackType == AttackTypes.NailBeam)
+			{
+				hitInstance.DamageDealt /= 2 + 1;
+			}
+			orig(self, hitInstance);
 		}
 
 		private IEnumerator SoulControl()
@@ -70,10 +73,9 @@ namespace ChallengeMode.Modifiers
 		public override void StopEffect()
 		{
 			ModHooks.TakeHealthHook -= TakeHealthHook;
-			StopAllCoroutines();
+			On.HealthManager.Hit -= HealthManagerHit;
 
-			PlayerData.instance.SetInt("nailDamage", nailDamage);
-			PlayMakerFSM.BroadcastEvent("UPDATE NAIL DAMAGE");
+			StopAllCoroutines();
 		}
 
 		public override string ToString()
