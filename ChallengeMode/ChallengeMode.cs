@@ -193,7 +193,7 @@ namespace ChallengeMode
 						{
 							wholeNumbers = true,
 							minValue = 1,
-							maxValue = 10
+							maxValue = 5
 						},
 
 						new CustomSlider("Increment modifiers",
@@ -202,7 +202,7 @@ namespace ChallengeMode
 						{
 							wholeNumbers = true,
 							minValue = 0,
-							maxValue = 4
+							maxValue = 3
 						},
 
 						new HorizontalOption("Guarantee modifier",
