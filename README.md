@@ -1,6 +1,6 @@
-# HK Challenge Mode
+# Hollow Knight Challenge Mode
 
-This mod is inspired by Challenge Mode from Enter the Gungeon. Each boss arena in Godhome now has randomly selected **modifiers** that make the game more challenging in a variety of ways, such as spawning enemies, adding a new mechanic to juggle, disabling or nerfing certain attacks, etc. The further the player gets in a pantheon, the more modifiers there are, and certain bosses will have unique modifiers. The mod works in both Pantheons and Hall of Gods (highly suggested to practice the boss modifiers).
+Each boss arena in Godhome now has randomly selected **modifiers** that make the game more challenging in a variety of ways, such as spawning enemies, adding a new mechanic to juggle, disabling or nerfing certain attacks, etc. The further the player gets in a pantheon, the more modifiers there are, and certain bosses will have unique modifiers. The mod works in both Pantheons and Hall of Gods (highly suggested to practice the boss modifiers).
 
 ### Menu Options
 - Number of modifiers: determines the number of modifiers active by default (1 to 5)
