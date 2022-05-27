@@ -48,8 +48,8 @@ namespace ChallengeMode.Modifiers
 				}, 0);
 
 				//Increase delay after attack
-				kingsmouldFSM.GetAction<WaitRandom>("Wait", 2).timeMin = 2f;
-				kingsmouldFSM.GetAction<WaitRandom>("Wait", 2).timeMax = 2f;
+				kingsmouldFSM.GetAction<WaitRandom>("Wait", 2).timeMin = 3f;
+				kingsmouldFSM.GetAction<WaitRandom>("Wait", 2).timeMax = 3f;
 
 				kingsmoulds[i].SetActive(true);
 			}

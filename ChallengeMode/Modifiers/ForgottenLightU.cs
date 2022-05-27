@@ -108,8 +108,8 @@ namespace ChallengeMode.Modifiers
 			state = new string[] { "EB 2", "EB 3", "EB 8", "EB 9" };
 			for(int i = 0; i < 4; i++)
 			{
-				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).min = 22.5f;
-				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).max = 22.5f;
+				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).min = 45f;
+				absradAttackFSM.GetAction<RandomFloat>(state[i], 0).max = 45f;
 			}
 		}
 
@@ -207,7 +207,7 @@ namespace ChallengeMode.Modifiers
 					swordWall = absradAttackFSM.FsmVariables.FindFsmGameObject("Attack Obj").Value;
 					//FSM located in sharedassets407.assets
 					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).easeType = iTween.EaseType.easeInOutQuad;
-					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).speed = 20f;
+					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).speed = 16f;
 				}, 3);
 			}
 		}

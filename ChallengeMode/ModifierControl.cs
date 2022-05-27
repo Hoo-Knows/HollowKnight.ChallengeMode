@@ -18,7 +18,7 @@ namespace ChallengeMode
 		{
 			"GG_Atrium", "GG_Atrium_Roof", "GG_Unlock_Wastes", "GG_Blue_Room", "GG_Workshop", "GG_Land_Of_Storms",
 			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa", "GG_Boss_Door_Entrance",
-			"GG_End_Sequence"
+			"GG_End_Sequence", "GG_Waterways"
 		};
 		private readonly List<string> foolSceneBlacklist = new List<string>()
 		{
@@ -67,11 +67,6 @@ namespace ChallengeMode
 						else j--;
 					}
 				}
-				//Absrad has High Stress
-				if(currentScene == "GG_Radiance" && numModifiers > 1)
-				{
-					activeModifiers[1] = cm.modifiers[0];
-				}
 			}
 			else
 			{
@@ -118,7 +113,7 @@ namespace ChallengeMode
 
 		public Modifier SelectModifier()
 		{
-			Modifier modifier = cm.modifiers[random.Next(0, cm.modifiers.Length)];
+			Modifier modifier = cm.modifiers[random.Next(0, cm.modifiers.Count)];
 
 			if(CheckValidModifier(modifier))
 			{
@@ -180,7 +175,6 @@ namespace ChallengeMode
 				{
 					cm.Log("Failed to start " + modifier.ToString().Substring(14));
 				}
-				yield return new WaitForSecondsRealtime(0.75f);
 			}
 			StartCoroutine(DisplayModifiers(false));
 			yield return new WaitForSecondsRealtime(2f);

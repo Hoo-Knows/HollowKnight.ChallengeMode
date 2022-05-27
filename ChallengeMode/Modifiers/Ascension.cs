@@ -40,7 +40,7 @@ namespace ChallengeMode.Modifiers
 			//Make Gorb warp or attack when idle and player can move
 			gorbMovementFSM.InsertMethod("Hover", () =>
 			{
-				if(!isAttacking || HeroController.instance.controlReqlinquished)
+				if(!isAttacking)
 				{
 					gorbMovementFSM.SendEvent("RETURN");
 				}
@@ -74,6 +74,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator GorbAttack()
 		{
+			yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
 			yield return new WaitForSeconds(0.3f);
 			gorbAttackFSM.SetState("Antic");
 			yield break;

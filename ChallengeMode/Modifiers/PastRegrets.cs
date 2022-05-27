@@ -83,7 +83,7 @@ namespace ChallengeMode.Modifiers
 				}
 				else if(usingScream)
 				{
-					position += 2 * Vector3.down;
+					position += 3 * Vector3.down;
 				}
 				shadeFSM.FsmVariables.FindFsmVector3("Start Pos").Value = position;
 			}, 1);

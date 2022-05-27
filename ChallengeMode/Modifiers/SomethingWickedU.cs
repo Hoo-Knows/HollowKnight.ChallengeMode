@@ -28,8 +28,8 @@ namespace ChallengeMode.Modifiers
 				PlayMakerFSM grimmkinFSM = grimmkins[i].LocateMyFSM("Control");
 
 				//Set delay between attacks
-				grimmkinFSM.GetAction<WaitRandom>("Attack Pause", 0).timeMin = 4f;
-				grimmkinFSM.GetAction<WaitRandom>("Attack Pause", 0).timeMax = 6f;
+				grimmkinFSM.GetAction<WaitRandom>("Attack Pause", 0).timeMin = 5f;
+				grimmkinFSM.GetAction<WaitRandom>("Attack Pause", 0).timeMax = 7.5f;
 
 				//Make Grimmkin after jump to Attack Pause after Appear
 				grimmkinFSM.InsertMethod("Init", () =>
@@ -80,23 +80,23 @@ namespace ChallengeMode.Modifiers
 			//Decrease delay/add more Grimmkins each pufferfish
 			nkgFSM.InsertMethod("Set Balloon 1", () =>
 			{
-				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 2f;
-				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 4f;
+				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 2.5f;
+				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 5f;
 			}, 0);
 			nkgFSM.InsertMethod("Set Balloon 2", () =>
 			{
-				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 4f;
-				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 6f;
-				grimmkins[1].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 4f;
-				grimmkins[1].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 6f;
+				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 5f;
+				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 7.5f;
+				grimmkins[1].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 5f;
+				grimmkins[1].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 7.5f;
 				grimmkins[1].SetActive(true);
 			}, 0);
 			nkgFSM.InsertMethod("Set Balloon 3", () =>
 			{
-				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 2f;
-				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 4f;
-				grimmkins[1].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 2f;
-				grimmkins[1].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 4f;
+				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 2.5f;
+				grimmkins[0].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 5f;
+				grimmkins[1].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMin = 2.5f;
+				grimmkins[1].LocateMyFSM("Control").GetAction<WaitRandom>("Attack Pause", 0).timeMax = 5f;
 			}, 0);
 
 			StartCoroutine(WaitToActivate());

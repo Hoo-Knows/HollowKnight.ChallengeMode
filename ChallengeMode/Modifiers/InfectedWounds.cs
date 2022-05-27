@@ -26,6 +26,7 @@ namespace ChallengeMode.Modifiers
 		{
 			StopAllCoroutines();
 
+			On.HealthManager.Hit -= HealthManagerHit;
 			StartCoroutine(NailControl());
 			StartCoroutine(SoulControl());
 

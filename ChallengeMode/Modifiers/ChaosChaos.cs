@@ -11,6 +11,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
+			flag = true;
 			StartCoroutine(BeginChaos());
 		}
 

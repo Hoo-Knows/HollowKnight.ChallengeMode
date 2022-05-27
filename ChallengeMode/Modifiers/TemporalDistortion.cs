@@ -40,7 +40,7 @@ namespace ChallengeMode.Modifiers
 			{
 				//Set gate
 				Vector3 position = HeroController.instance.transform.position;
-				GameObject dreamgate = Instantiate(GameManager.instance.sm.dreamgateObject, position, Quaternion.identity);
+				GameObject dreamgate = Instantiate(GameManager.instance.sm.dreamgateObject, position + new Vector3(0f, -1.42f, -0.0035f), Quaternion.identity);
 				audioSource.PlayOneShot(audioSet);
 
 				//Telegraph
