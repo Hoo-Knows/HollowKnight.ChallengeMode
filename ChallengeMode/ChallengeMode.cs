@@ -107,7 +107,7 @@ namespace ChallengeMode
 		private string BeforeSceneLoadHook(string sceneName)
 		{
 			//Used to override scene
-			if(sceneName == "GG_Mage_Knight") sceneName = "GG_Radiance";
+			//if(sceneName == "GG_Mage_Knight") sceneName = "GG_Radiance";
 
 			if(sceneName == "GG_Spa") spaCount++;
 			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;
