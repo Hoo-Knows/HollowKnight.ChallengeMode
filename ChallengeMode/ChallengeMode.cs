@@ -29,18 +29,11 @@ namespace ChallengeMode
 		public static Dictionary<string, Dictionary<string, GameObject>> Preloads;
 		public static ChallengeMode Instance;
 
-		public override string GetVersion() => "0.6.0.0";
+		public override string GetVersion() => "0.6.0.1";
 
 		public ChallengeMode() : base("ChallengeMode")
 		{
 			Instance = this;
-		}
-
-		public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
-		{
-			Log("Initializing");
-
-			Preloads = preloadedObjects;
 
 			//Modifier Object, all Monobehaviours are attached to this
 			modifierObject = new GameObject("Modifier Object");
@@ -51,6 +44,13 @@ namespace ChallengeMode
 			scenesU = new List<string>();
 			modifierControl = modifierObject.AddComponent<ModifierControl>();
 			modifierNames = new List<string>();
+		}
+
+		public override void Initialize(Dictionary<string, Dictionary<string, GameObject>> preloadedObjects)
+		{
+			Log("Initializing");
+
+			Preloads = preloadedObjects;
 
 			//Modifiers
 			AddModifier<Modifiers.HighStress>();

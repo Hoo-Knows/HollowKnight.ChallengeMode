@@ -52,32 +52,23 @@ namespace ChallengeMode
 			activeModifiers = new Modifier[numModifiers];
 			random = new Random();
 
+			int index = 0;
 			//Select modifiers
 			if(ChallengeMode.scenesU.Contains(currentScene))
 			{
 				int i = ChallengeMode.scenesU.IndexOf(currentScene);
-				activeModifiers[0] = ChallengeMode.modifiersU[i];
+				activeModifiers[index] = ChallengeMode.modifiersU[i];
+				index++;
+			}
+			if(ChallengeMode.Settings.modifierOption)
+			{
+				activeModifiers[index] = ChallengeMode.modifiers[ChallengeMode.Settings.modifierValue];
+				index++;
 			}
 			//Keep track of loops, if it hits 1000 then force break to prevent infinite loop
 			int loops = 0;
-			bool guaranteed = false;
-			for(int i = 0; i < numModifiers; i++)
+			for(int i = index; i < numModifiers; i++)
 			{
-				//Check whether extra modifiers should be selected besides a unique modifier
-				if(ChallengeMode.scenesU.Contains(currentScene))
-				{
-					if(ChallengeMode.Settings.uniqueOption && numModifiers > 1) i++;
-					else break;
-				}
-
-				//Guaranteed modifier
-				if(ChallengeMode.Settings.modifierOption && !guaranteed)
-				{
-					activeModifiers[i] = ChallengeMode.modifiers[ChallengeMode.Settings.modifierValue];
-					guaranteed = true;
-					continue;
-				}
-
 				Modifier modifier = SelectModifier();
 
 				if(modifier != null)
