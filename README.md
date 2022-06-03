@@ -66,8 +66,4 @@ If the modifier is a unique modifier, use the following line instead:
 ```
 ChallengeMode.ChallengeMode.AddModifierU<YourModifierHere>("Name of the scene you want this modifier to appear in");
 ```
-The mod class must also have a load priority above 1 to ensure that Challenge Mode is initialized before the addon:
-```
-public override int LoadPriority() => 10;
-```
 Finally, build the project and launch Hollow Knight. The custom modifier should now be able to appear in game and be selectable in the mod menu under the "Guarantee modifier" option.
