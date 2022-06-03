@@ -9,5 +9,9 @@ namespace ChallengeMode
 		public bool modifierOption { get; set; } = false;
 		public int modifierValue { get; set; } = 0;
 		public bool logicOption { get; set; } = true;
+		public bool slowdownOption { get; set; } = true;
+		public bool highStressOption { get; set; } = true;
+		public bool uniqueOption { get; set; } = false;
+		public bool everywhereOption { get; set; } = false;
 	}
 }

@@ -9,7 +9,7 @@ namespace ChallengeMode.Modifiers
 {
 	class FoolsErrand : Modifier
 	{
-		private GameObject[] spikes;
+		private List<GameObject> spikes;
 		private GameObject spikeGO;
 
 		private GameObject groundSpikesGO;
@@ -18,7 +18,7 @@ namespace ChallengeMode.Modifiers
 		private AudioClip audioSpikeExpand;
 		private AudioClip audioSpikeRetract;
 
-		private GameObject[] enemies;
+		private List<GameObject> enemies;
 		private Random random;
 		private AudioSource audioSource;
 		private bool waveFlag;
@@ -28,39 +28,39 @@ namespace ChallengeMode.Modifiers
 		public override void StartEffect()
 		{
 			//Set spikes
-			spikeGO = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Bronze"]["Colosseum Manager/Ground Spikes/Colosseum Spike (19)"];
-			spikes = new GameObject[31];
-			for(int i = -15; i < 16; i++)
+			spikeGO = ChallengeMode.Preloads["Room_Colosseum_Bronze"]["Colosseum Manager/Ground Spikes/Colosseum Spike (19)"];
+			spikes = new List<GameObject>();
+			for(int i = 0; i < 30; i++)
 			{
 				GameObject spike = Instantiate(spikeGO,
-					HeroController.instance.transform.position + new Vector3(i * 2f, -0.25f, 0f), Quaternion.identity);
+					HeroController.instance.transform.position + new Vector3(i * 2f - 30f, -0.25f, 0f), Quaternion.identity);
 				spike.GetComponent<DamageHero>().hazardType = 1;
 				spike.LocateMyFSM("Enemy Hurt").GetAction<SetFsmInt>("Hurt", 0).setValue = 0;
 				spike.SetActive(true);
-				spikes[i + 15] = spike;
+				spikes.Add(spike);
 			}
 
 			//Spike audio
-			groundSpikesGO = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Bronze"]["Colosseum Manager/Ground Spikes"];
+			groundSpikesGO = ChallengeMode.Preloads["Room_Colosseum_Bronze"]["Colosseum Manager/Ground Spikes"];
 			groundSpikesFSM = groundSpikesGO.LocateMyFSM("Spike Audio");
 			audioSpikeAntic = groundSpikesFSM.GetAction<AudioPlaySimple>("Antic", 1).oneShotClip.Value as AudioClip;
 			audioSpikeExpand = groundSpikesFSM.GetAction<AudioPlaySimple>("Expand", 3).oneShotClip.Value as AudioClip;
 			audioSpikeRetract = groundSpikesFSM.GetAction<AudioPlaySimple>("Retract", 2).oneShotClip.Value as AudioClip;
 
 			//Set possible enemies
-			enemies = new GameObject[6];
+			enemies = new List<GameObject>();
 			//Armored Squit
-			enemies[0] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 2/Colosseum Cage Small"];
+			enemies.Add(ChallengeMode.Preloads["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 2/Colosseum Cage Small"]);
 			//Battle Obble
-			enemies[1] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 37/Colosseum Cage Small (3)"];
+			enemies.Add(ChallengeMode.Preloads["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 37/Colosseum Cage Small (3)"]);
 			//Shielded Fool
-			enemies[2] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 3/Colosseum Cage Large"];
+			enemies.Add(ChallengeMode.Preloads["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 3/Colosseum Cage Large"]);
 			//Sturdy Fool
-			enemies[3] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 50/Colosseum Cage Large"];
+			enemies.Add(ChallengeMode.Preloads["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 50/Colosseum Cage Large"]);
 			//Heavy Fool
-			enemies[4] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 1/Colosseum Cage Large"];
+			enemies.Add(ChallengeMode.Preloads["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 1/Colosseum Cage Large"]);
 			//Winged Fool
-			enemies[5] = ChallengeMode.Instance.preloadedObjects["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"];
+			enemies.Add(ChallengeMode.Preloads["Room_Colosseum_Gold"]["Colosseum Manager/Waves/Wave 6/Colosseum Cage Large"]);
 
 			waveFlag = true;
 			enemyFlag = false;
@@ -104,7 +104,7 @@ namespace ChallengeMode.Modifiers
 		{
 			for(int i = 0; i < numEnemies + random.Next(0, 2); i++)
 			{
-				int index = random.Next(0, enemies.Length);
+				int index = random.Next(0, enemies.Count);
 
 				//Spawn cage
 				GameObject cage = Instantiate(enemies[index], spawnPos, Quaternion.identity);

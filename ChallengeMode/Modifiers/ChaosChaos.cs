@@ -17,14 +17,15 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator BeginChaos()
 		{
-			yield return new WaitForSeconds(4f);
+			yield return new WaitUntil(() => ChallengeMode.modifierControl.displayed);
+			yield return new WaitForSeconds(3f);
 			while(flag)
 			{
 				activeModifier = null;
 				int loops = 0;
 				while(activeModifier == null)
 				{
-					activeModifier = ChallengeMode.Instance.modifierControl.SelectModifier();
+					activeModifier = ChallengeMode.modifierControl.SelectModifier();
 					loops++;
 					if(loops > 1000) break;
 				}

@@ -15,9 +15,9 @@ namespace ChallengeMode.Modifiers
 		public override void StartEffect()
 		{
 			kingsmoulds = new GameObject[2];
-			kingsmoulds[0] = Instantiate(ChallengeMode.Instance.preloadedObjects["White_Palace_02"]["Battle Scene/Royal Gaurd"],
+			kingsmoulds[0] = Instantiate(ChallengeMode.Preloads["White_Palace_02"]["Battle Scene/Royal Gaurd"],
 				new Vector3(31.5f, 8.6f, 0f), Quaternion.identity);
-			kingsmoulds[1] = Instantiate(ChallengeMode.Instance.preloadedObjects["White_Palace_02"]["Battle Scene/Royal Gaurd"],
+			kingsmoulds[1] = Instantiate(ChallengeMode.Preloads["White_Palace_02"]["Battle Scene/Royal Gaurd"],
 				new Vector3(59.5f, 8.6f, 0f), Quaternion.identity);
 
 			for(int i = 0; i < 2; i++)

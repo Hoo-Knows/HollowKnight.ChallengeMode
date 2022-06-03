@@ -12,7 +12,7 @@ namespace ChallengeMode.Modifiers
 
 		public override void StartEffect()
 		{
-			balloonGO = ChallengeMode.Instance.preloadedObjects["Abyss_19"]["Parasite Balloon (1)"];
+			balloonGO = ChallengeMode.Preloads["Abyss_19"]["Parasite Balloon (1)"];
 			Destroy(balloonGO.GetComponent<PersistentBoolItem>());
 			HealthManager hm = balloonGO.GetComponent<HealthManager>();
 			hm.hp = 1;
