@@ -4,9 +4,13 @@ Each boss arena in Godhome now has randomly selected **modifiers** that make the
 
 ### Menu Options
 - Number of modifiers: determines the number of modifiers active by default (1 to 5)
-- Increment modifiers: determines how much the number of modifiers is incremented after each section in a pantheon (0 to 3)
+- Increment modifiers: determines how much the number of modifiers is incremented after each section in a pantheon (0 to 2)
 - Guarantee modifier: guarantee that a modifier will appear
 - Use logic: whether or not to use logic to prevent easy or unfair modifier combinations (ex. High Stress with Unfriendly Fire and A Fool's Errand)
+- Use slowdown: whether or not to slow down the game when displaying modifiers
+- Allow High Stress: whether or not to allow High Stress
+- Allow non-unique modifiers: whether or not to allow regular modifiers on bosses that have unique modifiers
+- Allow modifiers everywhere: whether or not to allow modifiers in any room, even outside Godhome
 - Reset settings: figure it out
 
 ### Dependencies
@@ -44,3 +48,26 @@ Each boss arena in Godhome now has randomly selected **modifiers** that make the
   - Sword Wall/Sword Rain: accelerate as they move across the arena
   - Orbs: spawn a light beam when they collide with an object or dissipate
   - Climb: light beams have a shorter telegraph and target the player with perfect accuracy
+
+## Adding custom modifiers
+To create a Challenge Mode addon, make a new mod project and add a reference to Challenge Mode. Create a new class that extends from the abstract Modifier class, which has the following methods:
+
+- StartEffect: where you instantiate GOs, add hooks, etc.
+- StopEffect: where you destroy GOs, unhook, etc.
+- ToString: name, in the format of YourAddonName_YourModifierName
+- GetCodeBlacklist: a list of the internal names of modifiers that are fundamentally incompatible with this modifier (note: Challenge Mode modifiers are named in the format ChallengeMode_ModifierName)
+- GetBalanceBlacklist: a list of the internal names of modifiers that are too difficult/too easy when they appear with this modifier
+
+Your custom modifier must implement StartEffect, StopEffect, and ToString. After creating the modifier, go into the mod class and add the following line to Initialize:
+```
+ChallengeMode.ChallengeMode.AddModifier<YourModifierHere>();
+```
+If the modifier is a unique modifier, use the following line instead:
+```
+ChallengeMode.ChallengeMode.AddModifierU<YourModifierHere>("Name of the scene you want this modifier to appear in");
+```
+The mod class must also have a load priority above 1 to ensure that Challenge Mode is initialized before the addon:
+```
+public override int LoadPriority() => int.MaxValue;
+```
+Finally, build the project and launch Hollow Knight. The custom modifier should now be able to appear in game and be selectable in the mod menu under the "Guarantee modifier" option.
