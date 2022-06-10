@@ -29,7 +29,7 @@ namespace ChallengeMode
 		public static Dictionary<string, Dictionary<string, GameObject>> Preloads;
 		public static ChallengeMode Instance;
 
-		public override string GetVersion() => "0.6.0.1";
+		public override string GetVersion() => AssemblyUtils.GetAssemblyVersionHash();
 
 		public ChallengeMode() : base("ChallengeMode")
 		{

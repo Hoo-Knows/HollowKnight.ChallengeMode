@@ -24,6 +24,18 @@ namespace ChallengeMode.Modifiers
 		private bool waveFlag;
 		private bool enemyFlag;
 		private int numEnemies;
+		private bool allowSpikes;
+
+		private readonly List<string> spikeScenes = new List<string>()
+		{
+			"GG_Gruz_Mother", "GG_Gruz_Mother_V", "GG_False_Knight", "GG_Mega_Moss_Charger", "GG_Hornet_1", "GG_Dung_Defender",
+			"GG_Mage_Knight", "GG_Mage_Knight_V", "GG_Brooding_Mawlek", "GG_Brooding_Mawlek_V", "GG_Nailmasters",
+			"GG_Crystal_Guardian", "GG_Soul_Master", "GG_Oblobbles", "GG_Mantis_Lords", "GG_Mantis_Lords_V", "GG_Ghost_Marmu",
+			"GG_Ghost_Marmu_V", "GG_Broken_Vessel", "GG_Galien", "GG_Painter", "GG_Hive_Knight", "GG_Ghost_Hu", "GG_Collector",
+			"GG_Collector_V", "GG_God_Tamer", "GG_Grimm", "GG_Watcher_Knights", "GG_Nosk", "GG_Nosk_V", "GG_Sly", "GG_Hornet_2",
+			"GG_Crystal_Guardian_2", "GG_Lost_Kin", "GG_Traitor_Lord", "GG_White_Defender", "GG_Soul_Tyrant", "GG_Grey_Prince_Zote",
+			"GG_Failed_Champion", "GG_Hollow_Knight"
+		};
 
 		public override void StartEffect()
 		{
@@ -67,6 +79,7 @@ namespace ChallengeMode.Modifiers
 			numEnemies = 1;
 			random = new Random();
 			audioSource = HeroController.instance.GetComponent<AudioSource>();
+			allowSpikes = spikeScenes.Contains(GameManager.instance.sceneName);
 
 			StartCoroutine(WaveControl());
 		}
@@ -79,16 +92,19 @@ namespace ChallengeMode.Modifiers
 				Vector3 spawnPos = new Vector3(HeroController.instance.transform.position.x, spikes[0].transform.position.y + 6f);
 
 				//Spikes
-				yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
-				PlayMakerFSM.BroadcastEvent("EXPAND");
-				audioSource.PlayOneShot(audioSpikeAntic);
-				yield return new WaitForSeconds(2f);
-				audioSource.PlayOneShot(audioSpikeExpand);
-				yield return new WaitForSeconds(5f);
-				PlayMakerFSM.BroadcastEvent("RETRACT");
-				audioSource.PlayOneShot(audioSpikeRetract);
+				if(allowSpikes)
+				{
+					yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
+					PlayMakerFSM.BroadcastEvent("EXPAND");
+					audioSource.PlayOneShot(audioSpikeAntic);
+					yield return new WaitForSeconds(2f);
+					audioSource.PlayOneShot(audioSpikeExpand);
+					yield return new WaitForSeconds(5f);
+					PlayMakerFSM.BroadcastEvent("RETRACT");
+					audioSource.PlayOneShot(audioSpikeRetract);
 
-				yield return new WaitForSeconds(random.Next(3, 5));
+					yield return new WaitForSeconds(random.Next(3, 5));
+				}
 
 				//Enemies
 				enemyFlag = true;

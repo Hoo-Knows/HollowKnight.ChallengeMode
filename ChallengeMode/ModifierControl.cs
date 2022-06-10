@@ -31,12 +31,6 @@ namespace ChallengeMode
 			"GG_Engine", "GG_Engine_Prime", "GG_Unn", "GG_Engine_Root", "GG_Wyrm", "GG_Spa", "GG_Boss_Door_Entrance",
 			"GG_End_Sequence", "GG_Waterways"
 		};
-		private readonly List<string> foolSceneBlacklist = new List<string>()
-		{
-			"GG_Vengefly", "GG_Vengefly_V", "GG_Ghost_Gorb", "GG_Ghost_Gorb_V", "GG_Ghost_Xero", "GG_Ghost_Xero_V",
-			"GG_Flukemarm", "GG_Uumuu", "GG_Uumuu_V", "GG_Nosk_Hornet", "GG_Ghost_No_Eyes", "GG_Ghost_No_Eyes_V",
-			"GG_Ghost_Markoth_V", "GG_Grimm_Nightmare", "GG_Radiance"
-		};
 
 		public void Initialize(int numModifiers, string currentScene)
 		{
@@ -120,21 +114,19 @@ namespace ChallengeMode
 			{
 				if(!ChallengeMode.Settings.highStressOption) return false;
 			}
-			//A Fool's Errand
-			if(modifier.ToString() == "ChallengeMode_A Fool's Errand")
-			{
-				if(foolSceneBlacklist.Contains(currentScene)) return false;
-			}
 
 			foreach(Modifier m in activeModifiers)
 			{
-				if(m != null && m.GetCodeBlacklist().Contains(modifier.ToString())) return false;
+				if(m != null && (m.GetCodeBlacklist().Contains(modifier.ToString()) || 
+					modifier.GetCodeBlacklist().Contains(m.ToString()))) return false;
+				if(m != null && m.ToString() == modifier.ToString()) return false;
 			}
 			if(ChallengeMode.Settings.logicOption)
 			{
 				foreach(Modifier m in activeModifiers)
 				{
-					if(m != null && m.GetBalanceBlacklist().Contains(modifier.ToString())) return false;
+					if(m != null && (m.GetBalanceBlacklist().Contains(modifier.ToString()) ||
+						modifier.GetBalanceBlacklist().Contains(m.ToString()))) return false;
 				}
 			}
 			

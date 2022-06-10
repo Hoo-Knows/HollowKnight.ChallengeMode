@@ -277,5 +277,14 @@ namespace ChallengeMode.Modifiers
 		{
 			return "ChallengeMode_Forgotten Light";
 		}
+
+		public override List<string> GetBalanceBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Nail Only",
+				"ChallengeMode_Speedrunner's Curse"
+			};
+		}
 	}
 }

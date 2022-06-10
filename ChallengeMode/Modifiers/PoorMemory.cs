@@ -156,7 +156,7 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Poor Memory", "ChallengeMode_High Stress"
+				"ChallengeMode_High Stress"
 			};
 		}
 	}

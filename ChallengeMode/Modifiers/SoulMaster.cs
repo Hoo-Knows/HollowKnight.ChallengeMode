@@ -54,7 +54,6 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Soul Master",
 				"ChallengeMode_Nail Only",
 				"ChallengeMode_Nailmaster"
 			};

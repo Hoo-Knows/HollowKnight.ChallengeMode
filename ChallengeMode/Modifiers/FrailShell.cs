@@ -29,7 +29,6 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Frail Shell",
 				"ChallengeMode_High Stress"
 			};
 		}

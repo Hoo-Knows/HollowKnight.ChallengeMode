@@ -3,6 +3,7 @@ using SFCore.Utils;
 using HutongGames.PlayMaker.Actions;
 using System.Collections;
 using GlobalEnums;
+using System.Collections.Generic;
 
 namespace ChallengeMode.Modifiers
 {
@@ -97,6 +98,15 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Pale Watch";
+		}
+
+		public override List<string> GetBalanceBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Nail Only",
+				"ChallengeMode_Speedrunner's Curse"
+			};
 		}
 	}
 }

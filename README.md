@@ -10,7 +10,7 @@ Each boss arena in Godhome now has randomly selected **modifiers** that make the
 - Use slowdown: whether or not to slow down the game when displaying modifiers
 - Allow High Stress: whether or not to allow High Stress
 - Allow non-unique modifiers: whether or not to allow regular modifiers on bosses that have unique modifiers
-- Allow modifiers everywhere: whether or not to allow modifiers in any room, even outside Godhome
+- Allow modifiers everywhere: whether or not to allow modifiers in any room, even outside Godhome (note: this option has not been extensively tested)
 - Reset settings: figure it out
 
 ### Dependencies
@@ -30,7 +30,7 @@ Each boss arena in Godhome now has randomly selected **modifiers** that make the
 - Unfriendly Fire: spawns a Grimmchild that attacks the player
 - Ascension: Gorb occasionally teleports onto the player and fires a ring of spears
 - Salubra’s Curse: unequips all charms
-- Past Regrets: spawns an invincible Shade with no contact damage that slashes at the player and copies any spell the player uses
+- Past Regrets: spawns an invincible Shade (no contact damage) that slashes at the player and copies any spell the player uses
 - Infected Wounds: taking damage drains soul, halves nail damage for 5 seconds, and spawns 1-3 Infected Balloons
 - Chaos, Chaos: applies a different modifier every 15 seconds
 - Temporal Distortion: occasionally warps the player back to where they were 3 seconds ago
@@ -40,8 +40,8 @@ Each boss arena in Godhome now has randomly selected **modifiers** that make the
 ## Unique Modifiers
 - Nailmaster: disables all attacks except for Nail Arts (applies to the Nailmasters)
 - The Ephemeral Ordeal: Grey Prince Zote can spit out Zotelings from the Eternal Ordeal (applies to Grey Prince Zote)
-- Something Wicked: invincible Grimmkin Nightmares with no contact damage appear in the arena, dash towards the player, and burst into flame pillars (applies to Nightmare King Grimm)
-- Pale Watch: spawns two invincible Kingsmoulds with no contact damage on either end of the arena that occasionally throw boomerangs at the player (applies to Pure Vessel)
+- Something Wicked: invincible Grimmkin Nightmares (no contact damage) appear in the arena, dash towards the player, and burst into flame pillars (applies to Nightmare King Grimm)
+- Pale Watch: spawns two invincible Kingsmoulds (no contact damage) on either end of the arena that occasionally throw boomerangs at the player (applies to Pure Vessel)
 - Forgotten Light: modifies Absolute Radiance’s attack patterns, guaranteed to appear with High Stress (applies to Absolute Radiance)
   - Eye Beams: light beams last longer and rotate in alternating directions
   - Sword Burst: both swords waves spawn at the same time and move slower with a sharper curve
@@ -50,15 +50,15 @@ Each boss arena in Godhome now has randomly selected **modifiers** that make the
   - Climb: light beams have a shorter telegraph and target the player with perfect accuracy
 
 ## Adding custom modifiers
-To create a Challenge Mode addon, make a new mod project and add a reference to Challenge Mode. Create a new class that extends from the abstract Modifier class, which has the following methods:
+To create an addon, make a new mod project and add a reference to Challenge Mode. Create a new class that extends from the abstract Modifier class and has the following methods:
 
 - StartEffect: where you instantiate GOs, add hooks, etc.
 - StopEffect: where you destroy GOs, unhook, etc.
 - ToString: name, in the format of YourAddonName_YourModifierName
-- GetCodeBlacklist: a list of the internal names of modifiers that are fundamentally incompatible with this modifier (note: Challenge Mode modifiers are named in the format ChallengeMode_ModifierName)
-- GetBalanceBlacklist: a list of the internal names of modifiers that are too difficult/too easy when they appear with this modifier
+- GetCodeBlacklist: a list of the internal names of modifiers that are fundamentally incompatible with this modifier (ex: Soul Master and Nail Only)
+- GetBalanceBlacklist: a list of the internal names of modifiers that are too difficult/too easy when they appear with this modifier (ex: High Stress and A Fool's Errand)
 
-Your custom modifier must implement StartEffect, StopEffect, and ToString. After creating the modifier, go into the mod class and add the following line to Initialize:
+Your custom modifier must implement StartEffect, StopEffect, and ToString. (Note for GetCodeBlacklist/: Challenge Mode modifiers are named in the format ChallengeMode_ModifierName). After creating the modifier, go into the mod class and add the following line to Initialize:
 ```
 ChallengeMode.ChallengeMode.AddModifier<YourModifierHere>();
 ```

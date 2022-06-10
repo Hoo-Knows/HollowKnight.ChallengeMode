@@ -28,7 +28,6 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Nail Only",
 				"ChallengeMode_Soul Master"
 			};
 		}
@@ -37,7 +36,6 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Past Regrets",
 				"ChallengeMode_Speedrunner's Curse",
 				"ChallengeMode_Nailmaster"
 			};
