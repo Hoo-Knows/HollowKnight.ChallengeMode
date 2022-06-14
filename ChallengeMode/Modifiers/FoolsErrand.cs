@@ -122,7 +122,7 @@ namespace ChallengeMode.Modifiers
 
 				//Spawn cage
 				Vector3 spawnPos = new Vector3(HeroController.instance.transform.position.x, 
-					HeroController.instance.transform.position.y + 6f);
+					HeroController.instance.transform.position.y + 5f);
 				GameObject cage = Instantiate(enemies[index], spawnPos, Quaternion.identity);
 				PlayMakerFSM cageFSM = cage.LocateMyFSM("Spawn");
 				cage.SetActive(true);

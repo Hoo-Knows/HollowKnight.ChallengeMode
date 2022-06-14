@@ -98,8 +98,10 @@ namespace ChallengeMode
 			if(sceneName == "GG_Atrium" || sceneName == "GG_Atrium_Roof" || sceneName == "GG_Workshop") spaCount = 0;
 			//P1 section in P5
 			if(spaCount >= 0) numModifiers = Settings.numModifiers;
-			//P2 and P3 sections in P5
+			//P2 section in P5
 			if(spaCount >= 1) numModifiers += Settings.incModifiers;
+			//P3 section in P5
+			if(spaCount >= 3) numModifiers += Settings.incModifiers;
 			//P4 section in P5
 			if(spaCount >= 5) numModifiers += Settings.incModifiers;
 
