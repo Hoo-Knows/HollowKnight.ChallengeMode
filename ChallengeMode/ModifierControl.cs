@@ -41,7 +41,7 @@ namespace ChallengeMode
 			//Scene checks
 			if(ChallengeMode.Settings.everywhereOption && sceneBlacklist.Contains(currentScene)) return;
 			if(!ChallengeMode.Settings.everywhereOption && 
-				(currentScene.Substring(0, 2) != "GG" || GGSceneBlacklist.Contains(currentScene))) return;
+				(currentScene.ToUpper().Substring(0, 2) != "GG" || GGSceneBlacklist.Contains(currentScene))) return;
 
 			activeModifiers = new Modifier[numModifiers];
 			random = new Random();
@@ -85,8 +85,13 @@ namespace ChallengeMode
 				}
 				else i--;
 
+				//Scuffed way to prevent infinite loops
 				loops++;
-				if(loops > 1000) break;
+				if(loops > 200)
+				{
+					ChallengeMode.Instance.Log("Spent too long finding a modifier for " + currentScene + ", breaking");
+					break;
+				}
 			}
 
 			GameManager.instance.OnFinishedEnteringScene += OnFinishedEnteringScene;
@@ -98,7 +103,7 @@ namespace ChallengeMode
 
 			if(CheckValidModifier(modifier))
 			{
-				ChallengeMode.Instance.Log(modifier.ToString() + " is valid");
+				//ChallengeMode.Instance.Log(modifier.ToString() + " is valid");
 				return modifier;
 			}
 			ChallengeMode.Instance.Log(modifier.ToString() + " is not valid");
@@ -144,24 +149,23 @@ namespace ChallengeMode
 			if(active) yield break;
 			active = true;
 
-			ChallengeMode.Instance.Log("Starting modifiers for " + currentScene);
-			
+			//ChallengeMode.Instance.Log("Started modifiers for " + currentScene);
 			if(ChallengeMode.Settings.slowdownOption) Time.timeScale = 0.2f;
 
 			for(int i = 0; i < activeModifiers.Length; i++)
 			{
-				if(activeModifiers[i] == null) break;
+				if(activeModifiers[i] == null) continue;
 				
 				Modifier modifier = activeModifiers[i];
-				ChallengeMode.Instance.Log("Starting " + modifier.ToString().Substring(14));
-
 				try
 				{
+					//ChallengeMode.Instance.Log("Starting " + modifier.ToString().Split(new char[] { '_' })[1]);
 					modifier.StartEffect();
 				}
 				catch
 				{
-					ChallengeMode.Instance.Log("Failed to start " + modifier.ToString().Substring(14));
+					ChallengeMode.Instance.Log("Failed to start " + modifier.ToString().Split(new char[] { '_' })[1] + 
+						" for " + currentScene);
 				}
 			}
 			StartCoroutine(DisplayModifiers());
@@ -201,19 +205,19 @@ namespace ChallengeMode
 		{
 			if(activeModifiers != null)
 			{
-				ChallengeMode.Instance.Log("Stopping modifiers for " + currentScene);
 				foreach(Modifier modifier in activeModifiers)
 				{
 					if(modifier != null)
 					{
-						ChallengeMode.Instance.Log("Stopping " + modifier.ToString().Substring(14));
+						//ChallengeMode.Instance.Log("Stopping " + modifier.ToString().Split(new char[] { '_' })[1]);
 						try
 						{
 							modifier.StopEffect();
 						}
 						catch
 						{
-							ChallengeMode.Instance.Log("Failed to stop " + modifier.ToString().Substring(14));
+							ChallengeMode.Instance.Log("Failed to stop " + modifier.ToString().Split(new char[] { '_' })[1] + 
+								" for " + currentScene);
 						}
 					}
 				}

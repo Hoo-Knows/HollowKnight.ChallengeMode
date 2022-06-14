@@ -89,8 +89,6 @@ namespace ChallengeMode.Modifiers
 			yield return new WaitForSeconds(7.5f);
 			while(waveFlag)
 			{
-				Vector3 spawnPos = new Vector3(HeroController.instance.transform.position.x, spikes[0].transform.position.y + 6f);
-
 				//Spikes
 				if(allowSpikes)
 				{
@@ -108,7 +106,7 @@ namespace ChallengeMode.Modifiers
 
 				//Enemies
 				enemyFlag = true;
-				StartCoroutine(SpawnEnemies(spawnPos));
+				StartCoroutine(SpawnEnemies());
 				yield return new WaitWhile(() => enemyFlag);
 
 				yield return new WaitForSeconds(random.Next(15, 20));
@@ -116,13 +114,15 @@ namespace ChallengeMode.Modifiers
 			yield break;
 		}
 
-		private IEnumerator SpawnEnemies(Vector3 spawnPos)
+		private IEnumerator SpawnEnemies()
 		{
 			for(int i = 0; i < numEnemies + random.Next(0, 2); i++)
 			{
 				int index = random.Next(0, enemies.Count);
 
 				//Spawn cage
+				Vector3 spawnPos = new Vector3(HeroController.instance.transform.position.x, 
+					HeroController.instance.transform.position.y + 6f);
 				GameObject cage = Instantiate(enemies[index], spawnPos, Quaternion.identity);
 				PlayMakerFSM cageFSM = cage.LocateMyFSM("Spawn");
 				cage.SetActive(true);
@@ -140,6 +140,16 @@ namespace ChallengeMode.Modifiers
 					enemy = Instantiate(cageFSM.FsmVariables.FindFsmGameObject("Corpse to Instantiate").Value, spawnPos, Quaternion.identity);
 					cageFSM.RemoveAction("Spawn", 1);
 				}
+				//Scale hp to be balanced around low level nail
+				HealthManager hm = enemy.GetComponent<HealthManager>();
+				hm.hp *= PlayerData.instance.GetInt("nailDamage");
+				hm.hp /= 21;
+
+				//Prevent geo gain
+				hm.SetGeoLarge(0);
+				hm.SetGeoMedium(0);
+				hm.SetGeoSmall(0);
+
 				enemy.SetActive(false);
 
 				//Set enemy active when cage comes up
@@ -152,6 +162,7 @@ namespace ChallengeMode.Modifiers
 				cageFSM.SendEvent("SPAWN");
 				yield return new WaitWhile(() => enemy != null);
 				Destroy(enemy);
+				yield return new WaitForSeconds(0.5f);
 			}
 
 			//Increase number of enemies after one wave

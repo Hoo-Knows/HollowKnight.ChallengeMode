@@ -42,7 +42,7 @@ namespace ChallengeMode.Modifiers
 			grimmchildFSM.GetAction<DistanceFlySmooth>("Follow", 11).targetRadius = 6f;
 
 			//Make teleports less frequent
-			grimmchildFSM.GetAction<FloatCompare>("Follow", 17).float2 = 25f;
+			grimmchildFSM.GetAction<FloatCompare>("Follow", 17).float2 = 10f;
 
 			//Target player
 			grimmchildFSM.InsertMethod("Check For Target", () =>
@@ -72,7 +72,7 @@ namespace ChallengeMode.Modifiers
 				grimmballFSM = grimmballGO.LocateMyFSM("Control");
 				grimmballFSM.InsertMethod("Impact", () =>
 				{
-					grimmballGO.layer = (int)PhysLayers.CORPSE;
+					Destroy(grimmballGO.GetComponent<DamageHero>());
 				}, 0);
 			}, 10);
 		}

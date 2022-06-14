@@ -6,11 +6,11 @@ Each boss arena in Godhome now has randomly selected **modifiers** that make the
 - Number of modifiers: determines the number of modifiers active by default (1 to 5)
 - Increment modifiers: determines how much the number of modifiers is incremented after each section in a pantheon (0 to 2)
 - Guarantee modifier: guarantee that a modifier will appear
-- Use logic: whether or not to use logic to prevent easy or unfair modifier combinations (ex. High Stress with Unfriendly Fire and A Fool's Errand)
+- Use logic: whether or not to use logic to prevent easy or unfair modifier combinations (ex. High Stress with Unfriendly Fire and A Fool's Errand; this option may cause less modifiers to be selected if the number of modifiers is too high)
 - Use slowdown: whether or not to slow down the game when displaying modifiers
 - Allow High Stress: whether or not to allow High Stress
 - Allow non-unique modifiers: whether or not to allow regular modifiers on bosses that have unique modifiers
-- Allow modifiers everywhere: whether or not to allow modifiers in any room, even outside Godhome (note: this option has not been extensively tested)
+- Allow modifiers everywhere: whether or not to allow modifiers in any room, even outside Godhome
 - Reset settings: figure it out
 
 ### Dependencies
@@ -66,4 +66,9 @@ If the modifier is a unique modifier, use the following line instead:
 ```
 ChallengeMode.ChallengeMode.AddModifierU<YourModifierHere>("Name of the scene you want this modifier to appear in");
 ```
-Finally, build the project and launch Hollow Knight. The custom modifier should now be able to appear in game and be selectable in the mod menu under the "Guarantee modifier" option.
+Finally, build the project and launch Hollow Knight. The custom modifier should now be able to appear in game and also be selectable in the mod menu under the "Guarantee modifier" option.
+
+## Credits/Thanks
+- Chrome and Near-ring for modifier ideas
+- All playtesters
+- HK Modding Discord
