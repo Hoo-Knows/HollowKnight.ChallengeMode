@@ -67,6 +67,7 @@ namespace ChallengeMode.Modifiers
 				grimmballGO.AddComponent<DamageHero>();
 				grimmballGO.GetComponent<DamageHero>().damageDealt = 1;
 				grimmballGO.GetComponent<DamageHero>().hazardType = 1;
+				grimmballGO.GetComponent<Rigidbody2D>().gravityScale = 0f;
 
 				//Prevent grimmball from doing daamge after impact
 				grimmballFSM = grimmballGO.LocateMyFSM("Control");

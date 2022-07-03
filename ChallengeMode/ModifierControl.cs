@@ -145,6 +145,8 @@ namespace ChallengeMode
 
 		private IEnumerator StartModifiers()
 		{
+			displayed = false;
+
 			//Used to make sure modifiers don't activate twice
 			if(active) yield break;
 			active = true;
@@ -177,8 +179,6 @@ namespace ChallengeMode
 
 		private IEnumerator DisplayModifiers()
 		{
-			displayed = false;
-
 			//Reflection magic to award achievements
 			AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
 			AchievementHandler.AchievementAwarded aa =
