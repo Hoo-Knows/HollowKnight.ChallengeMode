@@ -47,7 +47,7 @@ namespace ChallengeMode
 			random = new Random();
 
 			int index = 0;
-			//Select modifiers
+			//Unique or guaranteed modifiers
 			if(ChallengeMode.scenesU.Contains(currentScene))
 			{
 				int i = ChallengeMode.scenesU.IndexOf(currentScene);
@@ -59,37 +59,21 @@ namespace ChallengeMode
 				activeModifiers[index] = ChallengeMode.modifiers[ChallengeMode.Settings.modifierValue];
 				index++;
 			}
-			//Keep track of loops, if it hits 1000 then force break to prevent infinite loop
+
+			//Select remaining modifiers
 			int loops = 0;
 			for(int i = index; i < numModifiers; i++)
 			{
 				Modifier modifier = SelectModifier();
 
-				if(modifier != null)
-				{
-					activeModifiers[i] = modifier;
-					//Frail Shell must appear before High Stress and Poor Memory
-					if(modifier.ToString() == "ChallengeMode_Frail Shell")
-					{
-						for(int j = 0; j < numModifiers; j++)
-						{
-							if(activeModifiers[j] != null &&
-								(activeModifiers[j].ToString() == "ChallengeMode_High Stress" ||
-								activeModifiers[j].ToString() == "ChallengeMode_Poor Memory"))
-							{
-								(activeModifiers[i], activeModifiers[j]) = (activeModifiers[j], activeModifiers[i]);
-								break;
-							}
-						}
-					}
-				}
+				if(modifier != null) activeModifiers[i] = modifier;
 				else i--;
 
 				//Scuffed way to prevent infinite loops
 				loops++;
-				if(loops > 200)
+				if(loops > 100)
 				{
-					ChallengeMode.Instance.Log("Spent too long finding a modifier for " + currentScene + ", breaking");
+					ChallengeMode.Instance.Log("Took too long to find modifiers, breaking");
 					break;
 				}
 			}
@@ -103,10 +87,9 @@ namespace ChallengeMode
 
 			if(CheckValidModifier(modifier))
 			{
-				//ChallengeMode.Instance.Log(modifier.ToString() + " is valid");
 				return modifier;
 			}
-			ChallengeMode.Instance.Log(modifier.ToString() + " is not valid");
+			ChallengeMode.Instance.Log(modifier.ToString() + " is not valid on " + currentScene);
 			return null;
 		}
 
@@ -118,6 +101,11 @@ namespace ChallengeMode
 			if(modifier.ToString() == "ChallengeMode_High Stress")
 			{
 				if(!ChallengeMode.Settings.highStressOption) return false;
+			}
+
+			if(modifier.ToString() == "ChallengeMode_Ascension")
+			{
+				if(currentScene == "GG_Watcher_Knights") return false;
 			}
 
 			foreach(Modifier m in activeModifiers)
@@ -134,7 +122,6 @@ namespace ChallengeMode
 						modifier.GetBalanceBlacklist().Contains(m.ToString()))) return false;
 				}
 			}
-			
 			return true;
 		}
 
@@ -151,7 +138,6 @@ namespace ChallengeMode
 			if(active) yield break;
 			active = true;
 
-			//ChallengeMode.Instance.Log("Started modifiers for " + currentScene);
 			if(ChallengeMode.Settings.slowdownOption) Time.timeScale = 0.2f;
 
 			for(int i = 0; i < activeModifiers.Length; i++)
@@ -161,7 +147,6 @@ namespace ChallengeMode
 				Modifier modifier = activeModifiers[i];
 				try
 				{
-					//ChallengeMode.Instance.Log("Starting " + modifier.ToString().Split(new char[] { '_' })[1]);
 					modifier.StartEffect();
 				}
 				catch
@@ -209,7 +194,6 @@ namespace ChallengeMode
 				{
 					if(modifier != null)
 					{
-						//ChallengeMode.Instance.Log("Stopping " + modifier.ToString().Split(new char[] { '_' })[1]);
 						try
 						{
 							modifier.StopEffect();

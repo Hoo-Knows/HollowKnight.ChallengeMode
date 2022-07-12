@@ -3,6 +3,7 @@ using SFCore.Utils;
 using Random = System.Random;
 using System.Collections;
 using HutongGames.PlayMaker.Actions;
+using System.Collections.Generic;
 
 namespace ChallengeMode.Modifiers
 {
@@ -11,7 +12,6 @@ namespace ChallengeMode.Modifiers
 		private GameObject battleCtrl;
 		private GameObject[] zotelings;
 		private PlayMakerFSM gpzFSM;
-		private PlayMakerFSM zotelingFSM;
 		private int numFat;
 
 		public override void StartEffect()
@@ -72,7 +72,7 @@ namespace ChallengeMode.Modifiers
 			Destroy(zoteling.GetComponent<ConstrainPosition>());
 
 			//Switch statement of doom
-			zotelingFSM = zoteling.LocateMyFSM("Control");
+			PlayMakerFSM zotelingFSM = zoteling.LocateMyFSM("Control");
 			switch(index)
 			{
 				case 0: //Regular Zoteling
@@ -108,7 +108,7 @@ namespace ChallengeMode.Modifiers
 					zotelingFSM.RemoveAction("Tumble Out", 2);
 					zotelingFSM.InsertMethod("Dr", () =>
 					{
-						if(zotelingFSM.transform.position.x < HeroController.instance.transform.position.x)
+						if(zotelingFSM.gameObject.transform.position.x < HeroController.instance.transform.position.x)
 						{
 							zotelingFSM.SendEvent("R");
 						}
@@ -155,6 +155,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_The Ephemeral Ordeal";
+		}
+
+		public override List<string> GetBalanceBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_A Fool's Errand"
+			};
 		}
 	}
 }

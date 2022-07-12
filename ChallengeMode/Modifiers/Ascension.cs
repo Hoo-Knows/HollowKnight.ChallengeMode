@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using GlobalEnums;
+﻿using System.Collections.Generic;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
 using UnityEngine;
@@ -13,23 +11,22 @@ namespace ChallengeMode.Modifiers
 		private PlayMakerFSM gorbMovementFSM;
 		private PlayMakerFSM gorbAttackFSM;
 		private PlayMakerFSM gorbDistanceAttackFSM;
-		private bool isAttacking;
 
 		public override void StartEffect()
 		{
 			gorbGO = Instantiate(ChallengeMode.Preloads["GG_Ghost_Gorb"]["Warrior/Ghost Warrior Slug"]);
 			gorbGO.transform.position = HeroController.instance.transform.position;
-			Destroy(gorbGO.GetComponent<DamageHero>());
-			Destroy(gorbGO.GetComponent<Collider2D>());
+			GameObject.Destroy(gorbGO.GetComponent<DamageHero>());
+			GameObject.Destroy(gorbGO.GetComponent<Collider2D>());
 			gorbGO.SetActive(true);
 
 			gorbMovementFSM = gorbGO.LocateMyFSM("Movement");
 			gorbAttackFSM = gorbGO.LocateMyFSM("Attacking");
 			gorbDistanceAttackFSM = gorbGO.LocateMyFSM("Distance Attack");
-			isAttacking = false;
 
 			//Make Gorb teleport out, wait, then teleport to player
 			gorbMovementFSM.GetAction<Wait>("Warp Out", 2).time = 6f;
+			gorbMovementFSM.RemoveAction("Return", 4);
 			gorbMovementFSM.RemoveAction("Return", 0);
 			gorbMovementFSM.InsertAction("Return", gorbMovementFSM.GetAction<SetPosition>("Warp", 1), 0);
 			gorbMovementFSM.InsertMethod("Return", () =>
@@ -37,53 +34,37 @@ namespace ChallengeMode.Modifiers
 				gorbMovementFSM.FsmVariables.FindFsmVector3("Warp Pos").Value = HeroController.instance.transform.position;
 			}, 0);
 
-			//Make Gorb warp or attack when idle and player can move
-			gorbMovementFSM.InsertMethod("Hover", () =>
-			{
-				if(!isAttacking)
-				{
-					gorbMovementFSM.SendEvent("RETURN");
-				}
-				else
-				{
-					StartCoroutine(GorbAttack());
-				}
-			}, 0);
-
-			//Set isAttacking after teleport
-			gorbMovementFSM.InsertMethod("Return", () =>
-			{
-				isAttacking = true;
-			}, 7);
-
-			//Make sure Gorb is visible when attacking
-			gorbAttackFSM.InsertAction("Antic", gorbMovementFSM.GetAction<SetMeshRenderer>("Return", 6), 1);
+			//Prevent movement FSM from leaving Return state
+			gorbMovementFSM.RemoveTransition("Return", "FINISHED");
 
 			//Reset isAttacking
-			gorbAttackFSM.InsertMethod("End", () =>
+			gorbAttackFSM.InsertMethod("Recover", () =>
 			{
-				isAttacking = false;
+				gorbMovementFSM.SendEvent("RETURN");
+			}, 0);
+
+			//Set attack timer
+			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMin.Value = 0.7f;
+			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMax.Value = 0.7f;
+
+			//Make attack FSM skip check for player
+			gorbAttackFSM.ChangeTransition("Wait", "FINISHED", "Antic");
+
+			//Wait until player has control
+			gorbAttackFSM.InsertMethod("Antic", () =>
+			{
+				if(HeroController.instance.controlReqlinquished)
+				{
+					gorbAttackFSM.SendEvent("ATTACK OK");
+				}
 			}, 0);
 
 			//Disable Gorb's distance attack
-			gorbDistanceAttackFSM.InsertMethod("Away", () =>
-			{
-				gorbDistanceAttackFSM.SendEvent("CLOSE");
-			}, 0);
-		}
-
-		private IEnumerator GorbAttack()
-		{
-			yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
-			yield return new WaitForSeconds(0.3f);
-			gorbAttackFSM.SetState("Antic");
-			yield break;
+			gorbDistanceAttackFSM.RemoveTransition("Init", "FINISHED");
 		}
 
 		public override void StopEffect()
 		{
-			StopAllCoroutines();
-
 			Destroy(gorbGO);
 		}
 

@@ -29,8 +29,7 @@ namespace ChallengeMode.Modifiers
 			warping = false;
 
 			//Remove audio
-			shadeGO.LocateMyFSM("Play Audio").RemoveState("Pause");
-			shadeGO.LocateMyFSM("Play Audio").RemoveState("Fade Up");
+			shadeGO.LocateMyFSM("Play Audio").RemoveTransition("Pause", "FINISHED");
 
 			//Remove dreamnail cheese
 			shadeGO.LocateMyFSM("Dreamnail Kill").RemoveTransition("Idle", "DREAM IMPACT");
@@ -53,16 +52,16 @@ namespace ChallengeMode.Modifiers
 			shadeFSM.RemoveAction("Friendly?", 2);
 
 			//Decrease frequency of random attacks and make them slashes with a delay
-			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMin = 6f;
-			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMax = 8f;
+			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMin = 5f;
+			shadeFSM.GetAction<WaitRandom>("Fly", 5).timeMax = 5f;
 			shadeFSM.InsertMethod("Quake?", () =>
 			{
 				shadeFSM.SetState("Slash Antic");
 			}, 0);
 
 			//Decrease flight speed
-			shadeFSM.GetAction<ChaseObject>("Fly", 4).speedMax = 2f;
-			shadeFSM.GetAction<ChaseObjectV2>("Fly", 6).speedMax = 2f;
+			shadeFSM.GetAction<ChaseObject>("Fly", 4).speedMax = 1.5f;
+			shadeFSM.GetAction<ChaseObjectV2>("Fly", 6).speedMax = 1.5f;
 
 			//Teleport to different location depending on spell
 			shadeFSM.InsertMethod("Retreat Start", () =>
@@ -74,16 +73,17 @@ namespace ChallengeMode.Modifiers
 				Vector3 position = HeroController.instance.transform.position;
 				if(usingFireball)
 				{
-					if(HeroController.instance.cState.facingRight) position += 3 * Vector3.left;
-					else position += 2 * Vector3.right;
+					if(HeroController.instance.cState.facingRight) position += 3f * Vector3.left;
+					else position += 2f * Vector3.right;
+					position += Vector3.down;
 				}
 				else if(usingQuake)
 				{
-					position += 2 * Vector3.up;
+					position += 6f * Vector3.up;
 				}
 				else if(usingScream)
 				{
-					position += 3 * Vector3.down;
+					position += 4f * Vector3.down;
 				}
 				shadeFSM.FsmVariables.FindFsmVector3("Start Pos").Value = position;
 			}, 1);
@@ -96,11 +96,11 @@ namespace ChallengeMode.Modifiers
 			shadeFSM.InsertAction("Cast Antic", shadeFSM.GetAction<FaceObject>("Fireball Pos", 3), 0);
 
 			//Increase warp speed
-			shadeFSM.GetAction<iTweenMoveTo>("Retreat", 2).time = 0.15f;
+			shadeFSM.GetAction<iTweenMoveTo>("Retreat", 2).time = 0.1f;
 
 			//Increase attack speed
 			shadeFSM.GetAction<Wait>("Cast Antic", 8).time = 0.1f;
-			shadeFSM.GetAction<Wait>("Quake Antic", 7).time = 0.4f;
+			shadeFSM.GetAction<Wait>("Quake Antic", 7).time = 0.45f;
 			shadeFSM.GetAction<Wait>("Scream Antic", 6).time = 0.1f;
 
 			//Reset variables after using a spell
@@ -121,16 +121,19 @@ namespace ChallengeMode.Modifiers
 			spellFSM = HeroController.instance.spellControl;
 			spellFSM.InsertMethod("Wallside?", () =>
 			{
+				if(usingFireball || usingQuake || usingScream) return;
 				usingFireball = true;
 				StartCoroutine(SpellControl());
 			}, 0);
 			spellFSM.InsertMethod("On Ground?", () =>
 			{
+				if(usingFireball || usingQuake || usingScream) return;
 				usingQuake = true;
 				StartCoroutine(SpellControl());
 			}, 0);
 			spellFSM.InsertMethod("Scream Get?", () =>
 			{
+				if(usingFireball || usingQuake || usingScream) return;
 				usingScream = true;
 				StartCoroutine(SpellControl());
 			}, 0);

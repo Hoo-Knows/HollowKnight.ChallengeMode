@@ -11,8 +11,6 @@ namespace ChallengeMode.Modifiers
 		private PlayMakerFSM spawnFSM;
 		private GameObject grimmchildGO;
 		private PlayMakerFSM grimmchildFSM;
-		private GameObject grimmballGO;
-		private PlayMakerFSM grimmballFSM;
 
 		public override void StartEffect()
 		{
@@ -23,10 +21,7 @@ namespace ChallengeMode.Modifiers
 			grimmchildFSM = grimmchildGO.LocateMyFSM("Control");
 
 			//Set level to 4
-			grimmchildFSM.SendEvent("4");
-
-			//Set damage to 0
-			grimmchildFSM.GetAction<SetIntValue>("Level 4", 0).intValue = 0;
+			grimmchildFSM.SetState("4");
 
 			//Increase time between attacks
 			grimmchildFSM.GetAction<FloatSubtract>("Follow", 0).subtract = 0.4f;
@@ -62,25 +57,21 @@ namespace ChallengeMode.Modifiers
 			//Make grimmball do damage
 			grimmchildFSM.InsertMethod("Shoot", () =>
 			{
-				grimmballGO = grimmchildFSM.FsmVariables.FindFsmGameObject("Flameball").Value;
+				GameObject grimmballGO = grimmchildFSM.FsmVariables.FindFsmGameObject("Flameball").Value;
 				grimmballGO.layer = (int)PhysLayers.ENEMY_ATTACK;
 				grimmballGO.AddComponent<DamageHero>();
 				grimmballGO.GetComponent<DamageHero>().damageDealt = 1;
 				grimmballGO.GetComponent<DamageHero>().hazardType = 1;
 				grimmballGO.GetComponent<Rigidbody2D>().gravityScale = 0f;
 
-				//Prevent grimmball from doing daamge after impact
-				grimmballFSM = grimmballGO.LocateMyFSM("Control");
-				grimmballFSM.InsertMethod("Impact", () =>
-				{
-					Destroy(grimmballGO.GetComponent<DamageHero>());
-				}, 0);
+				//Prevent grimmball from doing damage after impact
+				PlayMakerFSM grimmballFSM = grimmballGO.LocateMyFSM("Control");
+				grimmballFSM.InsertAction("Impact", grimmballFSM.GetAction<SetCircleCollider>("Shrink", 3), 0);
 			}, 10);
 		}
 
 		public override void StopEffect()
 		{
-			Destroy(grimmballGO);
 			Destroy(grimmchildGO);
 		}
 

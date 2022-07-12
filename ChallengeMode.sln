@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31515.178
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChallengeMode", "ChallengeMode\ChallengeMode.csproj", "{BB614E90-CC24-4763-9AA5-655CBC0EC5B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChallengeMode", "ChallengeMode\ChallengeMode.csproj", "{854FF706-1B75-4FD4-8DAB-A5FCB33C5F94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BB614E90-CC24-4763-9AA5-655CBC0EC5B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB614E90-CC24-4763-9AA5-655CBC0EC5B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB614E90-CC24-4763-9AA5-655CBC0EC5B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB614E90-CC24-4763-9AA5-655CBC0EC5B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{854FF706-1B75-4FD4-8DAB-A5FCB33C5F94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{854FF706-1B75-4FD4-8DAB-A5FCB33C5F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{854FF706-1B75-4FD4-8DAB-A5FCB33C5F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{854FF706-1B75-4FD4-8DAB-A5FCB33C5F94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C509D797-C7EF-42D4-A4CE-F937354EA9DD}
+		SolutionGuid = {EA50DC29-B70C-4DE5-A0E6-2C8AC60DDB35}
 	EndGlobalSection
 EndGlobal

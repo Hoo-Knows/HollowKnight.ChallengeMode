@@ -27,33 +27,33 @@ namespace ChallengeMode.Modifiers
 				{
 					activeModifier = ChallengeMode.modifierControl.SelectModifier();
 					loops++;
-					if(loops > 1000) break;
+					if(loops > 100) break;
 				}
-				if(loops > 1000) break;
+				if(loops > 100) break;
 
 				AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
 				AchievementHandler.AchievementAwarded aa =
 					ReflectionHelper.GetField<AchievementHandler, AchievementHandler.AchievementAwarded>(ah, "AwardAchievementEvent");
 				aa.Invoke(activeModifier.ToString());
 
-				ChallengeMode.Instance.Log("Starting " + activeModifier.ToString().Substring(14));
 				try
 				{
 					activeModifier.StartEffect();
 				}
 				catch
 				{
-					ChallengeMode.Instance.Log("Failed to start " + activeModifier.ToString().Substring(14));
+					ChallengeMode.Instance.Log("Chaos, Chaos - Failed to start " + activeModifier.ToString().
+						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
 				}
 				yield return new WaitForSeconds(15f);
 				try
 				{
-					ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
 					activeModifier.StopEffect();
 				}
 				catch
 				{
-					ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
+					ChallengeMode.Instance.Log("Chaos, Chaos - Failed to stop " + activeModifier.ToString().
+						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
 				}
 			}
 			yield break;
@@ -66,12 +66,12 @@ namespace ChallengeMode.Modifiers
 			flag = false;
 			try
 			{
-				ChallengeMode.Instance.Log("Stopping " + activeModifier.ToString().Substring(14));
 				activeModifier.StopEffect();
 			}
 			catch
 			{
-				ChallengeMode.Instance.Log("Failed to stop " + activeModifier.ToString().Substring(14));
+				ChallengeMode.Instance.Log("Chaos, Chaos - Failed to stop " + activeModifier.ToString().
+						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
 			}
 		}
 

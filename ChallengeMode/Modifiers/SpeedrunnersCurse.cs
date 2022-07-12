@@ -8,7 +8,6 @@ namespace ChallengeMode.Modifiers
 	{
 		private bool sbodyAlreadyEquipped;
 		private bool thornsNotAlreadyEquipped;
-		private PlayMakerFSM spellFSM;
 
 		public override void StartEffect()
 		{
@@ -29,8 +28,7 @@ namespace ChallengeMode.Modifiers
 			CharmUpdate();
 
 			//Take hazard damage when using DDark
-			spellFSM = HeroController.instance.spellControl;
-			spellFSM.InsertMethod("Level Check 2", () =>
+			HeroController.instance.spellControl.InsertMethod("Level Check 2", () =>
 			{
 				HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.other, 1, 2);
 			}, 0);
@@ -48,9 +46,14 @@ namespace ChallengeMode.Modifiers
 				PlayerData.instance.SetBool("equippedCharm_12", false);
 				GameManager.instance.UnequipCharm(12);
 			}
+
+			ChallengeMode.Instance.Log("Speedrunner's Curse - before CharmUpdate " + GameManager.instance.sceneName);
 			CharmUpdate();
 
-			spellFSM.RemoveAction("Level Check 2", 0);
+			ChallengeMode.Instance.Log("Speedrunner's Curse - before FSM edit " + GameManager.instance.sceneName);
+			HeroController.instance.spellControl.RemoveAction("Level Check 2", 0);
+
+			ChallengeMode.Instance.Log("Speedrunner's Curse - end of StopEffect " + GameManager.instance.sceneName);
 		}
 
 		private void CharmUpdate()
@@ -93,6 +96,7 @@ namespace ChallengeMode.Modifiers
 			}
 
 			GameManager.instance.RefreshOvercharm();
+			ChallengeMode.Instance.Log("Speedrunner's Curse - before Charm Equip Check broadcast " + GameManager.instance.sceneName);
 			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
 		}
 

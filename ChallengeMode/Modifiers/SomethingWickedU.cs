@@ -3,6 +3,7 @@ using SFCore.Utils;
 using HutongGames.PlayMaker.Actions;
 using System.Collections;
 using Random = System.Random;
+using System.Collections.Generic;
 
 namespace ChallengeMode.Modifiers
 {
@@ -118,6 +119,14 @@ namespace ChallengeMode.Modifiers
 		public override string ToString()
 		{
 			return "ChallengeMode_Something Wicked";
+		}
+
+		public override List<string> GetBalanceBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_A Fool's Errand"
+			};
 		}
 	}
 }

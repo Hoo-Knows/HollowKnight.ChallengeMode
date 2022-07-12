@@ -115,14 +115,18 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator EyeBeams(GameObject beams, int num)
 		{
-			for(int i = 0; i < 200; i++)
+			for(int i = 0; i < 150; i++)
 			{
+				if(beams == null) break;
 				beams.transform.Rotate(0f, 0f, beamsRotation * (num % 2 == 0 ? 1f : -1f), Space.Self);
 				yield return new WaitForSeconds(0.01f);
 			}
-			foreach(PlayMakerFSM fsm in beams.GetComponentsInChildren<PlayMakerFSM>())
+			if(beams != null)
 			{
-				fsm.SetState("End");
+				foreach(PlayMakerFSM fsm in beams.GetComponentsInChildren<PlayMakerFSM>())
+				{
+					fsm.SetState("End");
+				}
 			}
 			yield break;
 		}
@@ -176,7 +180,7 @@ namespace ChallengeMode.Modifiers
 		{
 			//FSM located in sharedassets407.assets
 			yield return new WaitForSeconds(0.2f);
-			audioSource.PlayOneShot(swordsClip);
+			if(audioSource != null) audioSource.PlayOneShot(swordsClip);
 			yield return new WaitForSeconds(0.3f);
 
 			//Change sword speed and curve
@@ -283,7 +287,8 @@ namespace ChallengeMode.Modifiers
 			return new List<string>()
 			{
 				"ChallengeMode_Nail Only",
-				"ChallengeMode_Speedrunner's Curse"
+				"ChallengeMode_Speedrunner's Curse",
+				"ChallengeMode_A Fool's Errand"
 			};
 		}
 	}

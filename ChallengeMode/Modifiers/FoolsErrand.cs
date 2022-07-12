@@ -86,7 +86,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator WaveControl()
 		{
-			yield return new WaitForSeconds(7.5f);
+			yield return new WaitForSeconds(10f);
 			while(waveFlag)
 			{
 				//Spikes
@@ -95,7 +95,9 @@ namespace ChallengeMode.Modifiers
 					yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
 					PlayMakerFSM.BroadcastEvent("EXPAND");
 					audioSource.PlayOneShot(audioSpikeAntic);
-					yield return new WaitForSeconds(2f);
+					yield return new WaitForSeconds(1f);
+					yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
+					yield return new WaitForSeconds(1f);
 					audioSource.PlayOneShot(audioSpikeExpand);
 					yield return new WaitForSeconds(5f);
 					PlayMakerFSM.BroadcastEvent("RETRACT");
@@ -120,9 +122,11 @@ namespace ChallengeMode.Modifiers
 			{
 				int index = random.Next(0, enemies.Count);
 
+				//Set position
+				Vector3 spawnPos = HeroController.instance.transform.position;
+				if(index == 0 || index == 1 || index == 5) spawnPos += Vector3.up * 5f;
+
 				//Spawn cage
-				Vector3 spawnPos = new Vector3(HeroController.instance.transform.position.x, 
-					HeroController.instance.transform.position.y + 5f);
 				GameObject cage = Instantiate(enemies[index], spawnPos, Quaternion.identity);
 				PlayMakerFSM cageFSM = cage.LocateMyFSM("Spawn");
 				cage.SetActive(true);
@@ -140,6 +144,7 @@ namespace ChallengeMode.Modifiers
 					enemy = Instantiate(cageFSM.FsmVariables.FindFsmGameObject("Corpse to Instantiate").Value, spawnPos, Quaternion.identity);
 					cageFSM.RemoveAction("Spawn", 1);
 				}
+
 				//Scale hp to be balanced around low level nail
 				HealthManager hm = enemy.GetComponent<HealthManager>();
 				hm.hp *= PlayerData.instance.GetInt("nailDamage");
@@ -159,6 +164,7 @@ namespace ChallengeMode.Modifiers
 				}, 0);
 
 				//Start cage
+				yield return new WaitWhile(() => HeroController.instance.controlReqlinquished);
 				cageFSM.SendEvent("SPAWN");
 				yield return new WaitWhile(() => enemy != null);
 				Destroy(enemy);
@@ -195,10 +201,14 @@ namespace ChallengeMode.Modifiers
 			{
 				"ChallengeMode_High Stress",
 				"ChallengeMode_Ascension",
-				"ChallengeMode_Nailmaster",
 				"ChallengeMode_Past Regrets",
 				"ChallengeMode_Unfriendly Fire",
-				"ChallengeMode_Temporal Distortion"
+				"ChallengeMode_Temporal Distortion",
+				"ChallengeMode_Nailmaster",
+				"ChallengeMode_The Ephemeral Ordeal",
+				"ChallengeMode_Something Wicked",
+				"ChallengeMode_Pale Watch",
+				"ChallengeMode_Forgotten Light"
 			};
 		}
 	}
