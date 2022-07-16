@@ -18,8 +18,7 @@ namespace ChallengeMode.Modifiers
 
 		private int TakeHealthHook(int damage)
 		{
-			customTimeScale += 0.02f;
-			if(customTimeScale > 1.2f) customTimeScale = 1.2f;
+			customTimeScale = Mathf.Min(customTimeScale + 0.015f, 1.15f);
 			return damage;
 		}
 
@@ -50,7 +49,7 @@ namespace ChallengeMode.Modifiers
 
 		private void SetTimeScale(float newTimeScale)
 		{
-			Time.timeScale = ((newTimeScale <= 0.01f) ? 0f : newTimeScale) * newTimeScale;
+			Time.timeScale = newTimeScale <= 0.01f ? 0f : newTimeScale;
 		}
 
 		public override void StopEffect()

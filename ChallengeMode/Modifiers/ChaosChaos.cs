@@ -7,33 +7,52 @@ namespace ChallengeMode.Modifiers
 	class ChaosChaos : Modifier
 	{
 		private Modifier activeModifier;
+		private AchievementHandler.AchievementAwarded aa;
 		private bool flag;
 
 		public override void StartEffect()
 		{
+			AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
+			aa = ReflectionHelper.GetField<AchievementHandler, AchievementHandler.AchievementAwarded>(ah, "AwardAchievementEvent");
+
 			flag = true;
 			StartCoroutine(BeginChaos());
 		}
 
 		private IEnumerator BeginChaos()
 		{
+			//Activate first modifier instantly, but wait until later to display
+			SetActiveModifier();
+			try
+			{
+				activeModifier.StartEffect();
+			}
+			catch
+			{
+				ChallengeMode.Instance.Log("Chaos, Chaos - Failed to start " + activeModifier.ToString().
+					Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
+			}
 			yield return new WaitUntil(() => ChallengeMode.modifierControl.displayed);
 			yield return new WaitForSeconds(3f);
+			aa.Invoke(activeModifier.ToString());
+
+			//Modifiers after first one work like normal
 			while(flag)
 			{
-				activeModifier = null;
-				int loops = 0;
-				while(activeModifier == null)
+				yield return new WaitForSeconds(15f);
+				try
 				{
-					activeModifier = ChallengeMode.modifierControl.SelectModifier();
-					loops++;
-					if(loops > 100) break;
+					activeModifier.StopEffect();
 				}
-				if(loops > 100) break;
+				catch
+				{
+					ChallengeMode.Instance.Log("Chaos, Chaos - Failed to stop " + activeModifier.ToString().
+						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
+				}
 
-				AchievementHandler ah = GameManager.instance.GetComponent<AchievementHandler>();
-				AchievementHandler.AchievementAwarded aa =
-					ReflectionHelper.GetField<AchievementHandler, AchievementHandler.AchievementAwarded>(ah, "AwardAchievementEvent");
+				SetActiveModifier();
+				if(activeModifier == null) break;
+
 				aa.Invoke(activeModifier.ToString());
 
 				try
@@ -45,25 +64,27 @@ namespace ChallengeMode.Modifiers
 					ChallengeMode.Instance.Log("Chaos, Chaos - Failed to start " + activeModifier.ToString().
 						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
 				}
-				yield return new WaitForSeconds(15f);
-				try
-				{
-					activeModifier.StopEffect();
-				}
-				catch
-				{
-					ChallengeMode.Instance.Log("Chaos, Chaos - Failed to stop " + activeModifier.ToString().
-						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
-				}
 			}
 			yield break;
 		}
 
+		private void SetActiveModifier()
+		{
+			activeModifier = null;
+			int loops = 0;
+			while(activeModifier == null)
+			{
+				activeModifier = ChallengeMode.modifierControl.SelectModifier();
+				loops++;
+				if(loops > 100) break;
+			}
+		}
+
 		public override void StopEffect()
 		{
+			flag = false;
 			StopAllCoroutines();
 
-			flag = false;
 			try
 			{
 				activeModifier.StopEffect();

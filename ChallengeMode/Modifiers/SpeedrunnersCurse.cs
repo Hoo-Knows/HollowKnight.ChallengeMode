@@ -6,26 +6,26 @@ namespace ChallengeMode.Modifiers
 {
 	class SpeedrunnersCurse : Modifier
 	{
-		private bool sbodyAlreadyEquipped;
-		private bool thornsNotAlreadyEquipped;
+		private List<int> charms;
 
 		public override void StartEffect()
 		{
-			//Unequip SBody, equip Thorns of Agony
-			sbodyAlreadyEquipped = PlayerData.instance.GetBool("equippedCharm_14");
-			thornsNotAlreadyEquipped = !PlayerData.instance.GetBool("equippedCharm_12");
+			//Store current charms and unequip them
+			charms = new List<int>(PlayerData.instance.GetVariable<List<int>>(nameof(PlayerData.equippedCharms)).ToArray());
 
-			if(sbodyAlreadyEquipped)
-			{
-				PlayerData.instance.SetBool("equippedCharm_14", false);
-				GameManager.instance.UnequipCharm(14);
-			}
-			if(thornsNotAlreadyEquipped)
-			{
-				PlayerData.instance.SetBool("equippedCharm_12", true);
-				GameManager.instance.EquipCharm(12);
-			}
+			PlayerData.instance.SetBool(nameof(PlayerData.equippedCharm_12), true);
+			PlayerData.instance.SetBool(nameof(PlayerData.equippedCharm_14), false);
+			PlayerData.instance.SetBool(nameof(PlayerData.equippedCharm_32), false);
+
+			if(!charms.Contains(12)) GameManager.instance.EquipCharm(12);
+			if(charms.Contains(14)) GameManager.instance.UnequipCharm(14);
+			if(charms.Contains(32)) GameManager.instance.UnequipCharm(32);
+
+			PlayerData.instance.CalculateNotchesUsed();
+			GameManager.instance.RefreshOvercharm();
+
 			CharmUpdate();
+			PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK");
 
 			//Take hazard damage when using DDark
 			HeroController.instance.spellControl.InsertMethod("Level Check 2", () =>
@@ -36,19 +36,27 @@ namespace ChallengeMode.Modifiers
 
 		public override void StopEffect()
 		{
-			if(sbodyAlreadyEquipped)
+			PlayerData.instance.GetVariable<List<int>>(nameof(PlayerData.equippedCharms)).Clear();
+
+			for(int num = 1; num <= 40; num++)
 			{
-				PlayerData.instance.SetBool("equippedCharm_14", true);
-				GameManager.instance.EquipCharm(14);
+				PlayerData.instance.SetBool("equippedCharm_" + num, false);
 			}
-			if(thornsNotAlreadyEquipped)
+			foreach(int num in charms)
 			{
-				PlayerData.instance.SetBool("equippedCharm_12", false);
-				GameManager.instance.UnequipCharm(12);
+				GameManager.instance.EquipCharm(num);
+				PlayerData.instance.SetBool("equippedCharm_" + num, true);
 			}
+
+			PlayerData.instance.CalculateNotchesUsed();
+			GameManager.instance.RefreshOvercharm();
 
 			ChallengeMode.Instance.Log("Speedrunner's Curse - before CharmUpdate " + GameManager.instance.sceneName);
 			CharmUpdate();
+			ChallengeMode.Instance.Log("Speedrunner's Curse - before Charm Equip Check broadcast " + GameManager.instance.sceneName);
+			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
+			ChallengeMode.Instance.Log("Speedrunner's Curse - before Charm Indicator Check broadcast " + GameManager.instance.sceneName);
+			PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK");
 
 			ChallengeMode.Instance.Log("Speedrunner's Curse - before FSM edit " + GameManager.instance.sceneName);
 			HeroController.instance.spellControl.RemoveAction("Level Check 2", 0);
@@ -78,7 +86,7 @@ namespace ChallengeMode.Modifiers
 			}
 			if(hc.playerData.GetBool("equippedCharm_27"))
 			{
-				hc.playerData.SetInt("joniHealthBlue", (int)((float)hc.playerData.GetInt("maxHealth") * 1.4f));
+				hc.playerData.SetInt("joniHealthBlue", (int)(hc.playerData.GetInt("maxHealth") * 1.4f));
 				hc.playerData.SetInt("maxHealth", 1);
 				ReflectionHelper.SetField(hc, "joniBeam", true);
 			}
@@ -94,10 +102,6 @@ namespace ChallengeMode.Modifiers
 			{
 				hc.carefreeShieldEquipped = false;
 			}
-
-			GameManager.instance.RefreshOvercharm();
-			ChallengeMode.Instance.Log("Speedrunner's Curse - before Charm Equip Check broadcast " + GameManager.instance.sceneName);
-			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
 		}
 
 		public override string ToString()
@@ -105,13 +109,21 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_Speedrunner's Curse";
 		}
 
+		public override List<string> GetCodeBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Salubra's Curse"
+			};
+		}
+
 		public override List<string> GetBalanceBlacklist()
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_Salubra's Curse",
 				"ChallengeMode_Nail Only",
-				"ChallengeMode_Nailmaster"
+				"ChallengeMode_Nailmaster",
+				"ChallengeMode_Ascension"
 			};
 		}
 	}

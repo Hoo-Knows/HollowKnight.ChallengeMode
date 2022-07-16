@@ -309,13 +309,5 @@ namespace ChallengeMode
 			}
 			return MenuRef.GetMenuScreen(modListMenu);
 		}
-
-		public void Unload()
-		{
-			if(modifierControl != null) modifierControl.Unload();
-
-			ModHooks.BeforeSceneLoadHook -= BeforeSceneLoadHook;
-			ModHooks.LanguageGetHook -= LanguageGetHook;
-		}
 	}
 }

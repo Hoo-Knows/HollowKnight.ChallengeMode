@@ -115,7 +115,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator EyeBeams(GameObject beams, int num)
 		{
-			for(int i = 0; i < 150; i++)
+			for(int i = 0; i < 190; i++)
 			{
 				if(beams == null) break;
 				beams.transform.Rotate(0f, 0f, beamsRotation * (num % 2 == 0 ? 1f : -1f), Space.Self);
@@ -211,7 +211,7 @@ namespace ChallengeMode.Modifiers
 					swordWall = absradAttackFSM.FsmVariables.FindFsmGameObject("Attack Obj").Value;
 					//FSM located in sharedassets407.assets
 					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).easeType = iTween.EaseType.easeInOutQuad;
-					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).speed = 16f;
+					swordWall.LocateMyFSM("Control").GetAction<iTweenMoveBy>("Tween", 0).speed = 14f;
 				}, 3);
 			}
 		}
@@ -271,8 +271,8 @@ namespace ChallengeMode.Modifiers
 			absradAttackFSM.GetAction<RandomFloat>("Aim", 4).max = 0f;
 
 			//Decrease fire delay
-			absradAttackFSM.GetAction<SendEventByName>("Aim", 9).delay = 0.25f;
-			absradAttackFSM.GetAction<AudioPlayerOneShotSingle>("Aim", 3).delay = 0.25f;
+			absradAttackFSM.GetAction<SendEventByName>("Aim", 9).delay = 0.3f;
+			absradAttackFSM.GetAction<AudioPlayerOneShotSingle>("Aim", 3).delay = 0.3f;
 		}
 
 		public override void StopEffect() { }

@@ -44,8 +44,8 @@ namespace ChallengeMode.Modifiers
 			}, 0);
 
 			//Set attack timer
-			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMin.Value = 0.7f;
-			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMax.Value = 0.7f;
+			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMin.Value = 0.5f;
+			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMax.Value = 0.5f;
 
 			//Make attack FSM skip check for player
 			gorbAttackFSM.ChangeTransition("Wait", "FINISHED", "Antic");
@@ -80,7 +80,9 @@ namespace ChallengeMode.Modifiers
 				"ChallengeMode_High Stress",
 				"ChallengeMode_A Fool's Errand",
 				"ChallengeMode_Past Regrets",
-				"ChallengeMode_Unfriendly Fire"
+				"ChallengeMode_Unfriendly Fire",
+				"ChallengeMode_Salubra's Curse",
+				"ChallengeMode_Speedrunner's Curse"
 			};
 		}
 	}

@@ -34,8 +34,6 @@ namespace ChallengeMode
 
 		public void Initialize(int numModifiers, string currentScene)
 		{
-			Unload();
-			
 			this.currentScene = currentScene;
 
 			//Scene checks
@@ -54,7 +52,7 @@ namespace ChallengeMode
 				activeModifiers[index] = ChallengeMode.modifiersU[i];
 				index++;
 			}
-			if(ChallengeMode.Settings.modifierOption)
+			if(ChallengeMode.Settings.modifierOption && index < activeModifiers.Length)
 			{
 				activeModifiers[index] = ChallengeMode.modifiers[ChallengeMode.Settings.modifierValue];
 				index++;
@@ -79,6 +77,7 @@ namespace ChallengeMode
 			}
 
 			GameManager.instance.OnFinishedEnteringScene += OnFinishedEnteringScene;
+			On.BossSceneController.EndBossScene += EndBossScene;
 		}
 
 		public Modifier SelectModifier()
@@ -210,12 +209,14 @@ namespace ChallengeMode
 			active = false;
 		}
 
-		public void Unload()
+		private void EndBossScene(On.BossSceneController.orig_EndBossScene orig, BossSceneController self)
 		{
-			StopModifiers();
+			orig(self);
 
 			GameManager.instance.OnFinishedEnteringScene -= OnFinishedEnteringScene;
+			StopModifiers();
 			StopAllCoroutines();
+			On.BossSceneController.EndBossScene -= EndBossScene;
 		}
 	}
 }

@@ -5,37 +5,46 @@ namespace ChallengeMode.Modifiers
 {
 	class SalubrasCurse : Modifier
 	{
-		private List<int> charms;
+		private int[] charms;
 
 		public override void StartEffect()
 		{
 			//Store current charms and unequip them
-			charms = new List<int>();
-			for(int i = 1; i < 41; i++)
+			charms = PlayerData.instance.GetVariable<List<int>>(nameof(PlayerData.equippedCharms)).ToArray();
+
+			foreach(int num in charms)
 			{
-				if(PlayerData.instance.GetBool("equippedCharm_" + i))
-				{
-					charms.Add(i);
-				}
-				PlayerData.instance.SetBool("equippedCharm_" + i, false);
-				GameManager.instance.UnequipCharm(i);
+				GameManager.instance.UnequipCharm(num);
+				PlayerData.instance.SetBool("equippedCharm_" + num, false);
 			}
+
+			//Extra stuff to make sure
+			PlayerData.instance.CalculateNotchesUsed();
+			GameManager.instance.RefreshOvercharm();
+
 			CharmUpdate();
+			PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK");
 		}
 
 		public override void StopEffect()
 		{
-			foreach(int i in charms)
+			foreach(int num in charms)
 			{
-				PlayerData.instance.SetBool("equippedCharm_" + i, true);
-				GameManager.instance.EquipCharm(i);
+				GameManager.instance.EquipCharm(num);
+				PlayerData.instance.SetBool("equippedCharm_" + num, true);
 			}
+
+			PlayerData.instance.CalculateNotchesUsed();
+			GameManager.instance.RefreshOvercharm();
+
 			CharmUpdate();
+			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
+			PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK");
 		}
 
 		private void CharmUpdate()
 		{
-			//Custom charm update method to prevent healing
+			//Custom charm update method to prevent healing the player
 			HeroController hc = HeroController.instance;
 			if(hc.playerData.GetBool("equippedCharm_26"))
 			{
@@ -55,7 +64,7 @@ namespace ChallengeMode.Modifiers
 			}
 			if(hc.playerData.GetBool("equippedCharm_27"))
 			{
-				hc.playerData.SetInt("joniHealthBlue", (int)((float)hc.playerData.GetInt("maxHealth") * 1.4f));
+				hc.playerData.SetInt("joniHealthBlue", (int)(hc.playerData.GetInt("maxHealth") * 1.4f));
 				hc.playerData.SetInt("maxHealth", 1);
 				ReflectionHelper.SetField(hc, "joniBeam", true);
 			}
@@ -71,9 +80,6 @@ namespace ChallengeMode.Modifiers
 			{
 				hc.carefreeShieldEquipped = false;
 			}
-
-			GameManager.instance.RefreshOvercharm();
-			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
 		}
 
 		public override string ToString()
@@ -81,12 +87,20 @@ namespace ChallengeMode.Modifiers
 			return "ChallengeMode_Salubra's Curse";
 		}
 
-		public override List<string> GetBalanceBlacklist()
+		public override List<string> GetCodeBlacklist()
 		{
 			return new List<string>()
 			{
 				"ChallengeMode_Speedrunner's Curse",
-				"ChallengeMode_Unfriendly Fire"
+			};
+		}
+
+		public override List<string> GetBalanceBlacklist()
+		{
+			return new List<string>()
+			{
+				"ChallengeMode_Unfriendly Fire",
+				"ChallengeMode_Ascension"
 			};
 		}
 	}

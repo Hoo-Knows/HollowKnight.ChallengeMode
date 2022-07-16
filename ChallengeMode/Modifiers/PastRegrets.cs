@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
 using UnityEngine;
+using Modding;
 
 namespace ChallengeMode.Modifiers
 {
@@ -28,8 +29,9 @@ namespace ChallengeMode.Modifiers
 			usingScream = false;
 			warping = false;
 
-			//Remove audio
+			//Remove jingle
 			shadeGO.LocateMyFSM("Play Audio").RemoveTransition("Pause", "FINISHED");
+			shadeGO.transform.Find("Music Control").gameObject.LocateMyFSM("Music Control").RemoveTransition("Init", "FINISHED");
 
 			//Remove dreamnail cheese
 			shadeGO.LocateMyFSM("Dreamnail Kill").RemoveTransition("Idle", "DREAM IMPACT");

@@ -20,10 +20,10 @@ Each boss arena in Godhome now has randomly selected **modifiers** that make the
 ## List of Modifiers
 - High Stress: sets the player’s health to 1 for 5 seconds after they get hit
 - Frail Shell: makes the player take 1 extra damage from all sources
-- Adrenaline Rush: taking damage speeds up the game slightly, up to a max of 1.2 speed
+- Adrenaline Rush: taking damage speeds up the game slightly, up to a max of 15% extra speed
 - Aspid Rancher: failing to hit an enemy spawns a Primal Aspid
 - Void Vision: reduces the player's field of vision
-- Speedrunner’s Curse: removes Steady Body, equips Thorns of Agony, and makes the player take hazard damage when they try to Descending Dark
+- Speedrunner’s Curse: removes Steady Body and Quickslash, equips Thorns of Agony, and makes the player take hazard damage when they try to Descending Dark
 - Nail Only: disables spells
 - Soul Master: gives the player the soul over time, but sets nail damage to 1
 - Hungry Knight: drains soul over time, the player begins taking damage after soul is empty
