@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Modding;
 using UnityEngine;
 
@@ -27,10 +28,11 @@ namespace ChallengeMode.Modifiers
 			{
 				activeModifier.StartEffect();
 			}
-			catch
+			catch(Exception e)
 			{
 				ChallengeMode.Instance.Log("Chaos, Chaos - Failed to start " + activeModifier.ToString().
 					Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
+				ChallengeMode.Instance.Log(e.ToString());
 			}
 			yield return new WaitUntil(() => ChallengeMode.modifierControl.displayed);
 			yield return new WaitForSeconds(3f);
@@ -44,10 +46,11 @@ namespace ChallengeMode.Modifiers
 				{
 					activeModifier.StopEffect();
 				}
-				catch
+				catch(Exception e)
 				{
 					ChallengeMode.Instance.Log("Chaos, Chaos - Failed to stop " + activeModifier.ToString().
 						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
+					ChallengeMode.Instance.Log(e.ToString());
 				}
 
 				SetActiveModifier();
@@ -59,10 +62,11 @@ namespace ChallengeMode.Modifiers
 				{
 					activeModifier.StartEffect();
 				}
-				catch
+				catch(Exception e)
 				{
 					ChallengeMode.Instance.Log("Chaos, Chaos - Failed to start " + activeModifier.ToString().
 						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
+					ChallengeMode.Instance.Log(e.ToString());
 				}
 			}
 			yield break;
@@ -89,10 +93,11 @@ namespace ChallengeMode.Modifiers
 			{
 				activeModifier.StopEffect();
 			}
-			catch
+			catch(Exception e)
 			{
 				ChallengeMode.Instance.Log("Chaos, Chaos - Failed to stop " + activeModifier.ToString().
-						Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
+					Split(new char[] { '_' })[1] + " for " + GameManager.instance.sceneName);
+				ChallengeMode.Instance.Log(e.ToString());
 			}
 		}
 

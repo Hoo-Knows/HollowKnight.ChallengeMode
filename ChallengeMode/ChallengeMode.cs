@@ -91,7 +91,7 @@ namespace ChallengeMode
 
 		private string BeforeSceneLoadHook(string sceneName)
 		{
-			//Used to override scene for testing
+			//Override scene for testing
 			//if(sceneName == "GG_Mage_Knight") sceneName = "GG_Radiance";
 
 			if(sceneName == "GG_Spa") spaCount++;
@@ -181,21 +181,13 @@ namespace ChallengeMode
 					{
 						new CustomSlider("Number of modifiers",
 						(f) => Settings.numModifiers = (int)f,
-						() => Settings.numModifiers, Id: "NumSlider")
-						{
-							wholeNumbers = true,
-							minValue = 1,
-							maxValue = 5
-						},
+						() => Settings.numModifiers, 
+						1, 5, wholeNumbers: true, Id: "NumSlider"),
 
 						new CustomSlider("Increment modifiers",
 						(f) => Settings.incModifiers = (int)f,
-						() => Settings.incModifiers, Id: "IncSlider")
-						{
-							wholeNumbers = true,
-							minValue = 0,
-							maxValue = 2
-						},
+						() => Settings.incModifiers,
+						0, 2, wholeNumbers: true, Id: "IncSlider"),
 
 						new HorizontalOption("Guarantee modifier",
 						"Guarantee that a modifier will appear",

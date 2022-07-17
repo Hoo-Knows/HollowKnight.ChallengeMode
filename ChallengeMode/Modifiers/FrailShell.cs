@@ -12,6 +12,7 @@ namespace ChallengeMode.Modifiers
 
 		private int TakeDamageHook(ref int hazardType, int damage)
 		{
+			if(damage == 0) return 0;
 			return damage + 1;
 		}
 

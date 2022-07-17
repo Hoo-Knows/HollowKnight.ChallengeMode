@@ -21,9 +21,6 @@ namespace ChallengeMode.Modifiers
 			if(charms.Contains(14)) GameManager.instance.UnequipCharm(14);
 			if(charms.Contains(32)) GameManager.instance.UnequipCharm(32);
 
-			PlayerData.instance.CalculateNotchesUsed();
-			GameManager.instance.RefreshOvercharm();
-
 			CharmUpdate();
 			PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK");
 
@@ -40,6 +37,7 @@ namespace ChallengeMode.Modifiers
 
 			for(int num = 1; num <= 40; num++)
 			{
+				GameManager.instance.UnequipCharm(num);
 				PlayerData.instance.SetBool("equippedCharm_" + num, false);
 			}
 			foreach(int num in charms)
@@ -51,17 +49,10 @@ namespace ChallengeMode.Modifiers
 			PlayerData.instance.CalculateNotchesUsed();
 			GameManager.instance.RefreshOvercharm();
 
-			ChallengeMode.Instance.Log("Speedrunner's Curse - before CharmUpdate " + GameManager.instance.sceneName);
 			CharmUpdate();
-			ChallengeMode.Instance.Log("Speedrunner's Curse - before Charm Equip Check broadcast " + GameManager.instance.sceneName);
-			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
-			ChallengeMode.Instance.Log("Speedrunner's Curse - before Charm Indicator Check broadcast " + GameManager.instance.sceneName);
 			PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK");
 
-			ChallengeMode.Instance.Log("Speedrunner's Curse - before FSM edit " + GameManager.instance.sceneName);
 			HeroController.instance.spellControl.RemoveAction("Level Check 2", 0);
-
-			ChallengeMode.Instance.Log("Speedrunner's Curse - end of StopEffect " + GameManager.instance.sceneName);
 		}
 
 		private void CharmUpdate()

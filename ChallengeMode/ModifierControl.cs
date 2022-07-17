@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Modding;
 using UnityEngine;
@@ -34,6 +35,8 @@ namespace ChallengeMode
 
 		public void Initialize(int numModifiers, string currentScene)
 		{
+			Unload();
+
 			this.currentScene = currentScene;
 
 			//Scene checks
@@ -77,7 +80,6 @@ namespace ChallengeMode
 			}
 
 			GameManager.instance.OnFinishedEnteringScene += OnFinishedEnteringScene;
-			On.BossSceneController.EndBossScene += EndBossScene;
 		}
 
 		public Modifier SelectModifier()
@@ -148,10 +150,11 @@ namespace ChallengeMode
 				{
 					modifier.StartEffect();
 				}
-				catch
+				catch(Exception e)
 				{
 					ChallengeMode.Instance.Log("Failed to start " + modifier.ToString().Split(new char[] { '_' })[1] + 
 						" for " + currentScene);
+					ChallengeMode.Instance.Log(e.ToString());
 				}
 			}
 			StartCoroutine(DisplayModifiers());
@@ -197,10 +200,11 @@ namespace ChallengeMode
 						{
 							modifier.StopEffect();
 						}
-						catch
+						catch(Exception e)
 						{
 							ChallengeMode.Instance.Log("Failed to stop " + modifier.ToString().Split(new char[] { '_' })[1] + 
 								" for " + currentScene);
+							ChallengeMode.Instance.Log(e.ToString());
 						}
 					}
 				}
@@ -209,14 +213,11 @@ namespace ChallengeMode
 			active = false;
 		}
 
-		private void EndBossScene(On.BossSceneController.orig_EndBossScene orig, BossSceneController self)
+		private void Unload()
 		{
-			orig(self);
-
 			GameManager.instance.OnFinishedEnteringScene -= OnFinishedEnteringScene;
 			StopModifiers();
 			StopAllCoroutines();
-			On.BossSceneController.EndBossScene -= EndBossScene;
 		}
 	}
 }

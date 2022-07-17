@@ -38,7 +38,6 @@ namespace ChallengeMode.Modifiers
 			GameManager.instance.RefreshOvercharm();
 
 			CharmUpdate();
-			PlayMakerFSM.BroadcastEvent("CHARM EQUIP CHECK");
 			PlayMakerFSM.BroadcastEvent("CHARM INDICATOR CHECK");
 		}
 
