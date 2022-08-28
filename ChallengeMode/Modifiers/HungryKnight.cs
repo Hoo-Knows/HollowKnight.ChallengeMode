@@ -30,14 +30,14 @@ namespace ChallengeMode.Modifiers
 						HeroController.instance.TakeMP(11);
 					}
 				}
-				yield return new WaitForSeconds(4f);
+				yield return new WaitForSeconds(3f);
 				if(PlayerData.instance.GetInt("MPCharge") == 0)
 				{
 					if(!HeroController.instance.controlReqlinquished)
 					{
 						HeroController.instance.TakeDamage(HeroController.instance.gameObject, GlobalEnums.CollisionSide.other, 1, 1);
 					}
-					yield return new WaitForSeconds(6f);
+					yield return new WaitForSeconds(3f);
 				}
 			}
 			yield break;

@@ -78,7 +78,8 @@ namespace ChallengeMode.Modifiers
 		{
 			return new List<string>()
 			{
-				"ChallengeMode_A Fool's Errand"
+				"ChallengeMode_A Fool's Errand",
+				"ChallengeMode_Forgotten Light"
 			};
 		}
 	}

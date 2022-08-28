@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using HutongGames.PlayMaker.Actions;
 using SFCore.Utils;
 using UnityEngine;
-using Modding;
 
 namespace ChallengeMode.Modifiers
 {
@@ -16,6 +15,7 @@ namespace ChallengeMode.Modifiers
 		private bool usingQuake;
 		private bool usingScream;
 		private bool warping;
+		private bool fireballFacingRight;
 
 		public override void StartEffect()
 		{
@@ -28,6 +28,7 @@ namespace ChallengeMode.Modifiers
 			usingQuake = false;
 			usingScream = false;
 			warping = false;
+			fireballFacingRight = false;
 
 			//Remove jingle
 			shadeGO.LocateMyFSM("Play Audio").RemoveTransition("Pause", "FINISHED");
@@ -75,9 +76,11 @@ namespace ChallengeMode.Modifiers
 				Vector3 position = HeroController.instance.transform.position;
 				if(usingFireball)
 				{
-					if(HeroController.instance.cState.facingRight) position += 3f * Vector3.left;
-					else position += 2f * Vector3.right;
-					position += Vector3.down;
+					fireballFacingRight = HeroController.instance.cState.facingRight;
+					if(fireballFacingRight) position += 3f * Vector3.left;
+					else position += 3f * Vector3.right;
+
+					if(!HeroController.instance.CheckTouchingGround()) position += 3f * Vector3.down;
 				}
 				else if(usingQuake)
 				{
@@ -85,7 +88,7 @@ namespace ChallengeMode.Modifiers
 				}
 				else if(usingScream)
 				{
-					position += 4f * Vector3.down;
+					position += 6f * Vector3.down;
 				}
 				shadeFSM.FsmVariables.FindFsmVector3("Start Pos").Value = position;
 			}, 1);
@@ -98,44 +101,56 @@ namespace ChallengeMode.Modifiers
 			shadeFSM.InsertAction("Cast Antic", shadeFSM.GetAction<FaceObject>("Fireball Pos", 3), 0);
 
 			//Increase warp speed
-			shadeFSM.GetAction<iTweenMoveTo>("Retreat", 2).time = 0.1f;
+			shadeFSM.GetAction<iTweenMoveTo>("Retreat", 2).time = 0.05f;
 
 			//Increase attack speed
-			shadeFSM.GetAction<Wait>("Cast Antic", 8).time = 0.1f;
+			shadeFSM.GetAction<Wait>("Cast Antic", 8).time = 0f;
 			shadeFSM.GetAction<Wait>("Quake Antic", 7).time = 0.45f;
-			shadeFSM.GetAction<Wait>("Scream Antic", 6).time = 0.1f;
+			shadeFSM.GetAction<Wait>("Scream Antic", 6).time = 0f;
 
-			//Reset variables after using a spell
+			//Reset variables and position after using a spell
 			shadeFSM.InsertMethod("Cast", () =>
 			{
 				usingFireball = false;
+				RaycastHit2D raycastHit2D = Physics2D.Raycast(shadeGO.transform.position, 
+					fireballFacingRight ? Vector3.right : Vector3.left, 3f, 256);
+				if(raycastHit2D.collider != null)
+				{
+					shadeFSM.SetState("Retreat Start");
+				}
 			}, 4);
-			shadeFSM.InsertMethod("Collider On", () =>
+			shadeFSM.InsertMethod("Land", () =>
 			{
 				usingQuake = false;
-			}, 2);
+				shadeFSM.SetState("Retreat Start");
+			}, 11);
 			shadeFSM.InsertMethod("Scream Recover", () =>
 			{
 				usingScream = false;
+				RaycastHit2D raycastHit2D = Physics2D.Raycast(shadeGO.transform.position, Vector3.up, 6f, 256);
+				if(raycastHit2D.collider != null)
+				{
+					shadeFSM.SetState("Retreat Start");
+				}
 			}, 2);
 
 			//Detect when player uses a spell
 			spellFSM = HeroController.instance.spellControl;
 			spellFSM.InsertMethod("Wallside?", () =>
 			{
-				if(usingFireball || usingQuake || usingScream) return;
+				if(usingFireball || usingQuake || usingScream || warping) return;
 				usingFireball = true;
 				StartCoroutine(SpellControl());
 			}, 0);
 			spellFSM.InsertMethod("On Ground?", () =>
 			{
-				if(usingFireball || usingQuake || usingScream) return;
+				if(usingFireball || usingQuake || usingScream || warping) return;
 				usingQuake = true;
 				StartCoroutine(SpellControl());
 			}, 0);
 			spellFSM.InsertMethod("Scream Get?", () =>
 			{
-				if(usingFireball || usingQuake || usingScream) return;
+				if(usingFireball || usingQuake || usingScream || warping) return;
 				usingScream = true;
 				StartCoroutine(SpellControl());
 			}, 0);
@@ -143,7 +158,7 @@ namespace ChallengeMode.Modifiers
 
 		private IEnumerator SpellControl()
 		{
-			shadeFSM.SendEvent("RETREAT");
+			shadeFSM.SetState("Retreat Start");
 			yield return new WaitWhile(() => warping);
 			if(usingFireball) shadeFSM.SetState("Cast Antic");
 			if(usingQuake) shadeFSM.SetState("Quake Antic");

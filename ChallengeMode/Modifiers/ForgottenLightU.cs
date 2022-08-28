@@ -288,7 +288,8 @@ namespace ChallengeMode.Modifiers
 			{
 				"ChallengeMode_Nail Only",
 				"ChallengeMode_Speedrunner's Curse",
-				"ChallengeMode_A Fool's Errand"
+				"ChallengeMode_A Fool's Errand",
+				"ChallengeMode_Temporal Distortion"
 			};
 		}
 	}

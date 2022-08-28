@@ -25,7 +25,7 @@ namespace ChallengeMode.Modifiers
 			gorbDistanceAttackFSM = gorbGO.LocateMyFSM("Distance Attack");
 
 			//Make Gorb teleport out, wait, then teleport to player
-			gorbMovementFSM.GetAction<Wait>("Warp Out", 2).time = 6f;
+			gorbMovementFSM.GetAction<Wait>("Warp Out", 2).time = 7.5f;
 			gorbMovementFSM.RemoveAction("Return", 4);
 			gorbMovementFSM.RemoveAction("Return", 0);
 			gorbMovementFSM.InsertAction("Return", gorbMovementFSM.GetAction<SetPosition>("Warp", 1), 0);
@@ -44,8 +44,8 @@ namespace ChallengeMode.Modifiers
 			}, 0);
 
 			//Set attack timer
-			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMin.Value = 0.5f;
-			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMax.Value = 0.5f;
+			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMin.Value = 0.75f;
+			gorbAttackFSM.GetAction<WaitRandom>("Wait", 0).timeMax.Value = 0.75f;
 
 			//Make attack FSM skip check for player
 			gorbAttackFSM.ChangeTransition("Wait", "FINISHED", "Antic");
